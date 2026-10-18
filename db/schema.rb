@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_140006) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -54,6 +54,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
     t.check_constraint "blocker_id <> blocked_id", name: "blocks_not_self"
   end
 
+  create_table "coin_packs", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "coins", null: false
+    t.integer "bonus_coins", default: 0, null: false
+    t.integer "price_cents", null: false
+    t.string "currency", default: "usd", null: false
+    t.boolean "active", default: true, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "conversations", force: :cascade do |t|
     t.bigint "match_id", null: false
     t.datetime "last_message_at"
@@ -70,6 +82,46 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
     t.index ["followee_id"], name: "index_follows_on_followee_id"
     t.index ["follower_id", "followee_id"], name: "index_follows_on_follower_id_and_followee_id", unique: true
     t.check_constraint "follower_id <> followee_id", name: "follows_not_self"
+  end
+
+  create_table "gift_transactions", force: :cascade do |t|
+    t.bigint "gift_id", null: false
+    t.bigint "stream_id", null: false
+    t.bigint "sender_id", null: false
+    t.bigint "recipient_id", null: false
+    t.integer "coins", null: false
+    t.datetime "created_at", null: false
+    t.index ["gift_id"], name: "index_gift_transactions_on_gift_id"
+    t.index ["recipient_id"], name: "index_gift_transactions_on_recipient_id"
+    t.index ["sender_id"], name: "index_gift_transactions_on_sender_id"
+    t.index ["stream_id", "sender_id"], name: "index_gift_transactions_on_stream_id_and_sender_id"
+    t.index ["stream_id"], name: "index_gift_transactions_on_stream_id"
+    t.check_constraint "coins > 0", name: "gift_transactions_coins_positive"
+    t.check_constraint "sender_id <> recipient_id", name: "gift_transactions_not_self"
+  end
+
+  create_table "gifts", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "emoji", null: false
+    t.integer "coins", null: false
+    t.boolean "active", default: true, null: false
+    t.integer "position", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "ledger_entries", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "account", null: false
+    t.integer "kind", null: false
+    t.integer "amount", null: false
+    t.integer "balance_after", null: false
+    t.string "reference_type"
+    t.bigint "reference_id"
+    t.datetime "created_at", null: false
+    t.index ["reference_type", "reference_id"], name: "index_ledger_entries_on_reference"
+    t.index ["user_id", "account", "created_at"], name: "index_ledger_entries_on_user_id_and_account_and_created_at"
+    t.check_constraint "amount <> 0", name: "ledger_entries_amount_not_zero"
   end
 
   create_table "likes", force: :cascade do |t|
@@ -134,6 +186,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
     t.index ["user_id"], name: "index_profiles_on_user_id", unique: true
   end
 
+  create_table "purchases", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "coin_pack_id", null: false
+    t.integer "coins", null: false
+    t.integer "amount_cents", null: false
+    t.string "currency", null: false
+    t.integer "status", default: 0, null: false
+    t.string "stripe_checkout_session_id"
+    t.string "stripe_payment_intent_id"
+    t.datetime "paid_at"
+    t.datetime "refunded_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["coin_pack_id"], name: "index_purchases_on_coin_pack_id"
+    t.index ["stripe_checkout_session_id"], name: "index_purchases_on_stripe_checkout_session_id", unique: true
+    t.index ["stripe_payment_intent_id"], name: "index_purchases_on_stripe_payment_intent_id"
+    t.index ["user_id"], name: "index_purchases_on_user_id"
+  end
+
   create_table "reports", force: :cascade do |t|
     t.bigint "reporter_id", null: false
     t.bigint "reported_id", null: false
@@ -194,6 +265,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
     t.index ["user_id"], name: "index_streams_one_open_per_user", unique: true, where: "(status = ANY (ARRAY[0, 1]))"
   end
 
+  create_table "stripe_events", force: :cascade do |t|
+    t.string "stripe_event_id", null: false
+    t.string "event_type", null: false
+    t.datetime "created_at", null: false
+    t.index ["stripe_event_id"], name: "index_stripe_events_on_stripe_event_id", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
@@ -201,8 +279,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
     t.datetime "updated_at", null: false
     t.string "stream_path"
     t.string "stream_key"
+    t.integer "coin_balance", default: 0, null: false
+    t.integer "earnings_balance", default: 0, null: false
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["stream_path"], name: "index_users_on_stream_path", unique: true
+    t.check_constraint "coin_balance >= 0", name: "users_coin_balance_not_negative"
+    t.check_constraint "earnings_balance >= 0", name: "users_earnings_balance_not_negative"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -212,6 +294,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
   add_foreign_key "conversations", "matches", on_delete: :cascade
   add_foreign_key "follows", "users", column: "followee_id"
   add_foreign_key "follows", "users", column: "follower_id"
+  add_foreign_key "gift_transactions", "gifts"
+  add_foreign_key "gift_transactions", "streams"
+  add_foreign_key "gift_transactions", "users", column: "recipient_id"
+  add_foreign_key "gift_transactions", "users", column: "sender_id"
+  add_foreign_key "ledger_entries", "users"
   add_foreign_key "likes", "users", column: "likee_id"
   add_foreign_key "likes", "users", column: "liker_id"
   add_foreign_key "matches", "users", column: "user_a_id"
@@ -220,6 +307,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
   add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "photos", "profiles"
   add_foreign_key "profiles", "users"
+  add_foreign_key "purchases", "coin_packs"
+  add_foreign_key "purchases", "users"
   add_foreign_key "reports", "users", column: "reported_id"
   add_foreign_key "reports", "users", column: "reporter_id"
   add_foreign_key "sessions", "users"

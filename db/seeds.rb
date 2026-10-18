@@ -1,5 +1,23 @@
-# Demo data for trying the swipe deck locally: `bin/rails db:seed`.
-# Idempotent; does nothing outside development.
+# `bin/rails db:seed` (idempotent). The coin pack and gift catalog is needed in every
+# environment; run it once in production with `bin/kamal app exec "bin/rails db:seed"`.
+
+[
+  { name: "Starter", coins: 100, bonus_coins: 0, price_cents: 99, position: 1 },
+  { name: "Popular", coins: 500, bonus_coins: 50, price_cents: 499, position: 2 },
+  { name: "Best value", coins: 1200, bonus_coins: 200, price_cents: 999, position: 3 },
+  { name: "Mega", coins: 2600, bonus_coins: 600, price_cents: 1999, position: 4 }
+].each { |attrs| CoinPack.find_or_create_by!(name: attrs[:name]) { |pack| pack.assign_attributes(attrs) } }
+
+[
+  { name: "Rose", emoji: "🌹", coins: 5, position: 1 },
+  { name: "Coffee", emoji: "☕", coins: 10, position: 2 },
+  { name: "Heart", emoji: "💖", coins: 25, position: 3 },
+  { name: "Teddy", emoji: "🧸", coins: 50, position: 4 },
+  { name: "Diamond", emoji: "💎", coins: 100, position: 5 },
+  { name: "Rocket", emoji: "🚀", coins: 500, position: 6 }
+].each { |attrs| Gift.find_or_create_by!(name: attrs[:name]) { |gift| gift.assign_attributes(attrs) } }
+
+# Everything below is demo data for trying the app locally.
 return unless Rails.env.development?
 
 require "vips"
@@ -60,6 +78,11 @@ if conversation.messages.none?
   [ [ ani, "Hi! I saw you like the mountains too 🏔️" ], [ demo, "Hey Ani! Yes, Aragats last weekend." ], [ ani, "Nice, which trail?" ] ].each do |sender, body|
     conversation.messages.create!(sender: sender, body: body)
   end
+end
+
+# Some coins so gifts can be tried without a payment.
+User.where(email_address: %w[ demo@example.com ani@example.com lilit@example.com ]).find_each do |user|
+  Wallet.new(user).credit!(300, kind: :adjustment) if user.ledger_entries.none?
 end
 
 puts "Seeded #{Profile.count} profiles. Sign in as demo@example.com / password123."

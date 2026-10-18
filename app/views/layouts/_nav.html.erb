@@ -15,9 +15,10 @@
         Chats <span class="chats-count ml-1 rounded-full bg-pink-600 text-white px-2 empty:hidden"><%= unread_chats_count.nonzero? %></span>
       <% end %>
     </div>
-    <%= link_to "Go live", go_live_path, class: "ml-auto hidden sm:inline rounded-md px-3 py-1.5 bg-red-600 text-white" %>
+    <%= link_to coins_path, class: "ml-auto rounded-full bg-yellow-100 px-3 py-1 text-yellow-900", aria: { label: "Coins" } do %>🪙 <span class="coin-balance"><%= Current.user.coin_balance %></span><% end %>
+    <%= link_to "Go live", go_live_path, class: "hidden sm:inline rounded-md px-3 py-1.5 bg-red-600 text-white" %>
     <%= link_to "Profile", profile_path(Current.user.profile), class: "hidden sm:inline" %>
-    <%= button_to "Sign out", session_path, method: :delete, form_class: "ml-auto sm:ml-0", class: "text-gray-500 cursor-pointer" %>
+    <%= button_to "Sign out", session_path, method: :delete, class: "text-gray-500 cursor-pointer" %>
   </div>
 </nav>
 

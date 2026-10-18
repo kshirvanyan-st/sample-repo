@@ -1,0 +1,15 @@
+<%# Gift buttons under the player. Errors (not enough coins) land in #gift_message. %>
+<div class="mt-4 rounded-xl border p-3 bg-white">
+  <div class="flex items-center justify-between">
+    <p class="font-semibold">Send a gift</p>
+    <%= link_to coins_path, class: "text-sm" do %>🪙 <span class="coin-balance font-semibold"><%= Current.user.coin_balance %></span> · <span class="underline">Get coins</span><% end %>
+  </div>
+  <div class="flex flex-wrap gap-2 mt-3">
+    <% Gift.available.each do |gift| %>
+      <%= button_to stream_gifts_path(stream), params: { gift_id: gift.id }, class: "rounded-lg border px-3 py-2 hover:border-pink-500 cursor-pointer text-sm", aria: { label: "Send #{gift.name} for #{gift.coins} coins" } do %>
+        <span class="text-xl"><%= gift.emoji %></span> <%= gift.name %> <span class="text-gray-500">🪙<%= gift.coins %></span>
+      <% end %>
+    <% end %>
+  </div>
+  <div id="gift_message"></div>
+</div>

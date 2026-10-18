@@ -17,6 +17,8 @@ The full roadmap, phases and architecture are in `docs/ROADMAP.md`. Work one pha
   `Media::HooksController` when a path starts/stops; `StreamReconcileJob` is the safety net.
   Viewers read with a signed token from `Stream#viewer_token_for`; broadcasters publish with `User#stream_key`.
 - Coins are an append-only ledger (`LedgerEntry`); never update balances in place without a ledger row.
+  `Wallet#credit!/#debit!` is the only writer (row lock + ledger entry + cached balance). Coins are
+  credited only from the signed Stripe webhook (`Purchase#fulfill!`, idempotent via `StripeEvent`).
 - Controllers require authentication by default; opt out with `allow_unauthenticated_access`.
 
 ## Before every push

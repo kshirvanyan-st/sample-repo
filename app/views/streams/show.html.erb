@@ -24,6 +24,11 @@
         <%= render "profiles/follow", profile: profile %>
       <% end %>
     </div>
+
+    <% if @stream.live? && @stream.user != Current.user %>
+      <%= render "gift_transactions/bar", stream: @stream %>
+    <% end %>
+    <%= render "gift_transactions/leaderboard", stream: @stream %>
   </div>
 
   <%= render "stream_comments/panel", stream: @stream, moderator: false %>
