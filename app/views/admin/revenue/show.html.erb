@@ -1,0 +1,146 @@
+<% t = @report.totals %>
+<% m = @report.margin %>
+<% trend = @report.today_vs_week %>
+<% money = ->(cents) { number_to_currency(cents / 100.0, precision: cents.abs < 10_000 ? 2 : 0) } %>
+<% pct = ->(share, precision: 1) { number_to_percentage(share * 100, precision: precision) } %>
+
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <h1 class="font-bold text-3xl">Revenue &amp; growth</h1>
+  <div class="flex items-center gap-3 text-sm">
+    <% [ 7, 30, 90 ].each do |days| %>
+      <%= link_to "#{days} days", admin_revenue_path(days: days), class: days == @days ? "font-bold underline" : "" %>
+    <% end %>
+    <span class="text-gray-300">|</span>
+    <%= link_to "SQL (Blazer)", "/admin/blazer", class: "underline" %>
+    <%= link_to "Experiments", "/admin/experiments", class: "underline" %>
+  </div>
+</div>
+
+<%# Headline numbers: stat tiles, not charts. %>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-6">
+  <div class="rounded-xl border bg-white p-4">
+    <p class="text-sm text-gray-500">Revenue</p>
+    <p class="text-2xl font-bold mt-1 tabular-nums"><%= money.(t[:revenue_cents]) %></p>
+    <p class="text-xs text-gray-500 mt-1">Today <%= money.(trend[:today_cents]) %>
+      <% if trend[:change] %>· <%= trend[:change] >= 0 ? "▲" : "▼" %> <%= pct.(trend[:change].abs, precision: 0) %> vs 7-day avg<% end %></p>
+  </div>
+  <div class="rounded-xl border bg-white p-4">
+    <p class="text-sm text-gray-500">Paying users</p>
+    <p class="text-2xl font-bold mt-1 tabular-nums"><%= number_with_delimiter(t[:payers]) %></p>
+    <p class="text-xs text-gray-500 mt-1"><%= pct.(t[:payer_conversion]) %> of <%= number_with_delimiter(t[:active_users]) %> active</p>
+  </div>
+  <div class="rounded-xl border bg-white p-4">
+    <p class="text-sm text-gray-500">ARPU</p>
+    <p class="text-2xl font-bold mt-1 tabular-nums"><%= money.(t[:arpu_cents]) %></p>
+    <p class="text-xs text-gray-500 mt-1">per active user</p>
+  </div>
+  <div class="rounded-xl border bg-white p-4">
+    <p class="text-sm text-gray-500">ARPPU</p>
+    <p class="text-2xl font-bold mt-1 tabular-nums"><%= money.(t[:arppu_cents]) %></p>
+    <p class="text-xs text-gray-500 mt-1">per paying user</p>
+  </div>
+  <div class="rounded-xl border bg-white p-4">
+    <p class="text-sm text-gray-500">Gross margin</p>
+    <p class="text-2xl font-bold mt-1 tabular-nums"><%= money.(m[:profit_cents]) %></p>
+    <p class="text-xs text-gray-500 mt-1"><%= pct.(m[:margin], precision: 0) %> of net revenue</p>
+  </div>
+  <div class="rounded-xl border bg-white p-4">
+    <p class="text-sm text-gray-500">Refund rate</p>
+    <p class="text-2xl font-bold mt-1 tabular-nums"><%= pct.(t[:refund_rate], precision: 2) %></p>
+    <p class="text-xs mt-1 <%= t[:refund_rate] > 0.0075 ? "text-red-700 font-medium" : "text-gray-500" %>">
+      <%= t[:refund_rate] > 0.0075 ? "⚠ Above the 0.75% card-network risk line" : "✓ Under the 0.75% risk line" %></p>
+  </div>
+</div>
+
+<section class="rounded-xl border bg-white p-4 mt-6">
+  <h2 class="font-semibold">Revenue per day</h2>
+  <%= bar_chart(@report.daily.map { |row| [ l(row.date, format: "%-d %b"), row.revenue_cents ] }, title: "Revenue per day",
+        format: ->(cents) { number_to_currency(cents / 100.0, precision: 0) }) %>
+</section>
+
+<div class="grid lg:grid-cols-2 gap-6 mt-6">
+  <section class="rounded-xl border bg-white p-4">
+    <h2 class="font-semibold">Funnel: people who signed up in the last <%= @days %> days</h2>
+    <p class="text-sm text-gray-500 mb-3">Where people drop off before paying.</p>
+    <%= step_bars(@report.funnel) %>
+  </section>
+
+  <section class="rounded-xl border bg-white p-4">
+    <h2 class="font-semibold">Where the money goes</h2>
+    <table class="w-full mt-3 text-sm tabular-nums">
+      <tr><td class="py-1">Revenue after refunds</td><td class="text-right"><%= money.(m[:net_revenue_cents]) %></td></tr>
+      <tr><td class="py-1">− Stripe fees (<%= Analytics::Revenue::STRIPE_FEE_RATE * 100 %>% + <%= Analytics::Revenue::STRIPE_FEE_FIXED_CENTS %>¢)</td><td class="text-right"><%= money.(m[:stripe_fees_cents]) %></td></tr>
+      <tr><td class="py-1">− Creators' share of gifts (<%= pct.(Analytics::Revenue::CREATOR_PAYOUT_SHARE, precision: 0) %>)</td><td class="text-right"><%= money.(m[:creator_payouts_cents]) %></td></tr>
+      <tr><td class="py-1">− Servers (<%= money.(Analytics::Revenue::INFRA_MONTHLY_COST_CENTS) %>/month)</td><td class="text-right"><%= money.(m[:infra_cents]) %></td></tr>
+      <tr class="border-t font-semibold"><td class="py-1">Gross profit</td><td class="text-right"><%= money.(m[:profit_cents]) %></td></tr>
+    </table>
+    <p class="text-xs text-gray-500 mt-3">Server cost per viewer-hour: <%= t[:viewer_hours].positive? ? money.(m[:infra_per_viewer_hour_cents]) : "–" %>
+      (<%= number_with_precision(t[:viewer_hours], precision: 1) %> h watched). Assumptions: STRIPE_FEE_PERCENT, CREATOR_PAYOUT_SHARE, INFRA_MONTHLY_COST_CENTS.</p>
+  </section>
+</div>
+
+<section class="rounded-xl border bg-white p-4 mt-6 overflow-x-auto">
+  <h2 class="font-semibold">Retention and lifetime value by signup week</h2>
+  <p class="text-sm text-gray-500 mb-3">Share of each week's new users who came back 1, 7 and 30 days after signing up; LTV is revenue per user so far.</p>
+  <table class="w-full text-sm">
+    <thead class="text-gray-500"><tr><th class="p-2 text-left">Week of</th><th class="p-2 text-right">Users</th><th class="p-2">Day 1</th><th class="p-2">Day 7</th><th class="p-2">Day 30</th><th class="p-2 text-right">LTV</th></tr></thead>
+    <tbody>
+      <% @report.cohorts.each do |cohort| %>
+        <tr class="border-t">
+          <td class="p-2"><%= l(cohort[:week], format: "%-d %b") %></td>
+          <td class="p-2 text-right tabular-nums"><%= number_with_delimiter(cohort[:users]) %></td>
+          <%= retention_cell(cohort[:d1]) %><%= retention_cell(cohort[:d7]) %><%= retention_cell(cohort[:d30]) %>
+          <td class="p-2 text-right tabular-nums"><%= cohort[:users].zero? ? "–" : money.(cohort[:ltv_cents]) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>
+
+<div class="grid lg:grid-cols-3 gap-6 mt-6">
+  <section class="rounded-xl border bg-white p-4">
+    <h2 class="font-semibold">Coin economy</h2>
+    <dl class="mt-3 text-sm space-y-1 tabular-nums">
+      <div class="flex justify-between"><dt>Coins bought</dt><dd><%= number_with_delimiter(t[:coins_purchased]) %></dd></div>
+      <div class="flex justify-between"><dt>Coins spent on gifts</dt><dd><%= number_with_delimiter(t[:coins_spent]) %></dd></div>
+      <div class="flex justify-between"><dt>Unspent (all users)</dt><dd><%= number_with_delimiter(t[:unspent_coins]) %></dd></div>
+    </dl>
+    <p class="text-xs text-gray-500 mt-3">Lots of unspent coins means the gift catalog isn't tempting enough.</p>
+  </section>
+
+  <section class="rounded-xl border bg-white p-4">
+    <h2 class="font-semibold">Coin packs sold</h2>
+    <table class="w-full mt-3 text-sm tabular-nums">
+      <% @report.coin_packs.each do |name, count, cents| %>
+        <tr><td class="py-1"><%= name %></td><td class="text-right"><%= count %>×</td><td class="text-right"><%= money.(cents) %></td></tr>
+      <% end %>
+    </table>
+    <% if @report.coin_packs.empty? %><p class="text-sm text-gray-500 mt-2">No sales yet.</p><% end %>
+  </section>
+
+  <section class="rounded-xl border bg-white p-4">
+    <h2 class="font-semibold">Top broadcasters by gifts</h2>
+    <ol class="mt-3 text-sm space-y-1">
+      <% @report.top_broadcasters.each do |row| %>
+        <li class="flex justify-between"><%= render "admin/shared/user_chip", user: row[:user] %><span class="tabular-nums">🪙 <%= number_with_delimiter(row[:coins]) %></span></li>
+      <% end %>
+    </ol>
+    <% if @report.top_broadcasters.empty? %><p class="text-sm text-gray-500 mt-2">No gifts yet.</p><% end %>
+  </section>
+</div>
+
+<section class="rounded-xl border bg-white p-4 mt-6">
+  <h2 class="font-semibold">A/B tests</h2>
+  <% @report.experiments.each do |entry| %>
+    <% experiment = entry[:experiment] %>
+    <p class="text-sm mt-2"><strong><%= experiment.name %></strong>: <%= experiment.description %></p>
+    <table class="w-full mt-2 text-sm tabular-nums">
+      <thead class="text-gray-500"><tr><th class="py-1 text-left">Variant</th><th class="text-right">People</th><th class="text-right">Bought coins</th><th class="text-right">Conversion</th><th class="text-right">Chance it's best</th></tr></thead>
+      <% entry[:results].each do |variant, result| %>
+        <tr class="border-t"><td class="py-1"><%= variant.humanize %></td><td class="text-right"><%= result[:participated] %></td><td class="text-right"><%= result[:converted] %></td>
+          <td class="text-right"><%= result[:conversion_rate] ? pct.(result[:conversion_rate]) : "–" %></td><td class="text-right"><%= pct.(result[:prob_winning], precision: 0) %></td></tr>
+      <% end %>
+    </table>
+  <% end %>
+  <p class="text-xs text-gray-500 mt-3">Decide a test by setting its <code>winner</code> in config/field_test.yml; wait until one variant's chance of being best is above 95%.</p>
+</section>

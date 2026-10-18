@@ -12,6 +12,7 @@ class RegistrationsController < ApplicationController
 
     if @user.save
       start_new_session_for @user
+      ahoy.track "signed_up"
       redirect_to onboarding_path(Profile::ONBOARDING_STEPS.first), notice: "Welcome to Spark! Let's set up your profile."
     else
       render :new, status: :unprocessable_content

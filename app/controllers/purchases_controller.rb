@@ -4,6 +4,7 @@ class PurchasesController < ApplicationController
   def create
     coin_pack = CoinPack.available.find(params[:coin_pack_id])
     purchase = Purchase.start!(Current.user, coin_pack)
+    ahoy.track "checkout_started", coin_pack: coin_pack.name, amount_cents: coin_pack.price_cents
 
     if Stripe.api_key.present?
       session = Stripe::Checkout::Session.create(checkout_params(purchase, coin_pack))

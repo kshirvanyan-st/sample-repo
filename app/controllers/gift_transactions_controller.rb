@@ -5,6 +5,7 @@ class GiftTransactionsController < ApplicationController
     stream = Stream.visible_to(Current.user).find(params[:stream_id])
     gift = Gift.available.find(params[:gift_id])
     GiftTransaction.send!(sender: Current.user, stream:, gift:)
+    ahoy.track "gift_sent", gift: gift.name, coins: gift.coins, stream_id: stream.id
 
     respond_to do |format|
       format.turbo_stream { head :no_content } # the gift appears for everyone over the stream's broadcast

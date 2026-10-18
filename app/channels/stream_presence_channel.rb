@@ -12,7 +12,10 @@ class StreamPresenceChannel < ApplicationCable::Channel
   def unsubscribed
     return unless @connection_token
 
-    StreamViewer.where(connection_token: @connection_token).delete_all
+    if (viewer = StreamViewer.find_by(connection_token: @connection_token))
+      Stream.update_counters(@stream.id, viewer_seconds: (Time.current - viewer.created_at).to_i) # watch time for analytics
+      viewer.delete
+    end
     @stream.reload.refresh_viewer_count! if @stream.reload.live?
   end
 end

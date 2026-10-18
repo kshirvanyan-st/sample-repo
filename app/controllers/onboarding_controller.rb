@@ -47,6 +47,7 @@ class OnboardingController < ApplicationController
 
       if @profile.photos.any?
         @profile.update!(onboarded_at: Time.current)
+        ahoy.track "profile_completed", photos: @profile.photos.count
         redirect_to root_path, notice: "Your profile is ready!"
       else
         @profile.errors.add(:base, "Add at least one photo")

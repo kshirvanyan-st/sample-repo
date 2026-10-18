@@ -1,0 +1,14 @@
+# A/B tests (field_test). Participants are signed-in users; conversions are recorded
+# server-side (see Purchase#fulfill!). Results: /admin/revenue and /admin/experiments.
+experiments:
+  coin_store_highlight:
+    description: Does a "Best value" badge on the 1,400-coin pack make more people buy coins?
+    variants:
+      - control
+      - best_value_badge
+    # winner: best_value_badge  # set when the test is decided; everyone then gets it
+
+exclude:
+  bots: true
+
+cookies: false

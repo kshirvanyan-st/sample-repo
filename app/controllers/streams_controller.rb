@@ -26,6 +26,7 @@ class StreamsController < ApplicationController
     @stream = Current.user.streams.new(stream_params)
 
     if @stream.save
+      ahoy.track "stream_created", category: @stream.category
       redirect_to studio_stream_path(@stream)
     else
       render :new, status: :unprocessable_content
@@ -37,6 +38,7 @@ class StreamsController < ApplicationController
   def show
     @stream = Stream.visible_to(Current.user).find(params[:id])
     @viewer_token = @stream.viewer_token_for(Current.user) unless @stream.ended?
+    ahoy.track "stream_watched", stream_id: @stream.id, live: @stream.live? unless @stream.user == Current.user
   end
 
   # The broadcaster's control room: camera preview, OBS settings, chat moderation.

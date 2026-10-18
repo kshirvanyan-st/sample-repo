@@ -1,0 +1,7 @@
+<p>Something needs a look on Spark:</p>
+<ul>
+  <% @messages.each do |message| %>
+    <li><%= message %></li>
+  <% end %>
+</ul>
+<p><%= link_to "Open the revenue dashboard", admin_revenue_url %></p>

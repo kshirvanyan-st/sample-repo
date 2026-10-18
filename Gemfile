@@ -74,3 +74,7 @@ group :test do
   gem "capybara", "~> 3.40"
   gem "selenium-webdriver", "~> 4.51"
 end
+
+gem "ahoy_matey", "~> 5.5"
+gem "field_test", "~> 1.0"
+gem "blazer", "~> 3.5"

@@ -26,6 +26,31 @@ bin/dev_stream      # keep a test-pattern stream live as a seeded user (needs bi
 - `PHOTO_MODERATION=manual` keeps new photos pending (visible only to their owner) until
   approved in `/admin/photos`; the default approves them automatically.
 
+### Revenue and growth analytics
+
+Admins get **Revenue** in the admin nav (`/admin/revenue`): revenue per day, paying users and
+payer conversion, ARPU/ARPPU, gross margin after Stripe fees, creator payouts and servers,
+refund rate, the sign-up funnel, weekly retention (day 1/7/30) with LTV, the coin economy,
+top broadcasters and A/B test results.
+
+- **Events:** [Ahoy](https://github.com/ankane/ahoy), server-side only (no JS, masked IPs, no
+  cookies). Funnel events: `signed_up`, `profile_completed`, `rated`, `matched`, `message_sent`,
+  `stream_created`, `stream_watched`, `coin_store_viewed`, `checkout_started`, `gift_sent`.
+- **Daily numbers:** `DailyMetricsJob` (hourly) fills `daily_metrics`; backfill with
+  `bin/rails "metrics:backfill[90]"`. In development, `bin/rails demo:analytics` makes up 8 weeks of
+  activity so the dashboard has something to show.
+- **A/B tests:** [field_test](https://github.com/ankane/field_test), experiments in
+  `config/field_test.yml` (the first one tests a "Best value" badge in the coin store). Conversions
+  are recorded when the Stripe webhook confirms a purchase. Details: `/admin/experiments`.
+- **SQL dashboards:** [Blazer](https://github.com/ankane/blazer) at `/admin/blazer` (admins only), with
+  a few starter queries. Point `BLAZER_DATABASE_URL` at a read-only Postgres role so it can't change
+  data. Blazer checks (alerts on any query) run on Solid Queue every 5 minutes / hour / day.
+- **Alert email:** `RevenueAlertsJob` (daily) mails `ALERT_EMAILS` (or every admin) when yesterday's
+  revenue is 30% below the weekly average or refunds pass 0.5%. Needs SMTP: set `SMTP_ADDRESS`,
+  `SMTP_PORT`, `SMTP_USERNAME`, `SMTP_PASSWORD` and `MAIL_FROM` (also used for password resets).
+- **Margin assumptions:** `STRIPE_FEE_PERCENT` (2.9), `STRIPE_FEE_FIXED_CENTS` (30),
+  `CREATOR_PAYOUT_SHARE` (0.5 of gifted coins' value), `INFRA_MONTHLY_COST_CENTS` (7500).
+
 ### Load tests
 
 k6 scripts for browsing/swiping and for a crowd on a live stream are in [`load/`](load/README.md).

@@ -17,6 +17,17 @@
   { name: "Rocket", emoji: "🚀", coins: 500, position: 6 }
 ].each { |attrs| Gift.find_or_create_by!(name: attrs[:name]) { |gift| gift.assign_attributes(attrs) } }
 
+# Starter Blazer queries for /admin/blazer (edit or add more there).
+{
+  # One measure (or one unit) per query: Blazer charts every column on a single axis.
+  "Revenue by day (last 90 days)" => "SELECT date, revenue_cents / 100.0 AS revenue_usd FROM daily_metrics WHERE date > CURRENT_DATE - 90 ORDER BY date",
+  "Active users and payers by day (last 90 days)" => "SELECT date, active_users, payers FROM daily_metrics WHERE date > CURRENT_DATE - 90 ORDER BY date",
+  "Top gifters (30 days)" => "SELECT p.display_name, SUM(g.coins) AS coins FROM gift_transactions g JOIN profiles p ON p.user_id = g.sender_id WHERE g.created_at > NOW() - INTERVAL '30 days' GROUP BY 1 ORDER BY 2 DESC LIMIT 20",
+  "Events per day (14 days)" => "SELECT time::date AS day, name, COUNT(*) FROM ahoy_events WHERE time > NOW() - INTERVAL '14 days' GROUP BY 1, 2 ORDER BY 1, 3 DESC"
+}.each do |name, statement|
+  Blazer::Query.find_or_create_by!(name: name) { |query| query.statement = statement; query.data_source = "main" }
+end
+
 # Everything below is demo data for trying the app locally.
 return unless Rails.env.development?
 

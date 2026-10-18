@@ -1,1 +1,22 @@
 @import "tailwindcss";
+
+/* Data-viz roles (reference palette; the app is light-only for now). */
+.viz-root {
+  --viz-series-1: #2a78d6;
+  --viz-text: #0b0b0b;
+  --viz-text-secondary: #52514e;
+  --viz-text-muted: #8a8984;
+  --viz-grid: #e7e6e2;
+  --viz-baseline: #b9b8b3;
+  --viz-track: #f0efec;
+}
+.viz-bar { fill: var(--viz-series-1); }
+.viz-hit:hover .viz-bar { opacity: 0.8; }
+.viz-grid { stroke: var(--viz-grid); stroke-width: 1; }
+.viz-baseline { stroke: var(--viz-baseline); stroke-width: 1; }
+.viz-axis { fill: var(--viz-text-secondary); font-size: 11px; }
+.viz-text { color: var(--viz-text); }
+.viz-text-secondary { color: var(--viz-text-secondary); }
+.viz-text-muted { color: var(--viz-text-muted); }
+.viz-track { background: var(--viz-track); }
+.viz-fill { background: var(--viz-series-1); }
