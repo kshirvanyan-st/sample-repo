@@ -1,0 +1,20 @@
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl">Go live</h1>
+  <p class="text-gray-600 mt-2">Give your stream a title. Next you'll go live from your camera or from OBS.</p>
+
+  <%= form_with model: @stream, url: streams_path do |form| %>
+    <%= render "shared/errors", record: @stream %>
+
+    <div class="my-5">
+      <%= form.label :title %>
+      <%= form.text_field :title, required: true, maxlength: 80, class: input_classes %>
+    </div>
+
+    <div class="my-5">
+      <%= form.label :category %>
+      <%= form.select :category, Stream.categories.keys.map { |c| [ c.humanize, c ] }, {}, class: input_classes %>
+    </div>
+
+    <%= form.submit "Continue to studio", class: primary_button_classes %>
+  <% end %>
+</div>

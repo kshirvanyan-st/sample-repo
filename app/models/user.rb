@@ -14,11 +14,30 @@ class User < ApplicationRecord
   has_many :blocks_received, class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked, dependent: :destroy
   has_many :reports_filed, class_name: "Report", foreign_key: :reporter_id, inverse_of: :reporter, dependent: :destroy
   has_many :reports_received, class_name: "Report", foreign_key: :reported_id, inverse_of: :reported, dependent: :destroy
+  has_many :streams, dependent: :destroy
+
+  has_secure_token :stream_path, length: 24, on: :initialize
+  has_secure_token :stream_key, length: 32, on: :initialize
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :password, length: { minimum: 8, maximum: 72 }, allow_nil: true
+
+  # Users created before streaming existed get their credentials the first time they need them.
+  def streaming_credentials!
+    regenerate_stream_path if stream_path.blank?
+    regenerate_stream_key if stream_key.blank?
+    self
+  end
+
+  def open_stream
+    streams.open.order(:created_at).last
+  end
+
+  def live_stream
+    streams.live.order(:started_at).last
+  end
 
   def onboarded?
     profile&.onboarded_at?

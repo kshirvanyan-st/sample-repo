@@ -84,7 +84,8 @@ Choices confirmed with the user:
 - `authMethod: http`, pointing at `POST /media/auth`
 - paths `live/<stream_key>` for publishing and `watch/<stream_id>` for viewing (aliased with
   `source: rtsp://localhost/live/...`), or a single path that Rails authorizes for both
-- `runOnReady` and `runOnNotReady` call `POST /media/hooks/ready` and `/notready` with a shared secret
+- `runOnAvailable` and `runOnUnavailable` (renamed from `runOnReady`/`runOnNotReady` in MediaMTX 1.21) call `POST /media/hooks/ready` and `/not_ready` with a shared secret
+- RTMP ingest is played back over HLS (WebRTC can't carry AAC audio); WHIP ingest (browser, OBS 30+) over WebRTC
 
 **Rails controllers**
 - `Media::AuthController`:

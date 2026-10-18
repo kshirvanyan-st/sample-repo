@@ -1,0 +1,12 @@
+<aside class="rounded-xl border flex flex-col h-[28rem] lg:h-[calc(100dvh-9rem)] group" <%= "data-moderator" if moderator %>>
+  <%= turbo_stream_from stream, :chat, class: "hidden" %>
+  <h2 class="font-semibold p-3 border-b">Live chat</h2>
+  <div id="stream_comments" class="grow overflow-y-auto p-3 space-y-1 text-sm" data-controller="autoscroll">
+    <%= render partial: "stream_comments/stream_comment", collection: stream.comments.includes(user: :profile).last(50) %>
+  </div>
+  <% if stream.ended? %>
+    <p class="p-3 border-t text-sm text-gray-500">Chat closed when the stream ended.</p>
+  <% else %>
+    <%= render "stream_comments/form", stream: stream %>
+  <% end %>
+</aside>

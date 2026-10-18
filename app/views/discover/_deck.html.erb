@@ -7,6 +7,11 @@
       <% end %>
       <div class="p-4">
         <p class="font-bold text-2xl"><%= profile.display_name %>, <%= profile.age %></p>
+        <% if (live = profile.user.live_stream) %>
+          <%= link_to stream_path(live), class: "inline-flex items-center gap-2 mt-1 text-sm text-red-700", data: { turbo_frame: "_top" } do %>
+            <%= live_badge %> Watch <%= live.title %>
+          <% end %>
+        <% end %>
         <p class="text-sm text-gray-500"><%= [ profile.city.presence, distance_label(profile) ].compact.join(" · ") %></p>
         <% if profile.bio.present? %><p class="mt-2 text-gray-700 line-clamp-3"><%= profile.bio %></p><% end %>
         <%= link_to "View profile", profile_path(profile), class: "text-sm underline text-gray-600 mt-2 inline-block", data: { turbo_frame: "_top" } %>

@@ -1,0 +1,15 @@
+<%# Replaced over the stream's Turbo Stream when its status changes; the playback
+    controller lives on a wrapper outside it and starts when the <video> appears. %>
+<div id="<%= dom_id(stream, :player) %>" class="relative w-full aspect-video bg-black rounded-xl overflow-hidden">
+  <% if stream.live? %>
+    <video data-playback-target="video" data-protocol="<%= stream.playback_protocol %>" autoplay playsinline muted class="w-full h-full"></video>
+    <%= live_badge("absolute top-3 left-3") %>
+    <button type="button" data-action="playback#unmute" data-playback-target="unmute"
+            class="absolute bottom-3 right-3 rounded bg-white/90 px-3 py-1 text-sm font-medium cursor-pointer">🔊 Tap to unmute</button>
+    <p data-playback-target="status" class="absolute inset-0 flex items-center justify-center text-white/80 text-sm pointer-events-none">Connecting…</p>
+  <% elsif stream.pending? %>
+    <p class="absolute inset-0 flex items-center justify-center text-white">Starting soon…</p>
+  <% else %>
+    <p class="absolute inset-0 flex items-center justify-center text-white">This stream has ended.</p>
+  <% end %>
+</div>

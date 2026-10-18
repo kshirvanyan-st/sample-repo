@@ -1,0 +1,30 @@
+<% profile = @stream.user.profile %>
+<div class="grid lg:grid-cols-3 gap-6">
+  <%= turbo_stream_from @stream, class: "hidden" %>
+  <div class="lg:col-span-2"
+       data-controller="playback presence"
+       data-playback-whep-url-value="<%= "#{Rails.configuration.x.media.webrtc_url}/#{@stream.media_path}/whep" %>"
+       data-playback-hls-url-value="<%= "#{Rails.configuration.x.media.hls_url}/#{@stream.media_path}/index.m3u8" %>"
+       data-playback-token-value="<%= @viewer_token %>"
+       data-playback-ice-servers-value="<%= media_ice_servers.to_json %>"
+       data-presence-stream-id-value="<%= @stream.id %>">
+    <%= render "streams/player", stream: @stream %>
+
+    <div class="flex items-start justify-between gap-4 mt-4">
+      <div>
+        <h1 class="font-bold text-2xl"><%= @stream.title %></h1>
+        <p class="text-gray-500">
+          <%= link_to profile.display_name, profile_path(profile), class: "underline" %> · <%= @stream.category.humanize %>
+          · <span class="viewer-count"><%= @stream.viewers_count %></span> watching
+        </p>
+      </div>
+      <% if @stream.user == Current.user %>
+        <%= link_to "Open studio", studio_stream_path(@stream), class: secondary_button_classes %>
+      <% else %>
+        <%= render "profiles/follow", profile: profile %>
+      <% end %>
+    </div>
+  </div>
+
+  <%= render "stream_comments/panel", stream: @stream, moderator: false %>
+</div>

@@ -32,12 +32,16 @@ jobs:
       KAMAL_REGISTRY_PASSWORD: ${{ secrets.GITHUB_TOKEN }}
       SECRET_KEY_BASE: ${{ secrets.SECRET_KEY_BASE }}
       POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      MEDIA_HOST: ${{ vars.MEDIA_HOST }}
+      MEDIA_DOMAIN: ${{ vars.MEDIA_DOMAIN }}
+      MEDIA_HOOK_SECRET: ${{ secrets.MEDIA_HOOK_SECRET }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
         with:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 2
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -49,14 +53,25 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Trust the server host key
-        run: mkdir -p ~/.ssh && ssh-keyscan -H "$KAMAL_WEB_HOST" >> ~/.ssh/known_hosts
+      - name: Trust the server host keys
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H "$KAMAL_WEB_HOST" >> ~/.ssh/known_hosts
+          if [ -n "$MEDIA_HOST" ]; then ssh-keyscan -H "$MEDIA_HOST" >> ~/.ssh/known_hosts; fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
       - name: Deploy
         run: bin/kamal deploy
+
+      - name: Restart the media server if its config changed
+        if: env.MEDIA_HOST != ''
+        run: |
+          if git diff --name-only HEAD~1 HEAD | grep -q '^config/media/'; then
+            bin/kamal accessory reboot mediamtx
+            bin/kamal accessory reboot caddy
+          fi
 
       - name: Smoke test
         run: curl --fail --retry 5 --retry-delay 5 --retry-all-errors "https://$APP_HOST/up"

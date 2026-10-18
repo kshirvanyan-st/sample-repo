@@ -117,3 +117,54 @@ jobs:
 
       - name: Build production image
         run: docker build --tag spark:ci .
+
+  media:
+    # Real MediaMTX + ffmpeg against a test Rails server: see script/media_smoke.
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432
+      MEDIAMTX_VERSION: v1.21.2
+
+    steps:
+      - name: Install packages
+        run: sudo apt-get update && sudo apt-get install --no-install-recommends -y libvips ffmpeg
+
+      - name: Install MediaMTX
+        run: |
+          curl -sSfL "https://github.com/bluenviron/mediamtx/releases/download/${MEDIAMTX_VERSION}/mediamtx_${MEDIAMTX_VERSION}_linux_amd64.tar.gz" \
+            | sudo tar -xz -C /usr/local/bin mediamtx
+          mediamtx --help | head -3
+
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Prepare database
+        run: bin/rails db:test:prepare
+
+      - name: Run media smoke test
+        run: script/media_smoke
+
+      - name: Keep logs on failure
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: media-smoke-logs
+          path: ${{ github.workspace }}/tmp/media_smoke_*.log
+          if-no-files-found: ignore

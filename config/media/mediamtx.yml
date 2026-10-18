@@ -1,0 +1,49 @@
+# MediaMTX configuration shared by development, CI and production.
+# Environment-specific values come from env vars: MediaMTX lets any key be overridden with
+# MTX_<KEY> (e.g. MTX_AUTHHTTPADDRESS), and hook commands expand $VARS from its environment.
+#
+#   MTX_AUTHHTTPADDRESS   Rails auth callback, e.g. https://app.example.com/media/auth?secret=...
+#   MEDIA_HOOKS_URL       Rails hooks base URL, e.g. https://app.example.com/media/hooks
+#   MEDIA_HOOK_SECRET     same secret as Rails' MEDIA_HOOK_SECRET
+#   MTX_WEBRTCALLOWORIGINS / MTX_HLSALLOWORIGINS  the app's origin in production
+
+logLevel: info
+
+# Every publish/read is authorized by Rails (Media::AuthController). So is the control API:
+# Rails calls it with basic auth "rails:<MEDIA_HOOK_SECRET>" (in production through Caddy).
+authMethod: http
+authHTTPAddress: http://localhost:3000/media/auth?secret=development-media-secret
+authHTTPExclude:
+  - action: metrics
+
+# Control API and metrics listen on localhost only.
+api: true
+apiAddress: 127.0.0.1:9997
+metrics: true
+metricsAddress: 127.0.0.1:9998
+
+# Ingest: RTMP for OBS, WebRTC (WHIP) for the browser "Go live" page.
+rtmp: true
+rtmpAddress: :1935
+rtsp: false
+srt: false
+moq: false
+
+# Playback: WebRTC (WHEP) first, low-latency HLS as the fallback.
+webrtc: true
+webrtcAddress: :8889
+webrtcLocalUDPAddress: :8189
+webrtcAllowOrigins: ["*"]
+hls: true
+hlsAddress: :8888
+hlsVariant: lowLatency
+hlsAllowOrigins: ["*"]
+
+pathDefaults:
+  # Tell Rails when a broadcaster's video starts and stops (Media::HooksController).
+  runOnAvailable: 'wget -q -O /dev/null --header "X-Media-Secret: $MEDIA_HOOK_SECRET" --post-data "path=$MTX_PATH" $MEDIA_HOOKS_URL/ready'
+  runOnUnavailable: 'wget -q -O /dev/null --header "X-Media-Secret: $MEDIA_HOOK_SECRET" --post-data "path=$MTX_PATH" $MEDIA_HOOKS_URL/not_ready'
+
+paths:
+  # Broadcasters publish to live/<their stream_path>; anything else is rejected by Rails.
+  "~^live/[A-Za-z0-9]+$": {}

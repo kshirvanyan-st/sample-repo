@@ -1,0 +1,18 @@
+# TLS in front of MediaMTX on the media server (Kamal accessory "caddy").
+# One domain serves WebRTC signaling (WHIP/WHEP), HLS and the control API;
+# WebRTC media itself flows over UDP 8189 and RTMP ingest over TCP 1935, directly.
+{$MEDIA_DOMAIN} {
+	@api path /v3/*
+	handle @api {
+		reverse_proxy 127.0.0.1:9997
+	}
+
+	@hls path *.m3u8 *.mp4
+	handle @hls {
+		reverse_proxy 127.0.0.1:8888
+	}
+
+	handle {
+		reverse_proxy 127.0.0.1:8889
+	}
+}

@@ -1,0 +1,9 @@
+<div id="<%= dom_id(stream, :studio_status) %>" class="flex items-center gap-2 text-sm">
+  <% if stream.live? %>
+    <%= live_badge %> <span class="text-gray-600"><span class="viewer-count"><%= stream.viewers_count %></span> watching</span>
+  <% elsif stream.pending? %>
+    <span class="rounded bg-gray-200 px-2 py-0.5">Not live yet</span>
+  <% else %>
+    <span class="rounded bg-gray-200 px-2 py-0.5">Ended</span>
+  <% end %>
+</div>
