@@ -83,7 +83,8 @@ jobs:
 
     env:
       RAILS_ENV: test
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432
+      # postgis:// (not postgres://) so the URL keeps the PostGIS adapter from database.yml
+      DATABASE_URL: postgis://postgres:postgres@localhost:5432
 
     steps:
       - name: Install packages
