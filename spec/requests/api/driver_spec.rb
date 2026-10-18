@@ -61,6 +61,14 @@ RSpec.describe "Driver API", type: :request do
       expect(trip.reload).to be_searching
     end
 
+    it "explains errors in the driver's language" do
+      get root_path(locale: "en") # remembered in the locale cookie
+      DriverWallet.new(driver).debit!(5000, kind: :adjustment, note: "test")
+      driver.go_offline!
+      post online_api_v1_driver_state_path
+      expect(response.parsed_body).to include("error" => "low_balance", "message" => "Top up your balance to go online.")
+    end
+
     it "serves the app shell" do
       get driver_app_path
       expect(response.body).to include('id="driver-app"', "data-strings")

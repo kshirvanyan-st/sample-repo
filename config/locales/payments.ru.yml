@@ -1,0 +1,114 @@
+ru:
+  payments:
+    sms:
+      receipt: "Taxi AM: %{fare} оплачено наличными. %{from} → %{to}. Спасибо!"
+      statement: "Taxi AM за сегодня: %{trips} поездок, наличными %{cash}, комиссия %{commission}. Баланс: %{balance}."
+    trip:
+      pay_cash: "Оплатите водителю наличными: %{fare}"
+      includes_fee: "Включая %{fee} за поездку, которую вы отменили ранее."
+    quote:
+      outstanding_fee: "К этой поездке добавится плата %{fee} за отменённую ранее поездку."
+    sandbox:
+      show:
+        title: "Тестовый платёж"
+        notice: "Это тестовый банк. Настоящие деньги не списываются."
+        for: "Пополнение для %{name}"
+        pay: "Оплатить"
+        decline: "Отказаться"
+  ledger:
+    kinds:
+      commission: "Комиссия"
+      top_up: "Пополнение"
+      cancellation_payout: "Плата за отмену"
+      adjustment: "Корректировка"
+      refund: "Возврат"
+      fee_collection: "Прежняя плата пассажира за отмену"
+  dispatch:
+    errors:
+      low_balance: "Пополните баланс, чтобы выйти на линию."
+      payments_off: "Онлайн-пополнение пока недоступно. Оплатите в офисе."
+      bad_amount: "Выберите сумму от 1 000 до 50 000 ֏."
+  moderation_actions:
+    change_settings: "Настройки изменены"
+    balance_top_up: "Записано пополнение наличными"
+    balance_adjustment: "Баланс скорректирован"
+  admin:
+    shared:
+      tabs:
+        finance: "Финансы"
+        settings: "Настройки"
+    settings:
+      edit:
+        title: "Настройки"
+        commission_hint: "Списывается с баланса водителя после завершения поездки (пассажир платит водителю наличными)."
+        min_balance_hint: "Водитель может оставаться на линии, пока баланс не ниже этого значения; например, -2000 значит, что он может задолжать до 2 000 ֏."
+        save: "Сохранить"
+      update:
+        saved: "Настройки сохранены."
+    finance:
+      show:
+        title: "Финансы"
+        intro: "Суммы по журналу операций и завершённым поездкам."
+        today: "Сегодня"
+        month: "Этот месяц"
+        balances: "Сейчас"
+        trips: "Завершённые поездки"
+        gmv: "Стоимость поездок (наличными)"
+        commission: "Заработанная комиссия"
+        top_ups: "Пополнения"
+        payouts: "Платы за отмену водителям"
+        adjustments: "Корректировки"
+        owed_by_drivers: "Долг водителей"
+        driver_credit: "Остаток на балансах водителей"
+        riders_owe: "Долг пассажиров (отмены)"
+        debtors: "Водители с наибольшим долгом"
+    driver_balances:
+      show:
+        title: "Баланс: %{name}"
+        kind: "Тип"
+        cash_top_up: "Оплата наличными в офисе"
+        adjustment: "Корректировка (+ или −)"
+        amount: "Сумма, ֏"
+        note: "Комментарий"
+        record: "Записать"
+        confirm: "Записать это изменение баланса водителя?"
+        hint: "Каждое изменение сохраняется в журнале и в журнале аудита; его нельзя изменить или удалить."
+        when: "Когда"
+        what: "Что"
+        balance_after: "Баланс после"
+        trip: "поездка №%{id}"
+      create:
+        invalid: "Укажите сумму и комментарий (пополнение должно быть положительным)."
+        saved: "Баланс обновлён."
+    driver_applications:
+      show:
+        balance: "Баланс: %{amount}"
+  driver_app:
+    balance:
+      button: "Баланс: %{amount}"
+      title: "Баланс"
+      close: "Закрыть"
+      needed: "Пополните на %{amount}, чтобы выйти на линию."
+      rules: "Комиссия %{percent}% за поездку списывается с этого баланса. Работать можно, пока он не ниже %{min}."
+      today: "Сегодня"
+      trips: "Поездки"
+      cash: "Получено наличными"
+      commission: "Комиссия"
+      payouts: "Платы за отмену"
+      top_up: "Пополнить картой"
+      office_only: "Онлайн-пополнение скоро появится. Пока оплачивайте в офисе."
+      kinds:
+        commission: "Комиссия"
+        top_up: "Пополнение"
+        cancellation_payout: "Плата за отмену"
+        adjustment: "Корректировка"
+        refund: "Возврат"
+        fee_collection: "Прежняя плата пассажира"
+      result:
+        paid: "Оплата получена. Баланс обновлён."
+        failed: "Оплата не прошла."
+  activerecord:
+    attributes:
+      business_setting:
+        commission_percent: "Комиссия, %"
+        min_balance: "Минимальный баланс для выхода на линию, ֏"

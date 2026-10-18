@@ -18,7 +18,7 @@ module Api
           end
 
           def render_error(key, status)
-            render json: { error: key, message: t("dispatch.errors.#{key}") }, status: status
+            render json: { error: key, message: t_request("dispatch.errors.#{key}") }, status: status
           end
 
           def render_state

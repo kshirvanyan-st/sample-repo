@@ -16,7 +16,9 @@ module TripLifecycle
   end
 
   def self.complete!(trip, driver)
-    step!(trip, driver, from: :in_progress, to: :completed, stamp: :completed_at)
+    step!(trip, driver, from: :in_progress, to: :completed, stamp: :completed_at, after_change: -> { Settlement.trip_completed!(trip) })
+    Receipts.trip_completed(trip)
+    trip
   end
 
   # Riders can cancel until the trip starts (with a fee after the free minutes); drivers can hand a
@@ -31,6 +33,7 @@ module TripLifecycle
 
         trip.update!(status: :cancelled, cancelled_by: "rider", cancel_reason: reason, cancelled_at: Time.current,
           cancellation_fee: trip.cancellation_fee_now)
+        Settlement.rider_cancelled_with_fee!(trip)
         trip.offers.pending.update_all(status: TripOffer.statuses[:expired], updated_at: Time.current)
       when DriverProfile
         raise Error, "not_allowed" unless trip.driver_profile_id == by.id && trip.status.in?(%w[ accepted arrived ])
@@ -46,13 +49,14 @@ module TripLifecycle
     trip
   end
 
-  def self.step!(trip, driver, from:, to:, stamp:)
+  def self.step!(trip, driver, from:, to:, stamp:, after_change: nil)
     Trip.transaction do
       trip.lock!
       raise Error, "not_allowed" unless trip.driver_profile_id == driver.id && trip.status == from.to_s
 
       yield if block_given?
       trip.update!(status: to, stamp => Time.current)
+      after_change&.call
     end
     Notify.trip(trip)
     trip

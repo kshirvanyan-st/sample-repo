@@ -1,14 +1,18 @@
 import { useCallback, useEffect, useState } from "react"
 import { api } from "./api"
-import { t } from "./i18n"
+import { t, amd } from "./i18n"
 import { useDriverDevice } from "./useDriverDevice"
 import OfferCard from "./components/OfferCard"
 import TripScreen from "./components/TripScreen"
+import BalanceScreen from "./components/BalanceScreen"
+
+const topUpResult = new URLSearchParams(window.location.search).get("top_up")
 
 export default function App({ stateUrl }) {
   const [ state, setState ] = useState(null)
   const [ busy, setBusy ] = useState(false)
   const [ error, setError ] = useState(null)
+  const [ showBalance, setShowBalance ] = useState(false)
 
   const refresh = useCallback(() => api.state(stateUrl).then(setState).catch((e) => setError(e.message)), [ stateUrl ])
   useEffect(() => { refresh() }, [ refresh ])
@@ -35,6 +39,9 @@ export default function App({ stateUrl }) {
         <div>
           <p className="text-lg font-bold text-yellow-400">{t("title")}</p>
           <p className="text-sm text-gray-400">{state.name}{state.vehicle && ` · ${state.vehicle.plate}`}</p>
+          <button type="button" className="mt-1 text-sm underline" onClick={() => setShowBalance(!showBalance)}>
+            {t("balance.button", { amount: amd(state.balance) })}
+          </button>
         </div>
         {!state.trip && (
           <button type="button" role="switch" aria-checked={state.online} disabled={busy}
@@ -46,10 +53,16 @@ export default function App({ stateUrl }) {
       </header>
 
       {error && <p role="alert" className="rounded-lg bg-red-600 px-4 py-3">{error}</p>}
+      {topUpResult && <p role="status" className="rounded-lg bg-gray-800 px-4 py-3">{t(`balance.result.${topUpResult}`)}</p>}
+      {!state.online && !state.trip && state.needed > 0 && (
+        <p role="alert" className="rounded-lg bg-amber-500 px-4 py-3 text-gray-900">{t("balance.needed", { amount: amd(state.needed) })}</p>
+      )}
       {state.online && hidden && <p role="alert" className="rounded-lg bg-amber-500 px-4 py-3 text-gray-900">{t("keep_open")}</p>}
       {state.online && gpsError && <p role="alert" className="rounded-lg bg-amber-500 px-4 py-3 text-gray-900">{t("gps_error")}</p>}
 
-      {state.trip ? (
+      {showBalance ? (
+        <BalanceScreen onClose={() => { setShowBalance(false); refresh() }} />
+      ) : state.trip ? (
         <TripScreen trip={state.trip} busy={busy} onAction={(action) => run(() => api.trip(state.trip.id, action))} />
       ) : state.offer ? (
         <OfferCard offer={state.offer} busy={busy} onAccept={() => run(() => api.accept(state.offer.id))} onDecline={() => run(() => api.decline(state.offer.id))} />

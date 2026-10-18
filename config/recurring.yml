@@ -19,3 +19,6 @@ production:
   stale_drivers:
     class: StaleDriversJob
     schedule: every minute
+  daily_statements:
+    class: DailyStatementJob
+    schedule: every day at 11:55pm Asia/Yerevan

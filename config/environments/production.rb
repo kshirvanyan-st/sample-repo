@@ -52,6 +52,9 @@ Rails.application.configure do
   # Sign-in codes go out through Twilio. SMS_ADAPTER=log is only for a staging box without SMS.
   config.x.sms.adapter = ENV.fetch("SMS_ADAPTER", "twilio").to_sym
 
+  # No online top-ups until a real provider is set up (PAYMENTS_ADAPTER); never the sandbox by default.
+  config.x.payments.adapter = ENV["PAYMENTS_ADAPTER"].presence
+
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }

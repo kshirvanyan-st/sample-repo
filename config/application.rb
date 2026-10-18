@@ -45,6 +45,8 @@ module TaxiAm
     config.x.routing.osrm_url = ENV.fetch("OSRM_URL", "https://router.project-osrm.org")
     config.x.geocoding.adapter = ENV.fetch("GEOCODING_ADAPTER", "nominatim").to_sym
     config.x.geocoding.nominatim_url = ENV.fetch("NOMINATIM_URL", "https://nominatim.openstreetmap.org")
+    # Driver top-ups (app/services/payments.rb). Development uses the pretend "sandbox" bank.
+    config.x.payments.adapter = ENV.fetch("PAYMENTS_ADAPTER", "sandbox")
     config.x.maps.style_url = ENV.fetch("MAP_STYLE_URL", "https://tiles.openfreemap.org/styles/liberty")
     # config.eager_load_paths << Rails.root.join("extras")
 

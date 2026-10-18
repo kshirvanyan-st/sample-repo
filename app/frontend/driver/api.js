@@ -27,5 +27,7 @@ export const api = {
   offline: () => request("/api/v1/driver/state/offline", { method: "POST" }),
   accept: (id) => request(`/api/v1/driver/offers/${id}/accept`, { method: "POST" }),
   decline: (id) => request(`/api/v1/driver/offers/${id}/decline`, { method: "POST" }),
-  trip: (id, action) => request(`/api/v1/driver/trips/${id}/${action}`, { method: "POST" })
+  trip: (id, action) => request(`/api/v1/driver/trips/${id}/${action}`, { method: "POST" }),
+  wallet: () => request("/api/v1/driver/wallet"),
+  topUp: (amount) => request("/api/v1/driver/top_ups", { method: "POST", body: { amount } })
 }

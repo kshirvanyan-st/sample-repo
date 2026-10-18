@@ -9,3 +9,4 @@
 #   end
 
 MapDefaults.load!
+BusinessSetting.current

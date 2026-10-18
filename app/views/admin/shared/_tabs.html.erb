@@ -8,4 +8,6 @@
   <% end %>
   <%= link_to t(".tariffs"), admin_tariffs_path, class: controller_name == "tariffs" ? "font-semibold" : "text-gray-600" %>
   <%= link_to t(".zones"), admin_service_zones_path, class: controller_name == "service_zones" ? "font-semibold" : "text-gray-600" %>
+  <%= link_to t(".finance"), admin_finance_path, class: controller_name.in?(%w[ finance driver_balances ]) ? "font-semibold" : "text-gray-600" %>
+  <%= link_to t(".settings"), edit_admin_settings_path, class: controller_name == "settings" ? "font-semibold" : "text-gray-600" %>
 </nav>

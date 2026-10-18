@@ -1,0 +1,12 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-sm py-10">
+  <p class="rounded-lg bg-amber-100 px-3 py-2 text-sm text-amber-900"><%= t(".notice") %></p>
+  <h1 class="mt-4 text-2xl font-bold"><%= t(".title") %></h1>
+  <p class="mt-2 text-4xl font-bold"><%= amd(@top_up.amount) %></p>
+  <p class="mt-1 text-gray-600"><%= t(".for", name: @top_up.driver_profile.user.display_name) %></p>
+  <div class="mt-6 grid grid-cols-2 gap-3">
+    <%= button_to t(".decline"), payments_sandbox_path(@top_up, decision: "decline"), method: :patch, class: "w-full rounded-lg border px-4 py-3" %>
+    <%= button_to t(".pay"), payments_sandbox_path(@top_up, decision: "pay"), method: :patch,
+          class: "w-full rounded-lg bg-green-600 px-4 py-3 font-semibold text-white" %>
+  </div>
+</section>
