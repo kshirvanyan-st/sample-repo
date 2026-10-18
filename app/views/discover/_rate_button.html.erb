@@ -1,0 +1,2 @@
+<%= button_to label, likes_path, params: { profile_id: profile.id, kind: kind, source: local_assigns.fetch(:source, "deck") },
+      class: classes, form: { data: { swipe_target: kind } } %>

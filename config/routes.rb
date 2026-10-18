@@ -6,7 +6,14 @@ Rails.application.routes.draw do
 
   resources :profiles, only: :show do
     resource :follow, only: %i[ create destroy ]
+    resource :block, only: %i[ create destroy ]
+    resources :reports, only: %i[ new create ]
   end
+
+  resource :discover, only: :show, controller: "discover"
+  resources :likes, only: :create
+  get "liked-me" => "likes#index", as: :liked_me
+  resources :matches, only: %i[ index destroy ]
 
   scope module: :my do
     resource :profile, only: %i[ edit update ], as: :my_profile, path: "me"

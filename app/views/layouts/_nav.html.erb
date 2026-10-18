@@ -1,0 +1,14 @@
+<nav class="fixed top-0 inset-x-0 bg-white border-b z-10">
+  <div class="container mx-auto px-5 h-14 flex items-center gap-5 text-sm font-medium">
+    <%= link_to "Spark", root_path, class: "text-pink-600 font-bold text-lg mr-2" %>
+    <%= link_to "Discover", discover_path %>
+    <%= link_to liked_me_path do %>
+      Liked me <span id="liked_me_count" class="ml-1 rounded-full bg-pink-100 text-pink-700 px-2"><%= liked_me_count %></span>
+    <% end %>
+    <%= link_to matches_path do %>
+      Matches <span id="matches_count" class="ml-1 rounded-full bg-gray-100 px-2"><%= Current.user.matches.count %></span>
+    <% end %>
+    <%= link_to "Profile", profile_path(Current.user.profile), class: "ml-auto" %>
+    <%= button_to "Sign out", session_path, method: :delete, class: "text-gray-500 cursor-pointer" %>
+  </div>
+</nav>

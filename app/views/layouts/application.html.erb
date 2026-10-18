@@ -24,10 +24,16 @@
   </head>
 
   <body>
-    <main class="container mx-auto mt-28 px-5">
-      <% flash.each do |type, message| %>
-        <p class="py-2 px-3 mb-5 font-medium rounded-lg inline-block <%= type == "alert" ? "bg-red-50 text-red-500" : "bg-green-50 text-green-500" %>" id="<%= type %>"><%= message %></p>
-      <% end %>
+    <% if authenticated? && Current.user.onboarded? %>
+      <%= render "layouts/nav" %>
+    <% end %>
+
+    <main class="container mx-auto mt-24 px-5">
+      <div id="flash">
+        <% flash.each do |type, message| %>
+          <%= render "layouts/flash", type: type, message: message %>
+        <% end %>
+      </div>
       <%= yield %>
     </main>
   </body>

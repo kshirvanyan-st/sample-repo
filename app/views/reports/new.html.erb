@@ -1,0 +1,19 @@
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl">Report <%= @profile.display_name %></h1>
+
+  <%= form_with model: @report, url: profile_reports_path(@profile) do |form| %>
+    <%= render "shared/errors", record: @report %>
+
+    <div class="my-5">
+      <%= form.label :reason %>
+      <%= form.select :reason, Report.reasons.keys.map { |r| [ r.humanize, r ] }, {}, class: input_classes %>
+    </div>
+
+    <div class="my-5">
+      <%= form.label :details, "What happened? (optional)" %>
+      <%= form.text_area :details, rows: 4, maxlength: 1000, class: input_classes %>
+    </div>
+
+    <%= form.submit "Send report", class: primary_button_classes %>
+  <% end %>
+</div>

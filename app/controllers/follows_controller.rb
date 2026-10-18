@@ -18,7 +18,7 @@ class FollowsController < ApplicationController
 
   private
     def set_profile
-      @profile = Profile.where.not(onboarded_at: nil).find(params[:profile_id])
+      @profile = Profile.where.not(onboarded_at: nil).where.not(user_id: Current.user.blocked_user_ids).find(params[:profile_id])
     end
 
     def respond_with_button

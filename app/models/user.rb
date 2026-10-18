@@ -8,6 +8,13 @@ class User < ApplicationRecord
   has_many :following, through: :active_follows, source: :followee
   has_many :followers, through: :passive_follows, source: :follower
 
+  has_many :likes_given, class_name: "Like", foreign_key: :liker_id, inverse_of: :liker, dependent: :destroy
+  has_many :likes_received, class_name: "Like", foreign_key: :likee_id, inverse_of: :likee, dependent: :destroy
+  has_many :blocks_given, class_name: "Block", foreign_key: :blocker_id, inverse_of: :blocker, dependent: :destroy
+  has_many :blocks_received, class_name: "Block", foreign_key: :blocked_id, inverse_of: :blocked, dependent: :destroy
+  has_many :reports_filed, class_name: "Report", foreign_key: :reporter_id, inverse_of: :reporter, dependent: :destroy
+  has_many :reports_received, class_name: "Report", foreign_key: :reported_id, inverse_of: :reported, dependent: :destroy
+
   normalizes :email_address, with: ->(e) { e.strip.downcase }
 
   validates :email_address, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
@@ -27,5 +34,26 @@ class User < ApplicationRecord
 
   def following?(user)
     active_follows.exists?(followee: user)
+  end
+
+  def matches
+    Match.for(self)
+  end
+
+  def matched_with?(user)
+    Match.between(self, user).present?
+  end
+
+  # Everyone this user blocked or was blocked by.
+  def blocked_user_ids
+    Block.where(blocker_id: id).pluck(:blocked_id) | Block.where(blocked_id: id).pluck(:blocker_id)
+  end
+
+  def blocking?(user)
+    blocks_given.exists?(blocked: user)
+  end
+
+  def blocked_with?(user)
+    Block.where(blocker: self, blocked: user).or(Block.where(blocker: user, blocked: self)).exists?
   end
 end

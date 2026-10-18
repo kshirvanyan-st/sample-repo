@@ -9,11 +9,10 @@
         <%= pluralize(Current.user.followers.count, "follower") %> · <%= Current.user.following.count %> following
       </p>
       <div class="mt-6 flex flex-wrap gap-3">
+        <%= link_to "Start discovering", discover_path, class: primary_button_classes %>
         <%= link_to "Edit profile", edit_my_profile_path, class: secondary_button_classes %>
         <%= link_to "My photos", photos_path, class: secondary_button_classes %>
-        <%= button_to "Sign out", session_path, method: :delete, class: secondary_button_classes %>
       </div>
-      <p class="text-sm text-gray-500 mt-6">Discovery and matches are coming next.</p>
     </div>
   </section>
 <% else %>

@@ -1,0 +1,2 @@
+<%= turbo_stream.update "liked_me_count", liked_me_count.to_s %>
+<%= turbo_stream.update "matches_count", Current.user.matches.count.to_s %>

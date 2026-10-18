@@ -18,6 +18,6 @@ class My::ProfilesController < ApplicationController
     end
 
     def profile_params
-      params.expect(profile: %i[ display_name birthdate gender looking_for city bio latitude longitude ])
+      params.expect(profile: %i[ display_name birthdate gender looking_for city bio latitude longitude age_min age_max max_distance_km ])
     end
 end

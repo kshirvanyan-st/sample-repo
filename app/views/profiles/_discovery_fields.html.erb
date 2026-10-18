@@ -1,0 +1,17 @@
+<fieldset id="discovery" class="my-5 border rounded-lg p-4">
+  <legend class="px-1 font-medium">Discovery settings</legend>
+  <div class="grid grid-cols-3 gap-3">
+    <div>
+      <%= form.label :age_min, "Min age" %>
+      <%= form.number_field :age_min, min: Profile::MINIMUM_AGE, max: Profile::MAXIMUM_AGE, class: input_classes %>
+    </div>
+    <div>
+      <%= form.label :age_max, "Max age" %>
+      <%= form.number_field :age_max, min: Profile::MINIMUM_AGE, max: Profile::MAXIMUM_AGE, class: input_classes %>
+    </div>
+    <div>
+      <%= form.label :max_distance_km, "Max distance (km)" %>
+      <%= form.number_field :max_distance_km, min: 1, max: 500, placeholder: "Anywhere", class: input_classes %>
+    </div>
+  </div>
+</fieldset>
