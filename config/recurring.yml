@@ -16,3 +16,6 @@ production:
   document_expiry:
     class: DocumentExpiryJob
     schedule: every day at 10am Asia/Yerevan
+  stale_drivers:
+    class: StaleDriversJob
+    schedule: every minute

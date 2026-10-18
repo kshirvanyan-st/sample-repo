@@ -12,6 +12,16 @@ module Routing
     StraightLineAdapter.new.route(from, to)
   end
 
+  # Driving seconds from each origin to one destination (e.g. drivers to a pickup), same order.
+  def self.etas(origins, destination)
+    return [] if origins.empty?
+
+    adapter.etas(origins, destination)
+  rescue HttpJson::Error => e
+    Rails.logger.warn "ETA lookup failed, using straight-line estimates: #{e.message}"
+    StraightLineAdapter.new.etas(origins, destination)
+  end
+
   def self.adapter
     ADAPTERS.fetch(Rails.configuration.x.routing.adapter.to_sym).constantize.new
   end

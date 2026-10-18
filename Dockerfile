@@ -32,8 +32,17 @@ FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips libyaml-dev pkg-config && \
+    apt-get install --no-install-recommends -y build-essential git libpq-dev libvips libyaml-dev pkg-config xz-utils && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+# Node builds the driver app (Vite) during assets:precompile; it isn't in the final image.
+ARG NODE_VERSION=22.22.2
+ARG TARGETARCH
+RUN arch=$([ "$TARGETARCH" = "arm64" ] && echo arm64 || echo x64) && \
+    curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-${arch}.tar.xz" | tar -xJ -C /usr/local --strip-components=1
+
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci
 
 # Install application gems
 COPY vendor/* ./vendor/
@@ -52,7 +61,8 @@ COPY . .
 RUN bundle exec bootsnap precompile -j 1 app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile && \
+    rm -rf node_modules
 
 
 

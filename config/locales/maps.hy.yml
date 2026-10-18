@@ -35,7 +35,8 @@ hy:
         comfort: "Ավելի նոր և ընդարձակ մեքենաներ"
       valid_until: "Գները գործում են մինչև %{time}։"
       expired: "Գների ժամկետը լրացել է։ Ստուգեք դրանք կրկին։"
-      book_soon: "Պատվերը շուտով հասանելի կլինի"
+      book: "Պատվիրել"
+      book_class: "Պատվիրել «%{vehicle_class}»"
       change: "Փոխել երթուղին"
   saved_places:
     index:

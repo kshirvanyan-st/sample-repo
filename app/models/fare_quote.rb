@@ -3,6 +3,7 @@ class FareQuote < ApplicationRecord
   TTL = 10.minutes
 
   belongs_to :user
+  has_many :trips, dependent: :restrict_with_exception
 
   validates :pickup, :dropoff, presence: true
   validate :inside_service_area, on: :create

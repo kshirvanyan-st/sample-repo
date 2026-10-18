@@ -8,7 +8,10 @@ CI.run do
   step "Security: Gem audit", "bin/bundler-audit"
   step "Security: Importmap vulnerability audit", "bin/importmap audit"
   step "Security: Brakeman code analysis", "bin/brakeman --quiet --no-pager --exit-on-warn --exit-on-error"
+  step "Security: npm audit", "npm audit --omit=dev"
   step "Tests: RSpec", "bin/rspec"
+  step "Tests: driver app (Vitest)", "npm test"
+  step "Build: driver app (Vite)", "bin/vite build --mode=test"
 
 
   # Optional: set a green GitHub commit status to unblock PR merge.

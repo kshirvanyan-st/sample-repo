@@ -27,7 +27,13 @@
           <p class="font-semibold"><%= t("vehicles.classes.#{vehicle_class}") %></p>
           <p class="text-sm text-gray-600"><%= t("fare_quotes.show.class_hint.#{vehicle_class}") %></p>
         </div>
-        <p class="whitespace-nowrap text-xl font-bold"><%= amd(price) %></p>
+        <div class="flex items-center gap-3">
+          <p class="whitespace-nowrap text-xl font-bold"><%= amd(price) %></p>
+          <% unless @fare_quote.expired? %>
+            <%= button_to t(".book"), trips_path, params: { fare_quote_id: @fare_quote.id, vehicle_class: vehicle_class },
+                  class: "rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-gray-900", aria: { label: t(".book_class", vehicle_class: t("vehicles.classes.#{vehicle_class}")) } %>
+          <% end %>
+        </div>
       </li>
     <% end %>
   </ul>
@@ -35,6 +41,5 @@
   <p class="mt-3 text-sm text-gray-600">
     <%= @fare_quote.expired? ? t(".expired") : t(".valid_until", time: l(@fare_quote.expires_at, format: "%H:%M")) %>
   </p>
-  <button type="button" disabled class="mt-4 w-full rounded-lg bg-yellow-400 px-4 py-3 text-lg font-semibold text-gray-900 opacity-50"><%= t(".book_soon") %></button>
   <%= link_to t(".change"), new_fare_quote_path, class: "mt-3 inline-block underline" %>
 </section>

@@ -1,0 +1,82 @@
+en:
+  home:
+    index:
+      current_trip: "Your current trip"
+  dispatch:
+    errors:
+      quote_expired: "These prices have expired. Check the price again."
+      unknown_class: "That car class isn't available for this trip."
+      already_riding: "You already have a trip in progress."
+      offer_gone: "This ride is no longer available."
+      busy: "You already have a trip."
+      not_allowed: "That can't be done at this stage of the trip."
+      too_far: "You're not at the pickup point yet."
+      on_trip: "Finish the trip before going offline."
+      not_a_driver: "Only approved drivers can use the driver app."
+      rate_limited: "Too many requests. Wait a moment."
+  trips:
+    show:
+      title: "Your ride"
+      map: "Map of your ride"
+      cancel: "Cancel the ride"
+      confirm_cancel: "Cancel this ride?"
+      fee_rule: "Free to cancel for %{minutes} min after a driver accepts, %{fee} after that."
+    cancel:
+      cancelled: "Ride cancelled."
+    status:
+      title:
+        searching: "Finding you a driver…"
+        accepted: "Your driver is on the way"
+        arrived: "Your driver is here"
+        in_progress: "On the way"
+        completed: "You've arrived"
+        cancelled: "Ride cancelled"
+        no_drivers: "No drivers available"
+      body:
+        searching: "We're offering your ride to the nearest drivers. This usually takes under a minute."
+        accepted: "Watch the car on the map."
+        arrived: "Look for this car."
+        in_progress: "Enjoy the ride."
+        completed: "Thank you for riding with Taxi AM. Please pay the driver in cash."
+        cancelled: ""
+        no_drivers: "All drivers near you are busy. Please try again in a few minutes."
+      eta: "Arrives in about %{minutes} min"
+      fare: "%{vehicle_class} · %{fare}"
+      cancellation_fee: "cancellation fee %{fee}"
+      again: "Book another ride"
+  driver_app:
+    title: "Taxi AM Driver"
+    needs_javascript: "The driver app needs JavaScript."
+    loading: "Loading…"
+    online: "Online"
+    offline: "Offline"
+    waiting: "You're online. Waiting for a ride…"
+    go_online_hint: "Go online to receive rides."
+    keep_open: "Keep this app open while you're online, or you'll stop getting rides."
+    gps_error: "We can't get your location. Turn on GPS and allow location for this site."
+    pickup: "Pickup"
+    dropoff: "Destination"
+    pin: "Point on the map"
+    offer:
+      title: "New ride"
+      accept: "Accept"
+      decline: "Skip"
+      summary: "%{eta} min away · %{km} km trip"
+      seconds_left: "%{seconds} seconds left"
+    trip:
+      arrived: "I've arrived"
+      start: "Start the trip"
+      complete: "Finish the trip"
+      hand_back: "I can't take this ride"
+      rider: "Rider: %{name}"
+      navigate_yandex: "Yandex Navigator"
+      navigate_google: "Google Maps"
+      status:
+        accepted: "Drive to the pickup"
+        arrived: "Waiting for the rider"
+        in_progress: "Drive to the destination"
+  activerecord:
+    attributes:
+      tariff:
+        cancellation_fee: "Cancellation fee, ֏"
+        free_cancellation_minutes: "Free cancellation, minutes"

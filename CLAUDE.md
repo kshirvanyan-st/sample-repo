@@ -48,6 +48,19 @@ and on pushes to `taxi-main`.
 - MapLibre is served from `public/vendor/maplibre-gl-<version>/` (three ES modules that import each other
   by relative path). To upgrade: download the new `dist/*.mjs` and css there and update `config/importmap.rb`.
 - Specs tagged `:osrm` run only in the CI `routing` job against a real OSRM (`bin/osrm-prepare`).
+- Trips: `Dispatch` (request → offers to one driver at a time, 15 s each, nearest by OSRM ETA → accept)
+  and `TripLifecycle` (arrive / start / complete / cancel). Never change `trips.status` or
+  `driver_profile_id` anywhere else. Double booking is prevented by row locks (SKIP LOCKED when
+  reserving) plus the partial unique index `index_trips_one_active_per_driver`; keep both.
+- Realtime: `Notify` is the only place that broadcasts (Turbo Stream status panel for the rider,
+  `TripChannel` positions, `DriverChannel` "refresh" nudges). Partials it renders must not depend on the
+  request (no `Current`, no forms: CSRF tokens can't be rendered outside a request).
+- Driver app: React in `app/frontend/driver` built by Vite (`vite_rails`), served at `/driver`, talking
+  to `/api/v1/driver/*`. Its strings live under `driver_app.*` in the Rails locale files. Run
+  `npm test` (Vitest). The rider site stays on importmap; don't add Vite tags to the main layout.
+- Drivers go offline automatically after 60 s without a position (`StaleDriversJob`).
+- Specs tagged `:concurrency` run only in the CI `dispatch` job
+  (`RAILS_MAX_THREADS=25 CONCURRENCY_SPECS=1 bin/rspec --tag concurrency`).
 - Locale files: `config/locales/{hy,ru,en}.yml` plus feature files like `drivers.hy.yml`.
 - Rate limits: sign-in per IP and per number; signed-in actions per user (`by: -> { Current.user.id }`).
 - Geo: store points as PostGIS `geography(Point, 4326)` (longitude first); never compare raw lat/lng floats.

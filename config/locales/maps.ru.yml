@@ -35,7 +35,8 @@ ru:
         comfort: "Новее и просторнее"
       valid_until: "Цены действуют до %{time}."
       expired: "Срок действия цен истёк. Проверьте их снова."
-      book_soon: "Заказ скоро будет доступен"
+      book: "Заказать"
+      book_class: "Заказать «%{vehicle_class}»"
       change: "Изменить маршрут"
   saved_places:
     index:

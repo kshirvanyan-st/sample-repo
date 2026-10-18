@@ -4,6 +4,9 @@ class FareQuotesController < ApplicationController
   rate_limit to: 20, within: 1.minute, only: :create, by: -> { Current.user.id }
 
   def new
+    open_trip = Current.user.trips.open.first
+    return redirect_to(open_trip) if open_trip
+
     @fare_quote = FareQuote.new
     set_saved_places
   end
