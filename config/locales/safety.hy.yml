@@ -1,0 +1,200 @@
+hy:
+  ratings:
+    unsafe_report: "Վարորդին տրվել է 1 աստղ վտանգավոր վարման համար։"
+    form:
+      title: "Ինչպե՞ս անցավ ուղևորությունը %{name}-ի հետ"
+      stars: "Աստղեր"
+      star: "%{stars}՝ 5-ից"
+      comment: "Ուզո՞ւմ եք ինչ-որ բան ավելացնել (ըստ ցանկության)"
+      submit: "Ուղարկել գնահատականը"
+    reasons:
+      unsafe_driving: "Վտանգավոր վարում"
+      rude: "Կոպտություն"
+      dirty_car: "Կեղտոտ մեքենա"
+      wrong_route: "Սխալ երթուղի"
+      late: "Ուշացում"
+      friendly: "Բարեհամբույր"
+      clean_car: "Մաքուր մեքենա"
+      smooth_driving: "Զգույշ վարում"
+      messy: "Թողել է անկարգություն"
+      polite: "Քաղաքավարի"
+      on_time: "Ճշտապահ"
+    roles:
+      rider_rates_driver: "Ուղևորը գնահատել է վարորդին"
+      driver_rates_rider: "Վարորդը գնահատել է ուղևորին"
+    create:
+      thanks: "Շնորհակալություն գնահատականի համար։"
+  dispatch:
+    errors:
+      already_rated: "Դուք արդեն գնահատել եք այս ուղևորությունը։"
+      too_late: "Այս ուղևորությունն այլևս հնարավոր չէ գնահատել։"
+      bad_rating: "Ընտրեք 1-ից 5 աստղ։"
+  trips:
+    show:
+      share: "Կիսվել ուղևորությամբ"
+      link_copied: "Հղումը պատճենված է"
+      sos: "Պահեք SOS-ի համար"
+      sos_hint: "Պահեք կարմիր կոճակը՝ մեր թիմին և ձեր վստահելի մարդկանց տեղեկացնելու համար։ Վտանգի դեպքում զանգեք"
+      call_911: "911"
+      get_help: "Օգնություն այս ուղևորության վերաբերյալ"
+  share_links:
+    create:
+      text: "Հետևեք %{name}-ի Taxi AM ուղևորությանն իրական ժամանակում՝"
+  sos:
+    create:
+      sent: "Օգնությունը ճանապարհին է. մեր թիմը և ձեր վստահելի մարդիկ տեղեկացված են։ Վտանգի դեպքում զանգեք 911։"
+  shared_trips:
+    show:
+      title: "Ուղևորությունն իրական ժամանակում"
+      map: "Ուղևորության քարտեզը"
+      driver: "Վարորդ՝ %{name}"
+      emergency: "Անհանգստանո՞ւմ եք։ Արտակարգ դեպքում զանգեք"
+    status:
+      searching: "Վարորդ ենք փնտրում"
+      accepted: "Վարորդը գնում է նստեցման վայր"
+      arrived: "Վարորդը նստեցման վայրում է"
+      in_progress: "Ճանապարհին"
+      completed: "Հաջողությամբ հասան"
+      cancelled: "Ուղևորությունը չեղարկվել է"
+      no_drivers: "Ուղևորությունը չեղարկվել է"
+    expired:
+      title: "Այս հղման ժամկետը լրացել է"
+      body: "Ուղևորության հղումները դադարում են աշխատել ավարտից մեկ ժամ անց։"
+  safety:
+    sos:
+      ticket_body: "SOS-ը սեղմել է %{role}-ը ուղևորության ընթացքում։"
+    sms:
+      staff_replied: "Taxi AM-ի աջակցման ծառայությունը պատասխանել է ձեր №%{id} հարցմանը։ Բացեք հավելվածը՝ կարդալու համար։"
+      sos_contact: "Taxi AM. %{name}-ը սեղմել է SOS ուղևորության ընթացքում։ Հետևեք իրական ժամանակում՝ %{link} Վտանգի դեպքում զանգեք 911։"
+      sos_staff: "SOS Taxi AM-ում, հարցում №%{id}՝ %{link}"
+      lost_item_driver: "Taxi AM. №%{id} ուղևորության ուղևորը իր իրը թողել է ձեր մեքենայում։ Աջակցման ծառայությունը կկապվի ձեզ հետ։"
+  emergency_contacts:
+    index:
+      title: "Վստահելի կոնտակտներ"
+      intro: "Մինչև %{limit} մարդ, որոնց SMS-ով կուղարկենք ուղևորության հղումը, եթե սեղմեք SOS։"
+      delete: "Հեռացնել"
+      none: "Վստահելի կոնտակտներ դեռ չկան։"
+      add: "Ավելացնել կոնտակտ"
+    create:
+      saved: "Կոնտակտն ավելացված է։"
+    destroy:
+      deleted: "Կոնտակտը հեռացված է։"
+  support:
+    trip_statuses:
+      searching: "Վարորդի որոնում"
+      accepted: "Վարորդը ճանապարհին է"
+      arrived: "Վարորդը տեղում է"
+      in_progress: "Ընթացքում"
+      completed: "Ավարտված"
+      cancelled: "Չեղարկված"
+      no_drivers: "Վարորդ չգտնվեց"
+    kinds:
+      sos: "SOS"
+      complaint: "Բողոք"
+      lost_item: "Մոռացված իր"
+      fare: "Վճարման հարց"
+      other: "Այլ"
+      safety: "Անվտանգության մասին հաղորդում"
+    statuses:
+      open: "Բաց"
+      in_progress: "Ընթացքում"
+      resolved: "Լուծված"
+    thread:
+      staff: "%{name} (Taxi AM աջակցում)"
+      internal: "ներքին նշում"
+  support_tickets:
+    index:
+      title: "Օգնություն"
+      new: "Դիմել օգնության"
+      none: "Դուք դեռ չեք դիմել օգնության։"
+    new:
+      title: "Ինչո՞վ կարող ենք օգնել"
+      about_trip: "№%{id} ուղևորության մասին, %{date}"
+      kind: "Ի՞նչ է պատահել"
+      body: "Պատմեք ավելի մանրամասն"
+      send: "Ուղարկել"
+    create:
+      invalid: "Ընտրեք, թե ինչ է պատահել, և գրեք հաղորդագրություն։"
+      sent: "Շնորհակալություն, կպատասխանենք այստեղ և SMS-ով։"
+    show:
+      title: "Հարցում №%{id}"
+      back: "Բոլոր հարցումները"
+      reply: "Գրել պատասխան"
+      send: "Ուղարկել"
+  admin:
+    shared:
+      tabs:
+        support: "Աջակցում"
+    support_tickets:
+      index:
+        title: "Աջակցում"
+        filter: "Զտել ըստ կարգավիճակի"
+        unresolved: "Չլուծված"
+        ticket: "Հարցում"
+        from: "Ումից"
+        trip: "Ուղևորություն"
+        status: "Կարգավիճակ"
+        created: "Ստեղծվել է"
+      row:
+        trip: "ուղևորություն №%{id}"
+        open: "Բացել"
+      show:
+        back: "Վերադառնալ հերթին"
+        assigned: "%{name}-ի մոտ"
+        take: "Վերցնել"
+        resolve: "Նշել լուծված"
+        driver_file: "Վարորդի քարտը"
+        driver_balance: "Վարորդի հաշվեկշիռը"
+        reply: "Պատասխան օգտատիրոջը (նաև SMS-ով)"
+        internal: "Ներքին նշում (տեսնում են միայն աշխատակիցները)"
+        send: "Ուղարկել"
+        trip: "Ուղևորություն №%{id}"
+        rider: "Ուղևոր"
+        driver: "Վարորդ"
+        car: "Մեքենա"
+        status: "Կարգավիճակ"
+        sos_location: "Կարմիր նշան՝ որտեղ է սեղմվել SOS-ը։"
+      resolve:
+        resolved: "№%{id} հարցումը լուծված է։"
+    driver_applications:
+      reviewed: "%{name}-ը նշված է որպես ստուգված։"
+      index:
+        needs_review: "Ցածր վարկանիշ"
+      show:
+        rating: "Վարկանիշ %{avg} (%{count} գնահատական)"
+        flagged: "Նշվել է %{time}. միջին գնահատականն իջել է %{below}-ից։ Խոսեք վարորդի հետ, ապա նշեք որպես ստուգված կամ կասեցրեք։"
+        review_note: "Ինչ որոշվեց"
+        mark_reviewed: "Նշել որպես ստուգված"
+  shared:
+    user_menu:
+      help: "Օգնություն"
+      support_queue: "Աջակցում"
+  profiles:
+    edit:
+      emergency_contacts: "Վստահելի կոնտակտներ"
+  moderation_actions:
+    flag_for_review: "Նշվել է ցածր վարկանիշի համար"
+    clear_review: "Վարկանիշի ստուգումն ավարտված է"
+  driver_app:
+    rate:
+      title: "Գնահատեք %{name}-ին"
+      stars: "%{stars} աստղ"
+      skip: "Բաց թողնել"
+    sos:
+      hold: "Պահեք SOS-ի համար"
+      call: "Զանգել 911"
+  activerecord:
+    attributes:
+      emergency_contact:
+        name: "Անուն"
+        phone: "Հեռախոս"
+        base: ""
+      rating:
+        stars: "Գնահատական"
+        reasons: "Պատճառներ"
+        comment: "Մեկնաբանություն"
+      ticket_message:
+        body: "Հաղորդագրություն"
+    errors:
+      messages:
+        too_many_contacts: "Կարող եք ունենալ ամենաշատը %{limit} վստահելի կոնտակտ։"

@@ -3,6 +3,8 @@ class User < ApplicationRecord
   has_many :saved_places, dependent: :destroy
   has_many :fare_quotes, dependent: :delete_all
   has_many :trips, foreign_key: :rider_id, inverse_of: :rider, dependent: :restrict_with_exception
+  has_many :emergency_contacts, dependent: :delete_all
+  has_many :support_tickets, dependent: :restrict_with_exception
   has_one :driver_profile, dependent: :destroy
   has_many :moderation_actions # audit rows are kept; the foreign key blocks deleting a user who has them
 

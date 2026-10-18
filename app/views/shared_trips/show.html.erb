@@ -1,0 +1,28 @@
+<% content_for :title, t(".title") %>
+<% content_for :head, stylesheet_link_tag("/vendor/maplibre-gl-6.12.0/maplibre-gl.css") %>
+<% car = @trip.driver_profile&.location if @trip.status.in?(Trip::BUSY) %>
+<section class="mx-auto max-w-2xl space-y-4 py-6"
+         data-controller="trip-tracker"
+         data-trip-tracker-style-url-value="<%= Rails.configuration.x.maps.style_url %>"
+         data-trip-tracker-channel-value="SharedTripChannel"
+         data-trip-tracker-token-value="<%= @link.token %>"
+         data-trip-tracker-status-value="<%= @trip.status %>"
+         data-trip-tracker-labels-value="<%= Trip.statuses.keys.index_with { |status| t("shared_trips.status.#{status}") }.to_json %>"
+         data-trip-tracker-route-value="<%= @trip.fare_quote.route.to_json %>"
+         data-trip-tracker-pickup-value="<%= [ @trip.pickup.x, @trip.pickup.y ].to_json %>"
+         data-trip-tracker-dropoff-value="<%= [ @trip.dropoff.x, @trip.dropoff.y ].to_json %>"
+         data-trip-tracker-car-value="<%= (car ? [ car.location.x, car.location.y ] : []).to_json %>">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <p class="text-lg font-semibold" role="status" aria-live="polite" data-trip-tracker-target="statusLabel"><%= t("shared_trips.status.#{@trip.status}") %></p>
+  <div class="h-80 w-full overflow-hidden rounded-xl border" data-trip-tracker-target="map" role="img" aria-label="<%= t(".map") %>"></div>
+  <% if (vehicle = @trip.vehicle) %>
+    <div class="flex items-center justify-between gap-3 rounded-xl border p-4">
+      <div>
+        <p class="font-medium"><%= t(".driver", name: @trip.driver.name.to_s.split.first) %></p>
+        <p class="text-sm text-gray-600"><%= vehicle.description %></p>
+      </div>
+      <p class="rounded border-2 border-gray-900 px-2 py-0.5 font-mono font-bold whitespace-nowrap"><%= vehicle.plate_number %></p>
+    </div>
+  <% end %>
+  <p class="text-sm text-gray-600"><%= t(".emergency") %> <a href="tel:911" class="font-semibold text-red-700 underline">911</a></p>
+</section>

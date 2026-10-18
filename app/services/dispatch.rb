@@ -9,6 +9,7 @@ module Dispatch
   SEARCH_TIMEOUT = 3.minutes
   RETRY_EVERY = 10.seconds # when nobody is free right now
   RADIUS_M = 5_000
+  RATING_TIE_S = 60 # drivers arriving within this of the fastest are ordered by rating
   SHORTLIST = 10
 
   class Error < StandardError
@@ -54,7 +55,7 @@ module Dispatch
     return give_up!(trip) if trip.updated_at < SEARCH_TIMEOUT.ago
 
     drivers = candidates(trip).to_a
-    ranked = drivers.zip(Routing.etas(drivers.map { |driver| driver.location.location }, trip.pickup)).sort_by(&:last)
+    ranked = rank(drivers.zip(Routing.etas(drivers.map { |driver| driver.location.location }, trip.pickup)))
 
     offer = Trip.transaction do
       trip.lock!
@@ -70,6 +71,13 @@ module Dispatch
       DispatchRetryJob.set(wait: RETRY_EVERY).perform_later(trip)
     end
     offer
+  end
+
+  # Fastest arrival first; among those within RATING_TIE_S of the fastest, the better-rated driver.
+  def self.rank(drivers_with_etas)
+    fastest = drivers_with_etas.map(&:last).min
+    close, rest = drivers_with_etas.partition { |_, eta| eta <= fastest + RATING_TIE_S }
+    close.sort_by { |driver, eta| [ -Ratings.dispatch_score(driver), eta ] } + rest.sort_by(&:last)
   end
 
   # Offers the trip to this driver if they are still free. Called with the trip locked.

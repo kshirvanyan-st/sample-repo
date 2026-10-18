@@ -1,0 +1,13 @@
+<%# locals: (messages:, viewer:) %>
+<ol class="space-y-3">
+  <% messages.each do |message| %>
+    <% mine = message.author_id == viewer.id %>
+    <li class="rounded-xl p-3 <%= message.internal? ? "border border-dashed border-amber-400 bg-amber-50" : (mine ? "bg-yellow-50" : "bg-gray-100") %>">
+      <p class="text-xs text-gray-600">
+        <%= message.author.staff? ? t("support.thread.staff", name: message.author.display_name) : message.author.display_name %> · <%= l(message.created_at, format: :short) %>
+        <% if message.internal? %> · <%= t("support.thread.internal") %><% end %>
+      </p>
+      <p class="mt-1 whitespace-pre-line"><%= message.body %></p>
+    </li>
+  <% end %>
+</ol>

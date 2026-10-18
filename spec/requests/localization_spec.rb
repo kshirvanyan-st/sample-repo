@@ -19,6 +19,14 @@ RSpec.describe "Localization", type: :request do
     expect(response.body).to include('lang="en"')
   end
 
+  it "doesn't switch on a hover prefetch of a language link" do
+    get root_path(locale: "en")
+    get root_path(locale: "hy"), headers: { "X-Sec-Purpose" => "prefetch" }
+    get root_path
+    expect(response.body).to include('lang="en"')
+    expect(response.body).to include('data-turbo-prefetch="false"')
+  end
+
   it "ignores unsupported locales" do
     get root_path(locale: "fr")
     expect(response.body).to include('lang="hy"')

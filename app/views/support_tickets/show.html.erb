@@ -1,0 +1,11 @@
+<% content_for :title, t(".title", id: @ticket.id) %>
+<section class="mx-auto max-w-lg py-10">
+  <%= link_to t(".back"), support_tickets_path, class: "text-sm underline" %>
+  <h1 class="mt-2 text-2xl font-bold"><%= t("support.kinds.#{@ticket.kind}") %> #<%= @ticket.id %></h1>
+  <p class="text-gray-600"><%= t("support.statuses.#{@ticket.status}") %></p>
+  <div class="mt-6"><%= render "thread", messages: @ticket.public_messages.includes(:author), viewer: Current.user %></div>
+  <%= form_with url: reply_support_ticket_path(@ticket), class: "mt-6 space-y-2" do |form| %>
+    <%= form.text_area :body, rows: 3, required: true, maxlength: 2000, placeholder: t(".reply"), aria: { label: t(".reply") }, class: "block w-full rounded-lg border px-3 py-2" %>
+    <%= form.submit t(".send"), class: "rounded-lg bg-yellow-400 px-4 py-2 font-medium text-gray-900" %>
+  <% end %>
+</section>

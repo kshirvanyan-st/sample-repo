@@ -1,0 +1,19 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-lg py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <% if @ticket.trip %><p class="mt-1 text-gray-600"><%= t(".about_trip", id: @ticket.trip.id, date: l(@ticket.trip.created_at, format: :short)) %></p><% end %>
+  <%= form_with url: support_tickets_path, class: "mt-6 space-y-4" do |form| %>
+    <%= form.hidden_field :trip_id, value: @ticket.trip&.id %>
+    <fieldset class="space-y-2">
+      <legend class="text-sm font-medium"><%= t(".kind") %></legend>
+      <% SupportTicket::USER_KINDS.each do |kind| %>
+        <label class="flex items-center gap-2"><%= form.radio_button :kind, kind, checked: @ticket.kind == kind %> <%= t("support.kinds.#{kind}") %></label>
+      <% end %>
+    </fieldset>
+    <div>
+      <%= form.label :body, t(".body"), class: "block text-sm font-medium" %>
+      <%= form.text_area :body, rows: 5, required: true, maxlength: 2000, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+    </div>
+    <%= form.submit t(".send"), class: "w-full rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-gray-900" %>
+  <% end %>
+</section>

@@ -69,6 +69,24 @@ RSpec.describe "Driver API", type: :request do
       expect(response.parsed_body).to include("error" => "low_balance", "message" => "Top up your balance to go online.")
     end
 
+    it "sends SOS during a trip and rates the rider afterwards" do
+      trip = book
+      post accept_api_v1_driver_offer_path(trip.offers.sole)
+      post sos_api_v1_driver_trip_path(trip)
+      expect(SupportTicket.sole).to have_attributes(kind: "sos", priority: "urgent", user: driver.user, location: driver.location.location)
+
+      %w[ arrive start complete ].each { |step| post "/api/v1/driver/trips/#{trip.id}/#{step}" }
+      expect(json["rate_trip"]).to include("id" => trip.id)
+      post rate_api_v1_driver_trip_path(trip), params: { stars: 2, reasons: [ "late" ] }
+      expect(json["rate_trip"]).to be_nil
+      expect(trip.rider.reload.rider_rating_avg).to eq(2)
+
+      post rate_api_v1_driver_trip_path(trip), params: { stars: 5 }
+      expect(json).to include("error" => "already_rated")
+      post sos_api_v1_driver_trip_path(trip)
+      expect(json).to include("error" => "not_allowed")
+    end
+
     it "serves the app shell" do
       get driver_app_path
       expect(response.body).to include('id="driver-app"', "data-strings")

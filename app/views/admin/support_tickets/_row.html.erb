@@ -1,0 +1,9 @@
+<%# locals: (ticket:) %>
+<tr id="<%= dom_id(ticket) %>" class="border-b <%= "bg-red-50" if ticket.urgent? && !ticket.resolved? %>" data-urgent="<%= ticket.urgent? %>">
+  <td class="py-2 pr-4 font-medium"><%= "🚨 " if ticket.urgent? %><%= t("support.kinds.#{ticket.kind}") %> #<%= ticket.id %></td>
+  <td class="py-2 pr-4"><%= ticket.user.display_name %></td>
+  <td class="py-2 pr-4"><%= ticket.trip_id && t("admin.support_tickets.row.trip", id: ticket.trip_id) %></td>
+  <td class="py-2 pr-4"><%= t("support.statuses.#{ticket.status}") %><%= " · #{ticket.assignee.display_name}" if ticket.assignee %></td>
+  <td class="py-2 pr-4 whitespace-nowrap"><%= l(ticket.created_at, format: :short) %></td>
+  <td class="py-2"><a href="<%= admin_support_ticket_path(ticket) %>" class="underline"><%= t("admin.support_tickets.row.open") %></a></td>
+</tr>

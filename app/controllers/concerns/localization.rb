@@ -9,7 +9,8 @@ module Localization
 
   private
     def switch_locale(&action)
-      cookies.permanent[:locale] = request_locale if requested_locale
+      # A link Turbo prefetches on hover isn't a choice the user made, so it doesn't change the language.
+      cookies.permanent[:locale] = request_locale if requested_locale && request.headers["X-Sec-Purpose"] != "prefetch"
       I18n.with_locale(request_locale, &action)
     end
 

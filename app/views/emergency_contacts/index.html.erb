@@ -1,0 +1,28 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-lg py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <p class="mt-2 text-gray-600"><%= t(".intro", limit: EmergencyContact::LIMIT) %></p>
+  <ul class="mt-6 divide-y rounded-xl border">
+    <% @contacts.each do |contact| %>
+      <li class="flex items-center justify-between p-4" id="<%= dom_id(contact) %>">
+        <div><p class="font-medium"><%= contact.name %></p><p class="text-sm text-gray-600"><%= Phonelib.parse(contact.phone).international %></p></div>
+        <%= button_to t(".delete"), emergency_contact_path(contact), method: :delete, class: "text-sm text-red-700 underline" %>
+      </li>
+    <% end %>
+    <% if @contacts.empty? %><li class="p-4 text-gray-600"><%= t(".none") %></li><% end %>
+  </ul>
+  <% if @contacts.size < EmergencyContact::LIMIT %>
+    <%= form_with model: @contact, url: emergency_contacts_path, class: "mt-6 space-y-3" do |form| %>
+      <%= render "shared/errors", record: @contact %>
+      <div>
+        <%= form.label :name, class: "block text-sm font-medium" %>
+        <%= form.text_field :name, required: true, maxlength: 60, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :phone, class: "block text-sm font-medium" %>
+        <%= form.telephone_field :phone, required: true, placeholder: "+374 91 123456", class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+      </div>
+      <%= form.submit t(".add"), class: "w-full rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-gray-900" %>
+    <% end %>
+  <% end %>
+</section>

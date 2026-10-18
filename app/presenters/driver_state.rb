@@ -13,7 +13,8 @@ class DriverState
       needed: Settlement.needed_to_go_online(@driver),
       vehicle: vehicle && { description: vehicle.description, plate: vehicle.plate_number, vehicle_class: vehicle.vehicle_class },
       offer: offer_json(@driver.current_offer),
-      trip: trip_json(@driver.active_trip)
+      trip: trip_json(@driver.active_trip),
+      rate_trip: rate_json
     }
   end
 
@@ -33,6 +34,12 @@ class DriverState
 
       { id: trip.id, status: trip.status, fare: trip.fare, rider: trip.rider.name.presence || "—",
         pickup: place(trip.pickup, trip.pickup_address), dropoff: place(trip.dropoff, trip.dropoff_address) }
+    end
+
+    # The driver's last trip, if they haven't rated the rider yet (asked for an hour after the trip).
+    def rate_json
+      trip = @driver.trips.completed.where(completed_at: 1.hour.ago..).order(completed_at: :desc).first
+      { id: trip.id, rider: trip.rider.name.presence || "—" } if trip && Ratings.pending?(trip, @driver.user)
     end
 
     def place(point, address)
