@@ -8,6 +8,14 @@ Rails.application.routes.draw do
   resources :fare_quotes, path: "ride", only: %i[ new create show ]
   resources :trips, only: %i[ create show ] do
     post :cancel, on: :member
+    resource :rating, only: :create
+    resource :share_link, only: :create
+    resource :sos, only: :create, controller: :sos
+  end
+  get "t/:token", to: "shared_trips#show", as: :shared_trip
+  resources :emergency_contacts, only: %i[ index create destroy ]
+  resources :support_tickets, path: "support", only: %i[ index new create show ] do
+    post :reply, on: :member
   end
   get "places/search", to: "places#search", as: :search_places
   get "places/reverse", to: "places#reverse", as: :reverse_place
@@ -34,6 +42,8 @@ Rails.application.routes.draw do
         resources :top_ups, only: :create
         resources :trips, only: [] do
           member do
+            post :rate
+            post :sos
             post :arrive
             post :start
             post :complete
@@ -47,11 +57,19 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :tariffs, only: %i[ index update ]
     resources :service_zones, except: %i[ show destroy ]
+    resources :support_tickets, path: "support", only: %i[ index show ] do
+      member do
+        post :reply
+        post :assign
+        post :resolve
+      end
+    end
     resource :settings, only: %i[ edit update ]
     resource :finance, only: :show, controller: :finance
     resources :driver_applications, only: %i[ index show ] do
       resource :balance, only: %i[ show create ], controller: :driver_balances
       member do
+        post :reviewed
         post :approve
         post :request_changes
         post :reject

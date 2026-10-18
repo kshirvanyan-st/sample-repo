@@ -1,0 +1,55 @@
+<% content_for :title, "#{t("support.kinds.#{@ticket.kind}")} ##{@ticket.id}" %>
+<% content_for :head, stylesheet_link_tag("/vendor/maplibre-gl-6.12.0/maplibre-gl.css") if @trip %>
+<section class="py-6">
+  <% if Current.user.admin? %><%= render "admin/shared/tabs" %><% end %>
+  <%= link_to t(".back"), admin_support_tickets_path, class: "mt-4 inline-block text-sm underline" %>
+  <h1 class="mt-2 text-2xl font-bold"><%= "🚨 " if @ticket.urgent? %><%= t("support.kinds.#{@ticket.kind}") %> #<%= @ticket.id %></h1>
+  <p class="text-gray-600">
+    <%= @ticket.user.display_name %> · <%= @ticket.user.display_phone %> · <%= t("support.statuses.#{@ticket.status}") %>
+    <% if @ticket.assignee %> · <%= t(".assigned", name: @ticket.assignee.display_name) %><% end %>
+  </p>
+  <div class="mt-3 flex flex-wrap gap-2">
+    <% unless @ticket.assignee == Current.user %><%= button_to t(".take"), assign_admin_support_ticket_path(@ticket), class: "rounded-lg border px-3 py-1.5" %><% end %>
+    <% unless @ticket.resolved? %><%= button_to t(".resolve"), resolve_admin_support_ticket_path(@ticket), class: "rounded-lg border px-3 py-1.5" %><% end %>
+    <% if Current.user.admin? && (driver = @trip&.driver_profile) %>
+      <%= link_to t(".driver_file"), admin_driver_application_path(driver), class: "rounded-lg border px-3 py-1.5" %>
+      <%= link_to t(".driver_balance"), admin_driver_application_balance_path(driver), class: "rounded-lg border px-3 py-1.5" %>
+    <% end %>
+  </div>
+
+  <div class="mt-6 grid gap-6 md:grid-cols-2">
+    <div>
+      <%= render "support_tickets/thread", messages: @ticket.messages.includes(:author), viewer: Current.user %>
+      <%= form_with url: reply_admin_support_ticket_path(@ticket), class: "mt-4 space-y-2" do |form| %>
+        <%= form.text_area :body, rows: 3, required: true, maxlength: 2000, aria: { label: t(".reply") }, placeholder: t(".reply"), class: "block w-full rounded-lg border px-3 py-2" %>
+        <label class="flex items-center gap-2 text-sm"><%= form.check_box :internal %> <%= t(".internal") %></label>
+        <%= form.submit t(".send"), class: "rounded-lg bg-yellow-400 px-4 py-2 font-medium text-gray-900" %>
+      <% end %>
+    </div>
+    <% if @trip %>
+      <div>
+        <h2 class="font-semibold"><%= t(".trip", id: @trip.id) %></h2>
+        <dl class="mt-2 grid grid-cols-2 gap-1 text-sm">
+          <dt class="text-gray-600"><%= t(".rider") %></dt><dd><%= @trip.rider.display_name %> · <%= @trip.rider.display_phone %></dd>
+          <% if @trip.driver_profile %>
+            <dt class="text-gray-600"><%= t(".driver") %></dt><dd><%= @trip.driver.display_name %> · <%= @trip.driver.display_phone %></dd>
+            <dt class="text-gray-600"><%= t(".car") %></dt><dd><%= @trip.vehicle&.description %> · <%= @trip.vehicle&.plate_number %></dd>
+          <% end %>
+          <dt class="text-gray-600"><%= t(".status") %></dt><dd><%= t("support.trip_statuses.#{@trip.status}") %> · <%= amd(@trip.fare) %></dd>
+          <% @trip.ratings.each do |rating| %>
+            <dt class="text-gray-600"><%= t("ratings.roles.#{rating.role}") %></dt>
+            <dd><%= "★" * rating.stars %> <%= rating.reasons.map { |reason| t("ratings.reasons.#{reason}") }.join(", ") %> <%= rating.comment %></dd>
+          <% end %>
+        </dl>
+        <% points = @trip.points.order(:recorded_at).pluck(:location).map { |point| [ point.x, point.y ] } %>
+        <% here = @ticket.location && [ @ticket.location.x, @ticket.location.y ] %>
+        <div class="mt-3 h-64 w-full overflow-hidden rounded-xl border" data-controller="route-map"
+             data-route-map-style-url-value="<%= Rails.configuration.x.maps.style_url %>"
+             data-route-map-route-value="<%= (points.size > 1 ? { type: "LineString", coordinates: points } : @trip.fare_quote.route).to_json %>"
+             data-route-map-pickup-value="<%= [ @trip.pickup.x, @trip.pickup.y ].to_json %>"
+             data-route-map-dropoff-value="<%= (here || [ @trip.dropoff.x, @trip.dropoff.y ]).to_json %>"></div>
+        <% if here %><p class="mt-1 text-xs text-red-700"><%= t(".sos_location") %></p><% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

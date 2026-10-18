@@ -1,0 +1,28 @@
+<%# locals: (trip:) %>
+<%= form_with url: trip_rating_path(trip), class: "rounded-xl border p-4", data: { controller: "rating" } do |form| %>
+  <p class="text-lg font-semibold"><%= t("ratings.form.title", name: trip.driver.name) %></p>
+  <fieldset class="mt-3">
+    <legend class="sr-only"><%= t("ratings.form.stars") %></legend>
+    <div class="flex gap-1 text-4xl" data-rating-target="stars">
+      <% (1..5).each do |stars| %>
+        <label class="cursor-pointer">
+          <input type="radio" name="stars" value="<%= stars %>" required class="peer sr-only" data-action="rating#choose" aria-label="<%= t("ratings.form.star", stars: stars) %>">
+          <span class="text-gray-300 peer-checked:text-yellow-400" data-rating-target="star">★</span>
+        </label>
+      <% end %>
+    </div>
+  </fieldset>
+  <% %i[ low high ].each do |group| %>
+    <div class="mt-3 flex flex-wrap gap-2" data-rating-target="<%= group %>" hidden>
+      <% Ratings::REASONS[:rider_rates_driver][group].each do |reason| %>
+        <label class="cursor-pointer">
+          <input type="checkbox" name="reasons[]" value="<%= reason %>" class="peer sr-only">
+          <span class="inline-block rounded-full border px-3 py-1 text-sm peer-checked:border-gray-900 peer-checked:bg-gray-900 peer-checked:text-white"><%= t("ratings.reasons.#{reason}") %></span>
+        </label>
+      <% end %>
+    </div>
+  <% end %>
+  <%= form.text_area :comment, rows: 2, maxlength: 500, placeholder: t("ratings.form.comment"), aria: { label: t("ratings.form.comment") },
+        class: "mt-3 block w-full rounded-lg border px-3 py-2" %>
+  <%= form.submit t("ratings.form.submit"), class: "mt-3 w-full rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-gray-900" %>
+<% end %>

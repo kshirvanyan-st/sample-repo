@@ -12,6 +12,16 @@
   <% if @driver_profile.approved? || @driver_profile.suspended? || @driver_profile.ledger_entries.exists? %>
     <p class="mt-2"><%= link_to t(".balance", amount: amd(@driver_profile.balance)), admin_driver_application_balance_path(@driver_profile), class: "underline" %></p>
   <% end %>
+  <% if @driver_profile.rating_count.positive? %>
+    <p class="mt-2"><%= t(".rating", avg: number_with_precision(@driver_profile.rating_avg, precision: 2), count: @driver_profile.rating_count) %></p>
+  <% end %>
+  <% if @driver_profile.review_flagged_at %>
+    <%= form_with url: reviewed_admin_driver_application_path(@driver_profile), class: "mt-3 flex flex-wrap items-end gap-2 rounded-lg bg-amber-50 p-3" do |form| %>
+      <p class="w-full text-amber-900"><%= t(".flagged", time: l(@driver_profile.review_flagged_at, format: :short), below: Ratings::REVIEW_BELOW) %></p>
+      <%= form.text_field :note, placeholder: t(".review_note"), aria: { label: t(".review_note") }, class: "flex-1 rounded-lg border px-3 py-2" %>
+      <%= form.submit t(".mark_reviewed"), class: "rounded-lg border px-4 py-2" %>
+    <% end %>
+  <% end %>
   <% if @driver_profile.review_note.present? %>
     <p class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-amber-900"><%= @driver_profile.review_note %></p>
   <% end %>

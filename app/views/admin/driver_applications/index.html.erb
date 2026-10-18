@@ -3,11 +3,11 @@
   <%= render "admin/shared/tabs" %>
   <h1 class="mt-6 text-2xl font-bold"><%= t(".title") %></h1>
   <nav class="mt-4 flex flex-wrap gap-2 text-sm" aria-label="<%= t(".filter") %>">
-    <% Admin::DriverApplicationsController::STATUSES.each do |status| %>
+    <% (Admin::DriverApplicationsController::STATUSES + [ Admin::DriverApplicationsController::REVIEW ]).each do |status| %>
       <%= link_to admin_driver_applications_path(status: status),
             class: "rounded-full border px-3 py-1 #{'bg-gray-900 text-white' if status == @status}",
             aria: { current: (status == @status ? "page" : nil) } do %>
-        <%= t("driver_profiles.statuses.#{status}") %> (<%= @counts.fetch(status, 0) %>)
+        <%= status == "review" ? t(".needs_review") : t("driver_profiles.statuses.#{status}") %> (<%= @counts.fetch(status, 0) %>)
       <% end %>
     <% end %>
   </nav>

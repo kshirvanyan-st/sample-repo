@@ -1,0 +1,200 @@
+en:
+  ratings:
+    unsafe_report: "Rated the driver 1 star for unsafe driving."
+    form:
+      title: "How was your ride with %{name}?"
+      stars: "Stars"
+      star: "%{stars} out of 5"
+      comment: "Anything to add? (optional)"
+      submit: "Send rating"
+    reasons:
+      unsafe_driving: "Unsafe driving"
+      rude: "Rude"
+      dirty_car: "Dirty car"
+      wrong_route: "Wrong route"
+      late: "Late"
+      friendly: "Friendly"
+      clean_car: "Clean car"
+      smooth_driving: "Smooth driving"
+      messy: "Left a mess"
+      polite: "Polite"
+      on_time: "On time"
+    roles:
+      rider_rates_driver: "Rider rated the driver"
+      driver_rates_rider: "Driver rated the rider"
+    create:
+      thanks: "Thank you for your rating."
+  dispatch:
+    errors:
+      already_rated: "You've already rated this trip."
+      too_late: "This trip can no longer be rated."
+      bad_rating: "Choose from 1 to 5 stars."
+  trips:
+    show:
+      share: "Share trip"
+      link_copied: "Link copied"
+      sos: "Hold for SOS"
+      sos_hint: "Hold the red button to alert our team and your emergency contacts. In danger, call"
+      call_911: "911"
+      get_help: "Get help with this trip"
+  share_links:
+    create:
+      text: "Follow %{name}'s Taxi AM ride live:"
+  sos:
+    create:
+      sent: "Help is on the way: our team and your emergency contacts have been alerted. In danger, call 911."
+  shared_trips:
+    show:
+      title: "Live trip"
+      map: "Map of the trip"
+      driver: "Driver: %{name}"
+      emergency: "Worried? In an emergency call"
+    status:
+      searching: "Looking for a driver"
+      accepted: "The driver is on the way to the pickup"
+      arrived: "The driver is at the pickup"
+      in_progress: "On the way"
+      completed: "Arrived safely"
+      cancelled: "The trip was cancelled"
+      no_drivers: "The trip was cancelled"
+    expired:
+      title: "This link has expired"
+      body: "Trip links stop working an hour after the trip ends."
+  safety:
+    sos:
+      ticket_body: "SOS pressed by the %{role} during the trip."
+    sms:
+      staff_replied: "Taxi AM support replied to your request #%{id}. Open the app to read it."
+      sos_contact: "Taxi AM: %{name} pressed SOS during a ride. Follow it live: %{link} In danger, call 911."
+      sos_staff: "SOS on Taxi AM, ticket #%{id}: %{link}"
+      lost_item_driver: "Taxi AM: a rider from trip #%{id} left something in your car. Support will contact you."
+  emergency_contacts:
+    index:
+      title: "Emergency contacts"
+      intro: "Up to %{limit} people we text with your live trip if you press SOS."
+      delete: "Remove"
+      none: "No emergency contacts yet."
+      add: "Add contact"
+    create:
+      saved: "Contact added."
+    destroy:
+      deleted: "Contact removed."
+  support:
+    trip_statuses:
+      searching: "Searching"
+      accepted: "Driver on the way"
+      arrived: "Driver at pickup"
+      in_progress: "In progress"
+      completed: "Completed"
+      cancelled: "Cancelled"
+      no_drivers: "No drivers found"
+    kinds:
+      sos: "SOS"
+      complaint: "Complaint"
+      lost_item: "Lost item"
+      fare: "Fare problem"
+      other: "Other"
+      safety: "Safety report"
+    statuses:
+      open: "Open"
+      in_progress: "In progress"
+      resolved: "Resolved"
+    thread:
+      staff: "%{name} (Taxi AM support)"
+      internal: "internal note"
+  support_tickets:
+    index:
+      title: "Help"
+      new: "Ask for help"
+      none: "You haven't asked for help yet."
+    new:
+      title: "How can we help?"
+      about_trip: "About trip #%{id}, %{date}"
+      kind: "What happened?"
+      body: "Tell us more"
+      send: "Send"
+    create:
+      invalid: "Choose what happened and write a message."
+      sent: "Thanks, we'll reply here and by SMS."
+    show:
+      title: "Request #%{id}"
+      back: "All requests"
+      reply: "Write a reply"
+      send: "Send"
+  admin:
+    shared:
+      tabs:
+        support: "Support"
+    support_tickets:
+      index:
+        title: "Support"
+        filter: "Filter by status"
+        unresolved: "Not resolved"
+        ticket: "Request"
+        from: "From"
+        trip: "Trip"
+        status: "Status"
+        created: "Created"
+      row:
+        trip: "trip #%{id}"
+        open: "Open"
+      show:
+        back: "Back to the queue"
+        assigned: "with %{name}"
+        take: "Take it"
+        resolve: "Mark resolved"
+        driver_file: "Driver's file"
+        driver_balance: "Driver's balance"
+        reply: "Reply to the user (sent by SMS too)"
+        internal: "Internal note (only staff see it)"
+        send: "Send"
+        trip: "Trip #%{id}"
+        rider: "Rider"
+        driver: "Driver"
+        car: "Car"
+        status: "Status"
+        sos_location: "Red pin: where SOS was pressed."
+      resolve:
+        resolved: "Request #%{id} resolved."
+    driver_applications:
+      reviewed: "%{name} is marked as reviewed."
+      index:
+        needs_review: "Low rating"
+      show:
+        rating: "Rating %{avg} (%{count} ratings)"
+        flagged: "Flagged %{time}: the average rating fell below %{below}. Talk to the driver, then mark as reviewed or suspend."
+        review_note: "What was decided"
+        mark_reviewed: "Mark as reviewed"
+  shared:
+    user_menu:
+      help: "Help"
+      support_queue: "Support"
+  profiles:
+    edit:
+      emergency_contacts: "Emergency contacts"
+  moderation_actions:
+    flag_for_review: "Flagged for low rating"
+    clear_review: "Rating review done"
+  driver_app:
+    rate:
+      title: "Rate %{name}"
+      stars: "%{stars} stars"
+      skip: "Skip"
+    sos:
+      hold: "Hold for SOS"
+      call: "Call 911"
+  activerecord:
+    attributes:
+      emergency_contact:
+        name: "Name"
+        phone: "Phone"
+        base: ""
+      rating:
+        stars: "Rating"
+        reasons: "Reasons"
+        comment: "Comment"
+      ticket_message:
+        body: "Message"
+    errors:
+      messages:
+        too_many_contacts: "You can have up to %{limit} emergency contacts."

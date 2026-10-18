@@ -10,6 +10,7 @@
          data-trip-tracker-route-value="<%= @trip.fare_quote.route.to_json %>"
          data-trip-tracker-pickup-value="<%= [ @trip.pickup.x, @trip.pickup.y ].to_json %>"
          data-trip-tracker-dropoff-value="<%= [ @trip.dropoff.x, @trip.dropoff.y ].to_json %>"
+         data-trip-tracker-channel-value="TripChannel"
          data-trip-tracker-car-value="<%= (car ? [ car.location.x, car.location.y ] : []).to_json %>">
   <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
   <ol class="space-y-1 text-sm">
@@ -19,6 +20,32 @@
   <div class="h-72 w-full overflow-hidden rounded-xl border" data-trip-tracker-target="map" role="img" aria-label="<%= t(".map") %>"></div>
 
   <%= render "status", trip: @trip %>
+
+  <div class="grid grid-cols-2 gap-3" data-trip-tracker-target="safety" <%= "hidden" unless @trip.status.in?(Trip::BUSY) %>>
+    <button type="button" class="rounded-lg border px-4 py-3 font-medium" data-controller="share"
+            data-share-url-value="<%= trip_share_link_path(@trip) %>" data-share-copied-value="<%= t(".link_copied") %>" data-action="share#share">
+      <%= t(".share") %>
+    </button>
+    <%= form_with url: trip_sos_path(@trip), data: { controller: "hold", hold_target: "form" } do |form| %>
+      <%= form.hidden_field :lat, data: { hold_target: "lat" } %>
+      <%= form.hidden_field :lon, data: { hold_target: "lon" } %>
+      <button type="button" class="relative w-full overflow-hidden rounded-lg bg-red-600 px-4 py-3 font-bold text-white"
+              data-action="pointerdown->hold#start pointerup->hold#cancel pointerleave->hold#cancel keydown.enter->hold#start keyup.enter->hold#cancel"
+              aria-describedby="sos-hint">
+        <span class="absolute inset-y-0 left-0 w-0 bg-red-800" data-hold-target="progress"></span>
+        <span class="relative"><%= t(".sos") %></span>
+      </button>
+    <% end %>
+    <p id="sos-hint" class="col-span-2 text-xs text-gray-600"><%= t(".sos_hint") %>
+      <a href="tel:911" class="font-semibold text-red-700 underline"><%= t(".call_911") %></a></p>
+  </div>
+
+  <% if Ratings.pending?(@trip, Current.user) %>
+    <%= render "rating_form", trip: @trip %>
+  <% end %>
+  <% if @trip.completed? || @trip.cancelled? %>
+    <%= link_to t(".get_help"), new_support_ticket_path(trip_id: @trip.id), class: "inline-block text-sm underline" %>
+  <% end %>
 
   <div data-trip-tracker-target="cancel" <%= "hidden" unless @trip.status.in?(%w[ searching accepted arrived ]) %>>
     <% if (tariff = @trip.tariff) && tariff.cancellation_fee.positive? %>

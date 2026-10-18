@@ -5,6 +5,7 @@ import { useDriverDevice } from "./useDriverDevice"
 import OfferCard from "./components/OfferCard"
 import TripScreen from "./components/TripScreen"
 import BalanceScreen from "./components/BalanceScreen"
+import RateRiderCard from "./components/RateRiderCard"
 
 const topUpResult = new URLSearchParams(window.location.search).get("top_up")
 
@@ -13,6 +14,7 @@ export default function App({ stateUrl }) {
   const [ busy, setBusy ] = useState(false)
   const [ error, setError ] = useState(null)
   const [ showBalance, setShowBalance ] = useState(false)
+  const [ skippedRating, setSkippedRating ] = useState(null)
 
   const refresh = useCallback(() => api.state(stateUrl).then(setState).catch((e) => setError(e.message)), [ stateUrl ])
   useEffect(() => { refresh() }, [ refresh ])
@@ -66,6 +68,9 @@ export default function App({ stateUrl }) {
         <TripScreen trip={state.trip} busy={busy} onAction={(action) => run(() => api.trip(state.trip.id, action))} />
       ) : state.offer ? (
         <OfferCard offer={state.offer} busy={busy} onAccept={() => run(() => api.accept(state.offer.id))} onDecline={() => run(() => api.decline(state.offer.id))} />
+      ) : state.rate_trip && skippedRating !== state.rate_trip.id ? (
+        <RateRiderCard trip={state.rate_trip} busy={busy} onSkip={() => setSkippedRating(state.rate_trip.id)}
+                       onRate={(stars) => run(() => api.trip(state.rate_trip.id, "rate", { stars }))} />
       ) : (
         <p className="mt-10 text-center text-xl text-gray-300">{state.online ? t("waiting") : t("go_online_hint")}</p>
       )}

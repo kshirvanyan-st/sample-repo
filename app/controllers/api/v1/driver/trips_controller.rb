@@ -19,6 +19,16 @@ module Api
           render_state
         end
 
+        def rate
+          Ratings.submit!(trip: @trip, rater: Current.user, stars: params[:stars], reasons: params[:reasons])
+          render_state
+        end
+
+        def sos
+          Support.sos!(trip: @trip, by: Current.user, location: @driver.location&.location)
+          render_state
+        end
+
         def cancel
           TripLifecycle.cancel!(@trip, by: @driver, reason: params[:reason].to_s.first(200).presence)
           render_state

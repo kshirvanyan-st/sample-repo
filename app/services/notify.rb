@@ -13,6 +13,12 @@ module Notify
     driver(trip.driver_profile) if trip.driver_profile
   end
 
+  # New tickets appear in Admin → Support for everyone watching: each page refreshes itself (in its
+  # viewer's language and filters, urgent first) rather than us rendering a row for all of them.
+  def self.support_queue(_ticket)
+    Turbo::StreamsChannel.broadcast_refresh_to(:support_queue)
+  end
+
   def self.location(trip, point, heading)
     TripChannel.broadcast_to(trip, type: "location", lat: point.y, lon: point.x, heading: heading)
   end

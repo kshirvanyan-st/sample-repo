@@ -1,0 +1,24 @@
+<% content_for :title, t(".title") %>
+<%= turbo_refreshes_with method: :morph, scroll: :preserve %>
+<%= turbo_stream_from :support_queue %>
+<section class="py-6" data-controller="alarm">
+  <% if Current.user.admin? %><%= render "admin/shared/tabs" %><% end %>
+  <h1 class="mt-6 text-2xl font-bold"><%= t(".title") %></h1>
+  <nav class="mt-4 flex flex-wrap gap-2 text-sm" aria-label="<%= t(".filter") %>">
+    <%= link_to t(".unresolved"), admin_support_tickets_path, class: "rounded-full border px-3 py-1 #{'bg-gray-900 text-white' if @status.nil?}" %>
+    <% %w[ open in_progress resolved ].each do |status| %>
+      <%= link_to t("support.statuses.#{status}"), admin_support_tickets_path(status: status), class: "rounded-full border px-3 py-1 #{'bg-gray-900 text-white' if @status == status}" %>
+    <% end %>
+  </nav>
+  <div class="mt-6 overflow-x-auto">
+    <table class="w-full text-left text-sm">
+      <thead class="border-b text-gray-600">
+        <tr><th class="py-2 pr-4"><%= t(".ticket") %></th><th class="py-2 pr-4"><%= t(".from") %></th><th class="py-2 pr-4"><%= t(".trip") %></th>
+            <th class="py-2 pr-4"><%= t(".status") %></th><th class="py-2 pr-4"><%= t(".created") %></th><th></th></tr>
+      </thead>
+      <tbody id="support_tickets" data-alarm-target="list">
+        <%= render partial: "row", collection: @tickets, as: :ticket %>
+      </tbody>
+    </table>
+  </div>
+</section>

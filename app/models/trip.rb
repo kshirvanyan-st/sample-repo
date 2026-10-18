@@ -8,6 +8,9 @@ class Trip < ApplicationRecord
   belongs_to :fare_quote
   has_many :offers, class_name: "TripOffer", dependent: :delete_all
   has_many :points, class_name: "TripPoint", dependent: :delete_all
+  has_many :ratings, dependent: :destroy
+  has_one :share_link, dependent: :destroy
+  has_many :support_tickets, dependent: :nullify
 
   enum :status, { searching: 0, accepted: 1, arrived: 2, in_progress: 3, completed: 4, cancelled: 5, no_drivers: 6 }, validate: true
   enum :vehicle_class, Vehicle.vehicle_classes, prefix: :class, validate: true

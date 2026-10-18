@@ -10,6 +10,7 @@ RSpec.describe TripChannel, type: :channel do
       subscribe id: trip.id
       expect(subscription).to have_stream_for(trip)
     end
+    expect(transmissions.last).to include("type" => "sync", "status" => "accepted")
   end
 
   it "turns everyone else away" do

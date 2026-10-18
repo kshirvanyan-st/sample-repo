@@ -4,7 +4,7 @@ class DriverChannel < ApplicationCable::Channel
   MIN_INTERVAL = 1.second
 
   def subscribed
-    @driver = current_user.driver_profile
+    @driver = current_user&.driver_profile
     @driver&.approved? ? stream_for(@driver) : reject
   end
 

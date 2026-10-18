@@ -2,8 +2,9 @@ module ApplicationCable
   class Connection < ActionCable::Connection::Base
     identified_by :current_user
 
+    # Anonymous connections are allowed for the public shared-trip page; every channel decides who may subscribe.
     def connect
-      set_current_user || reject_unauthorized_connection
+      set_current_user
     end
 
     private

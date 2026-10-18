@@ -1,17 +1,26 @@
 module Admin
   class DriverApplicationsController < BaseController
     STATUSES = %w[ submitted needs_changes approved suspended rejected ].freeze
+    REVIEW = "review" # approved drivers whose rating fell below Ratings::REVIEW_BELOW
 
     before_action :set_driver_profile, except: :index
     rate_limit to: 60, within: 1.minute, except: %i[ index show ], by: -> { Current.user.id }
 
     def index
-      @status = params[:status].presence_in(STATUSES) || "submitted"
-      @driver_profiles = DriverProfile.where(status: @status).includes(:user, :vehicle).order(submitted_at: :asc, updated_at: :desc).limit(100)
-      @counts = DriverProfile.where(status: STATUSES).group(:status).count
+      @status = params[:status].presence_in(STATUSES + [ REVIEW ]) || "submitted"
+      scope = @status == REVIEW ? DriverProfile.where.not(review_flagged_at: nil).order(:rating_avg) : DriverProfile.where(status: @status)
+      @driver_profiles = scope.includes(:user, :vehicle).order(submitted_at: :asc, updated_at: :desc).limit(100)
+      @counts = DriverProfile.where(status: STATUSES).group(:status).count.merge(REVIEW => DriverProfile.where.not(review_flagged_at: nil).count)
     end
 
     def show
+    end
+
+    def reviewed
+      @driver_profile.update!(review_flagged_at: nil)
+      ModerationAction.create!(moderator: Current.user, user: @driver_profile.user, action: "clear_review",
+        details: { driver_profile_id: @driver_profile.id, note: params[:note].to_s.strip.first(500).presence }.compact)
+      redirect_to admin_driver_applications_path(status: REVIEW), notice: t("admin.driver_applications.reviewed", name: @driver_profile.user.display_name)
     end
 
     def approve

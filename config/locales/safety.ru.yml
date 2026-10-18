@@ -1,0 +1,200 @@
+ru:
+  ratings:
+    unsafe_report: "Водителю поставлена 1 звезда за опасное вождение."
+    form:
+      title: "Как прошла поездка с %{name}?"
+      stars: "Звёзды"
+      star: "%{stars} из 5"
+      comment: "Хотите что-то добавить? (необязательно)"
+      submit: "Отправить оценку"
+    reasons:
+      unsafe_driving: "Опасное вождение"
+      rude: "Грубость"
+      dirty_car: "Грязная машина"
+      wrong_route: "Неправильный маршрут"
+      late: "Опоздание"
+      friendly: "Приветливость"
+      clean_car: "Чистая машина"
+      smooth_driving: "Аккуратное вождение"
+      messy: "Оставил беспорядок"
+      polite: "Вежливость"
+      on_time: "Пунктуальность"
+    roles:
+      rider_rates_driver: "Пассажир оценил водителя"
+      driver_rates_rider: "Водитель оценил пассажира"
+    create:
+      thanks: "Спасибо за оценку."
+  dispatch:
+    errors:
+      already_rated: "Вы уже оценили эту поездку."
+      too_late: "Эту поездку уже нельзя оценить."
+      bad_rating: "Выберите от 1 до 5 звёзд."
+  trips:
+    show:
+      share: "Поделиться поездкой"
+      link_copied: "Ссылка скопирована"
+      sos: "Удерживайте для SOS"
+      sos_hint: "Удерживайте красную кнопку, чтобы предупредить нашу команду и ваших доверенных людей. При опасности звоните"
+      call_911: "911"
+      get_help: "Помощь по этой поездке"
+  share_links:
+    create:
+      text: "Следите за поездкой %{name} в Taxi AM в реальном времени:"
+  sos:
+    create:
+      sent: "Помощь уже в пути: наша команда и ваши доверенные люди предупреждены. При опасности звоните 911."
+  shared_trips:
+    show:
+      title: "Поездка в реальном времени"
+      map: "Карта поездки"
+      driver: "Водитель: %{name}"
+      emergency: "Волнуетесь? В экстренном случае звоните"
+    status:
+      searching: "Ищем водителя"
+      accepted: "Водитель едет к месту подачи"
+      arrived: "Водитель на месте подачи"
+      in_progress: "В пути"
+      completed: "Благополучно доехали"
+      cancelled: "Поездка отменена"
+      no_drivers: "Поездка отменена"
+    expired:
+      title: "Срок действия ссылки истёк"
+      body: "Ссылки на поездку перестают работать через час после её окончания."
+  safety:
+    sos:
+      ticket_body: "SOS нажал(а) %{role} во время поездки."
+    sms:
+      staff_replied: "Поддержка Taxi AM ответила на ваше обращение №%{id}. Откройте приложение, чтобы прочитать."
+      sos_contact: "Taxi AM: %{name} нажал(а) SOS во время поездки. Следите в реальном времени: %{link} При опасности звоните 911."
+      sos_staff: "SOS в Taxi AM, обращение №%{id}: %{link}"
+      lost_item_driver: "Taxi AM: пассажир поездки №%{id} забыл вещь в вашей машине. С вами свяжется поддержка."
+  emergency_contacts:
+    index:
+      title: "Доверенные контакты"
+      intro: "До %{limit} человек, которым мы отправим ссылку на поездку, если вы нажмёте SOS."
+      delete: "Удалить"
+      none: "Доверенных контактов пока нет."
+      add: "Добавить контакт"
+    create:
+      saved: "Контакт добавлен."
+    destroy:
+      deleted: "Контакт удалён."
+  support:
+    trip_statuses:
+      searching: "Поиск водителя"
+      accepted: "Водитель едет к пассажиру"
+      arrived: "Водитель на месте"
+      in_progress: "В пути"
+      completed: "Завершена"
+      cancelled: "Отменена"
+      no_drivers: "Водитель не найден"
+    kinds:
+      sos: "SOS"
+      complaint: "Жалоба"
+      lost_item: "Забытая вещь"
+      fare: "Вопрос по оплате"
+      other: "Другое"
+      safety: "Сообщение о безопасности"
+    statuses:
+      open: "Открыто"
+      in_progress: "В работе"
+      resolved: "Решено"
+    thread:
+      staff: "%{name} (поддержка Taxi AM)"
+      internal: "внутренняя заметка"
+  support_tickets:
+    index:
+      title: "Помощь"
+      new: "Обратиться за помощью"
+      none: "Вы ещё не обращались за помощью."
+    new:
+      title: "Чем мы можем помочь?"
+      about_trip: "О поездке №%{id}, %{date}"
+      kind: "Что случилось?"
+      body: "Расскажите подробнее"
+      send: "Отправить"
+    create:
+      invalid: "Выберите, что случилось, и напишите сообщение."
+      sent: "Спасибо, мы ответим здесь и по SMS."
+    show:
+      title: "Обращение №%{id}"
+      back: "Все обращения"
+      reply: "Написать ответ"
+      send: "Отправить"
+  admin:
+    shared:
+      tabs:
+        support: "Поддержка"
+    support_tickets:
+      index:
+        title: "Поддержка"
+        filter: "Фильтр по статусу"
+        unresolved: "Нерешённые"
+        ticket: "Обращение"
+        from: "От"
+        trip: "Поездка"
+        status: "Статус"
+        created: "Создано"
+      row:
+        trip: "поездка №%{id}"
+        open: "Открыть"
+      show:
+        back: "К очереди"
+        assigned: "у %{name}"
+        take: "Взять"
+        resolve: "Отметить решённым"
+        driver_file: "Карточка водителя"
+        driver_balance: "Баланс водителя"
+        reply: "Ответ пользователю (также по SMS)"
+        internal: "Внутренняя заметка (видят только сотрудники)"
+        send: "Отправить"
+        trip: "Поездка №%{id}"
+        rider: "Пассажир"
+        driver: "Водитель"
+        car: "Автомобиль"
+        status: "Статус"
+        sos_location: "Красная метка: где нажали SOS."
+      resolve:
+        resolved: "Обращение №%{id} решено."
+    driver_applications:
+      reviewed: "%{name} отмечен как проверенный."
+      index:
+        needs_review: "Низкий рейтинг"
+      show:
+        rating: "Рейтинг %{avg} (оценок: %{count})"
+        flagged: "Отмечен %{time}: средняя оценка опустилась ниже %{below}. Поговорите с водителем, затем отметьте как проверенного или приостановите."
+        review_note: "Что решили"
+        mark_reviewed: "Отметить как проверенного"
+  shared:
+    user_menu:
+      help: "Помощь"
+      support_queue: "Поддержка"
+  profiles:
+    edit:
+      emergency_contacts: "Доверенные контакты"
+  moderation_actions:
+    flag_for_review: "Отмечен за низкий рейтинг"
+    clear_review: "Проверка рейтинга завершена"
+  driver_app:
+    rate:
+      title: "Оцените: %{name}"
+      stars: "%{stars} звёзд"
+      skip: "Пропустить"
+    sos:
+      hold: "Удерживайте для SOS"
+      call: "Позвонить 911"
+  activerecord:
+    attributes:
+      emergency_contact:
+        name: "Имя"
+        phone: "Телефон"
+        base: ""
+      rating:
+        stars: "Оценка"
+        reasons: "Причины"
+        comment: "Комментарий"
+      ticket_message:
+        body: "Сообщение"
+    errors:
+      messages:
+        too_many_contacts: "Можно добавить не более %{limit} доверенных контактов."

@@ -1,4 +1,5 @@
 import { t, amd } from "../i18n"
+import SosButton from "./SosButton"
 
 const NEXT = {
   accepted: { action: "arrive", label: "trip.arrived" },
@@ -32,6 +33,7 @@ export default function TripScreen({ trip, onAction, busy }) {
         <button type="button" className="mt-4 w-full rounded-xl bg-yellow-400 py-5 text-xl font-bold disabled:opacity-60"
                 onClick={() => onAction(next.action)} disabled={busy}>{t(next.label)}</button>
       )}
+      <SosButton onSos={() => onAction("sos")} />
       {trip.status !== "in_progress" && (
         <button type="button" className="mt-3 w-full py-2 text-sm text-red-700 underline" onClick={() => onAction("cancel")} disabled={busy}>
           {t("trip.hand_back")}

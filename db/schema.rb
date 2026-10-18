@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_220003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -84,9 +84,21 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
     t.datetime "updated_at", null: false
     t.datetime "online_at"
     t.integer "balance", default: 0, null: false
+    t.decimal "rating_avg", precision: 3, scale: 2
+    t.integer "rating_count", default: 0, null: false
+    t.datetime "review_flagged_at"
     t.index ["status", "submitted_at"], name: "index_driver_profiles_on_status_and_submitted_at"
     t.index ["user_id"], name: "index_driver_profiles_on_user_id", unique: true
     t.check_constraint "status >= 0 AND status <= 5", name: "driver_profiles_status_known"
+  end
+
+  create_table "emergency_contacts", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "name", null: false
+    t.string "phone", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_emergency_contacts_on_user_id"
   end
 
   create_table "expiry_notices", force: :cascade do |t|
@@ -163,6 +175,22 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
     t.index ["phone", "created_at"], name: "index_phone_verifications_on_phone_and_created_at"
   end
 
+  create_table "ratings", force: :cascade do |t|
+    t.bigint "trip_id", null: false
+    t.bigint "rater_id", null: false
+    t.bigint "ratee_id", null: false
+    t.integer "role", null: false
+    t.integer "stars", null: false
+    t.string "reasons", default: [], null: false, array: true
+    t.string "comment"
+    t.datetime "created_at", null: false
+    t.index ["ratee_id", "role", "created_at"], name: "index_ratings_on_ratee_id_and_role_and_created_at"
+    t.index ["ratee_id"], name: "index_ratings_on_ratee_id"
+    t.index ["rater_id"], name: "index_ratings_on_rater_id"
+    t.index ["trip_id", "role"], name: "index_ratings_on_trip_id_and_role", unique: true
+    t.check_constraint "stars >= 1 AND stars <= 5", name: "ratings_stars_range"
+  end
+
   create_table "saved_places", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.integer "kind", default: 2, null: false
@@ -194,6 +222,31 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "share_links", force: :cascade do |t|
+    t.bigint "trip_id", null: false
+    t.string "token", null: false
+    t.datetime "created_at", null: false
+    t.index ["token"], name: "index_share_links_on_token", unique: true
+    t.index ["trip_id"], name: "index_share_links_on_trip_id"
+  end
+
+  create_table "support_tickets", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "trip_id"
+    t.integer "kind", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "priority", default: 0, null: false
+    t.geography "location", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}
+    t.bigint "assignee_id"
+    t.datetime "resolved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assignee_id"], name: "index_support_tickets_on_assignee_id"
+    t.index ["status", "priority", "created_at"], name: "index_support_tickets_on_status_and_priority_and_created_at"
+    t.index ["trip_id"], name: "index_support_tickets_on_trip_id"
+    t.index ["user_id"], name: "index_support_tickets_on_user_id"
+  end
+
   create_table "tariffs", force: :cascade do |t|
     t.integer "vehicle_class", null: false
     t.integer "base_fare", null: false
@@ -208,6 +261,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
     t.index ["updated_by_id"], name: "index_tariffs_on_updated_by_id"
     t.index ["vehicle_class"], name: "index_tariffs_on_vehicle_class", unique: true
     t.check_constraint "base_fare >= 0 AND per_km >= 0 AND per_minute >= 0 AND minimum_fare >= 0", name: "tariffs_amounts_not_negative"
+  end
+
+  create_table "ticket_messages", force: :cascade do |t|
+    t.bigint "support_ticket_id", null: false
+    t.bigint "author_id", null: false
+    t.text "body", null: false
+    t.boolean "internal", default: false, null: false
+    t.datetime "created_at", null: false
+    t.index ["author_id"], name: "index_ticket_messages_on_author_id"
+    t.index ["support_ticket_id"], name: "index_ticket_messages_on_support_ticket_id"
   end
 
   create_table "top_ups", force: :cascade do |t|
@@ -285,6 +348,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "outstanding_fee", default: 0, null: false
+    t.decimal "rider_rating_avg", precision: 3, scale: 2
+    t.integer "rider_rating_count", default: 0, null: false
     t.index ["phone"], name: "index_users_on_phone", unique: true
     t.check_constraint "role = ANY (ARRAY[0, 1, 2, 3])", name: "users_role_known"
   end
@@ -311,15 +376,25 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
   add_foreign_key "daily_statements", "driver_profiles"
   add_foreign_key "driver_locations", "driver_profiles"
   add_foreign_key "driver_profiles", "users"
+  add_foreign_key "emergency_contacts", "users"
   add_foreign_key "expiry_notices", "driver_profiles"
   add_foreign_key "fare_quotes", "users"
   add_foreign_key "ledger_entries", "driver_profiles"
   add_foreign_key "ledger_entries", "users", column: "created_by_id"
   add_foreign_key "moderation_actions", "users"
   add_foreign_key "moderation_actions", "users", column: "moderator_id"
+  add_foreign_key "ratings", "trips"
+  add_foreign_key "ratings", "users", column: "ratee_id"
+  add_foreign_key "ratings", "users", column: "rater_id"
   add_foreign_key "saved_places", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "share_links", "trips"
+  add_foreign_key "support_tickets", "trips"
+  add_foreign_key "support_tickets", "users"
+  add_foreign_key "support_tickets", "users", column: "assignee_id"
   add_foreign_key "tariffs", "users", column: "updated_by_id"
+  add_foreign_key "ticket_messages", "support_tickets"
+  add_foreign_key "ticket_messages", "users", column: "author_id"
   add_foreign_key "top_ups", "driver_profiles"
   add_foreign_key "trip_offers", "driver_profiles"
   add_foreign_key "trip_offers", "trips"
