@@ -3,8 +3,18 @@ Rails.application.routes.draw do
   resource :verification, only: %i[ new create ]
   resource :profile, only: %i[ edit update ]
   resources :saved_places, except: :show
+  resource :driver_application, path: "drive", only: %i[ show edit update ]
+  resources :documents, only: :show
 
   namespace :admin do
+    resources :driver_applications, only: %i[ index show ] do
+      member do
+        post :approve
+        post :request_changes
+        post :reject
+        post :suspend
+      end
+    end
     resources :users, only: :index do
       member do
         patch :role

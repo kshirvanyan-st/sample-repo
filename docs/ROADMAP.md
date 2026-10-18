@@ -90,7 +90,7 @@ These are copied and adapted, not shared code:
    - phone plus SMS code login (rate-limited per phone and per IP, codes hashed and expiring)
    - `User` roles: rider, driver, dispatcher, admin
    - rider profile and saved places (home, work)
-2. **Drivers and vehicles**
+2. **Drivers and vehicles** (done)
    - driver application: license, ID, car registration, photos via Active Storage; vehicle make,
      model, color, plate
    - admin review queue (approve, reject, ask for more) through `Moderation` with the audit log

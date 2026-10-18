@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :sessions, dependent: :destroy
   has_many :saved_places, dependent: :destroy
+  has_one :driver_profile, dependent: :destroy
   has_many :moderation_actions # audit rows are kept; the foreign key blocks deleting a user who has them
 
   enum :role, { rider: 0, driver: 1, dispatcher: 2, admin: 3 }, validate: true

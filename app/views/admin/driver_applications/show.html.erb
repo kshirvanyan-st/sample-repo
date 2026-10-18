@@ -1,0 +1,79 @@
+<% user = @driver_profile.user %>
+<% vehicle = @driver_profile.vehicle %>
+<% content_for :title, user.display_name %>
+<section class="py-6">
+  <%= render "admin/shared/tabs" %>
+  <%= link_to t(".back"), admin_driver_applications_path(status: @driver_profile.status), class: "mt-4 inline-block text-sm underline" %>
+  <h1 class="mt-2 text-2xl font-bold"><%= user.display_name %></h1>
+  <p class="text-gray-600">
+    <%= user.display_phone %> · <%= t("driver_profiles.statuses.#{@driver_profile.status}") %>
+    <% if @driver_profile.submitted_at %> · <%= t(".submitted_at", time: l(@driver_profile.submitted_at, format: :short)) %><% end %>
+  </p>
+  <% if @driver_profile.review_note.present? %>
+    <p class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-amber-900"><%= @driver_profile.review_note %></p>
+  <% end %>
+
+  <h2 class="mt-8 text-lg font-semibold"><%= t(".license") %></h2>
+  <dl class="mt-2 grid grid-cols-2 gap-2 text-sm md:w-1/2">
+    <dt class="text-gray-600"><%= DriverProfile.human_attribute_name(:license_number) %></dt><dd><%= @driver_profile.license_number %></dd>
+    <dt class="text-gray-600"><%= DriverProfile.human_attribute_name(:license_expires_on) %></dt>
+    <dd><%= @driver_profile.license_expires_on && l(@driver_profile.license_expires_on) %></dd>
+  </dl>
+  <%= render "documents", record: @driver_profile %>
+
+  <% if vehicle %>
+    <h2 class="mt-8 text-lg font-semibold"><%= t(".vehicle") %></h2>
+    <dl class="mt-2 grid grid-cols-2 gap-2 text-sm md:w-1/2">
+      <dt class="text-gray-600"><%= t(".vehicle") %></dt><dd><%= vehicle.description %></dd>
+      <dt class="text-gray-600"><%= Vehicle.human_attribute_name(:plate_number) %></dt><dd><%= vehicle.plate_number %></dd>
+      <dt class="text-gray-600"><%= Vehicle.human_attribute_name(:vehicle_class) %></dt><dd><%= t("vehicles.classes.#{vehicle.vehicle_class}") %></dd>
+      <dt class="text-gray-600"><%= Vehicle.human_attribute_name(:registration_expires_on) %></dt>
+      <dd><%= vehicle.registration_expires_on && l(vehicle.registration_expires_on) %></dd>
+      <dt class="text-gray-600"><%= Vehicle.human_attribute_name(:insurance_expires_on) %></dt>
+      <dd><%= vehicle.insurance_expires_on && l(vehicle.insurance_expires_on) %></dd>
+    </dl>
+    <%= render "documents", record: vehicle %>
+  <% end %>
+
+  <h2 class="mt-8 text-lg font-semibold"><%= t(".decision") %></h2>
+  <div class="mt-3 space-y-4 md:w-2/3">
+    <% if @driver_profile.draft? || @driver_profile.needs_changes? || @driver_profile.rejected? %>
+      <p class="text-gray-600"><%= t(".no_decision.#{@driver_profile.status}") %></p>
+    <% end %>
+    <% if @driver_profile.submitted? || @driver_profile.suspended? %>
+      <%= button_to t(".approve"), approve_admin_driver_application_path(@driver_profile),
+            class: "rounded-lg bg-green-600 px-4 py-2 font-semibold text-white" %>
+    <% end %>
+    <% if @driver_profile.submitted? || @driver_profile.approved? %>
+      <%= form_with url: request_changes_admin_driver_application_path(@driver_profile), class: "space-y-2" do |form| %>
+        <%= form.label :note, t(".note"), class: "block text-sm font-medium" %>
+        <%= form.text_area :note, rows: 3, maxlength: 1000, class: "block w-full rounded-lg border px-3 py-2" %>
+        <div class="flex flex-wrap gap-2">
+          <%= form.submit t(".request_changes"), class: "rounded-lg border px-4 py-2" %>
+          <% if @driver_profile.submitted? %>
+            <%= form.submit t(".reject"), formaction: reject_admin_driver_application_path(@driver_profile),
+                  class: "rounded-lg border border-red-300 px-4 py-2 text-red-700", data: { turbo_confirm: t(".confirm_reject") } %>
+          <% else %>
+            <%= form.submit t(".suspend"), formaction: suspend_admin_driver_application_path(@driver_profile),
+                  class: "rounded-lg border border-red-300 px-4 py-2 text-red-700", data: { turbo_confirm: t(".confirm_suspend") } %>
+          <% end %>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+
+  <% history = ModerationAction.where(user: user).order(created_at: :desc).limit(20).includes(:moderator) %>
+  <% if history.any? %>
+    <h2 class="mt-8 text-lg font-semibold"><%= t(".history") %></h2>
+    <ul class="mt-2 space-y-1 text-sm">
+      <% history.each do |entry| %>
+        <li>
+          <span class="text-gray-600"><%= l(entry.created_at, format: :short) %></span>
+          <%= t("moderation_actions.#{entry.action}", default: entry.action) %>
+          — <%= entry.moderator&.display_name || t(".system") %>
+          <% if entry.details["note"].present? %><span class="text-gray-600">: <%= entry.details["note"] %></span><% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+</section>

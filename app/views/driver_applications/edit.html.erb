@@ -1,0 +1,82 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-lg py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <p class="mt-2 text-gray-600"><%= t(".intro") %></p>
+
+  <% if @driver_profile.review_note.present? && !@driver_profile.draft? %>
+    <div class="mt-4 rounded-lg bg-amber-50 px-4 py-3 text-amber-900" role="status">
+      <p class="font-medium"><%= t(".review_note") %></p>
+      <p class="mt-1"><%= @driver_profile.review_note %></p>
+    </div>
+  <% end %>
+
+  <%= form_with model: @driver_profile, url: driver_application_path, method: :patch, class: "mt-6 space-y-8" do |form| %>
+    <%= render "errors", driver_profile: @driver_profile %>
+
+    <fieldset class="space-y-4">
+      <legend class="text-lg font-semibold"><%= t(".license") %></legend>
+      <div>
+        <%= form.label :license_number, class: "block text-sm font-medium" %>
+        <%= form.text_field :license_number, maxlength: 30, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+      </div>
+      <div>
+        <%= form.label :license_expires_on, class: "block text-sm font-medium" %>
+        <%= form.date_field :license_expires_on, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+      </div>
+      <%= render "document_field", form: form, record: @driver_profile, name: :license_front %>
+      <%= render "document_field", form: form, record: @driver_profile, name: :license_back %>
+    </fieldset>
+
+    <fieldset class="space-y-4">
+      <legend class="text-lg font-semibold"><%= t(".identity") %></legend>
+      <%= render "document_field", form: form, record: @driver_profile, name: :id_document %>
+      <%= render "document_field", form: form, record: @driver_profile, name: :selfie %>
+    </fieldset>
+
+    <%= form.fields_for :vehicle do |car| %>
+      <fieldset class="space-y-4">
+        <legend class="text-lg font-semibold"><%= t(".vehicle") %></legend>
+        <div class="grid grid-cols-2 gap-3">
+          <% %i[ make model color ].each do |field| %>
+            <div>
+              <%= car.label field, class: "block text-sm font-medium" %>
+              <%= car.text_field field, maxlength: 40, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+            </div>
+          <% end %>
+          <div>
+            <%= car.label :year, class: "block text-sm font-medium" %>
+            <%= car.number_field :year, min: 1990, max: Date.current.year + 1, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+          </div>
+        </div>
+        <div>
+          <%= car.label :plate_number, class: "block text-sm font-medium" %>
+          <%= car.text_field :plate_number, placeholder: "35 OS 555", autocapitalize: "characters", class: "mt-1 block w-full rounded-lg border px-3 py-2 uppercase" %>
+        </div>
+        <div>
+          <%= car.label :vehicle_class, class: "block text-sm font-medium" %>
+          <%= car.select :vehicle_class, Vehicle.vehicle_classes.keys.map { |key| [ t("vehicles.classes.#{key}"), key ] }, {},
+                class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <%= car.label :registration_expires_on, class: "block text-sm font-medium" %>
+            <%= car.date_field :registration_expires_on, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+          </div>
+          <div>
+            <%= car.label :insurance_expires_on, class: "block text-sm font-medium" %>
+            <%= car.date_field :insurance_expires_on, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+          </div>
+        </div>
+        <% Vehicle::DOCUMENTS.each do |name| %>
+          <%= render "document_field", form: car, record: car.object, name: name %>
+        <% end %>
+      </fieldset>
+    <% end %>
+
+    <p class="text-xs text-gray-500"><%= t(".files_hint", max: DocumentAttachments::MAX_SIZE / 1.megabyte) %></p>
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <%= form.submit t(".save"), class: "flex-1 rounded-lg border px-4 py-2 font-medium" %>
+      <%= form.submit t(".submit"), name: "submit_application", class: "flex-1 rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-gray-900" %>
+    </div>
+  <% end %>
+</section>

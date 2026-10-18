@@ -10,13 +10,65 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_170005) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_180004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
 
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "driver_profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.integer "status", default: 0, null: false
+    t.string "license_number"
+    t.date "license_expires_on"
+    t.text "review_note"
+    t.datetime "submitted_at"
+    t.datetime "approved_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status", "submitted_at"], name: "index_driver_profiles_on_status_and_submitted_at"
+    t.index ["user_id"], name: "index_driver_profiles_on_user_id", unique: true
+    t.check_constraint "status >= 0 AND status <= 5", name: "driver_profiles_status_known"
+  end
+
+  create_table "expiry_notices", force: :cascade do |t|
+    t.bigint "driver_profile_id", null: false
+    t.string "document", null: false
+    t.date "expires_on", null: false
+    t.string "stage", null: false
+    t.datetime "created_at", null: false
+    t.index ["driver_profile_id", "document", "expires_on", "stage"], name: "index_expiry_notices_once", unique: true
+  end
+
   create_table "moderation_actions", force: :cascade do |t|
-    t.bigint "moderator_id", null: false
+    t.bigint "moderator_id"
     t.bigint "user_id", null: false
     t.string "action", null: false
     t.jsonb "details", default: {}, null: false
@@ -71,8 +123,29 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_170005) do
     t.check_constraint "role = ANY (ARRAY[0, 1, 2, 3])", name: "users_role_known"
   end
 
+  create_table "vehicles", force: :cascade do |t|
+    t.bigint "driver_profile_id", null: false
+    t.string "make"
+    t.string "model"
+    t.string "color"
+    t.integer "year"
+    t.string "plate_number"
+    t.integer "vehicle_class", default: 0, null: false
+    t.date "registration_expires_on"
+    t.date "insurance_expires_on"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_profile_id"], name: "index_vehicles_on_driver_profile_id", unique: true
+    t.index ["plate_number"], name: "index_vehicles_on_plate_number", unique: true
+  end
+
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "driver_profiles", "users"
+  add_foreign_key "expiry_notices", "driver_profiles"
   add_foreign_key "moderation_actions", "users"
   add_foreign_key "moderation_actions", "users", column: "moderator_id"
   add_foreign_key "saved_places", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "vehicles", "driver_profiles"
 end
