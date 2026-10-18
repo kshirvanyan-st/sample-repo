@@ -1,0 +1,64 @@
+# Kamal deploy config. Hosts and names come from environment variables so the
+# same file works locally and in .github/workflows/deploy.yml.
+#   KAMAL_WEB_HOST   IP of the app VPS
+#   APP_HOST         public domain, e.g. spark.example.com
+#   KAMAL_IMAGE      e.g. ghcr.io/<owner>/spark
+#   KAMAL_REGISTRY_USERNAME / KAMAL_REGISTRY_PASSWORD (see .kamal/secrets)
+service: spark
+
+image: <%= ENV.fetch("KAMAL_IMAGE", "spark") %>
+
+servers:
+  web:
+    - <%= ENV.fetch("KAMAL_WEB_HOST", "192.168.0.1") %>
+
+proxy:
+  ssl: true
+  host: <%= ENV.fetch("APP_HOST", "spark.example.com") %>
+
+registry:
+  server: ghcr.io
+  username: <%= ENV.fetch("KAMAL_REGISTRY_USERNAME", "spark") %>
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  secret:
+    - SECRET_KEY_BASE
+    - SPARK_DATABASE_PASSWORD
+  clear:
+    # Run the Solid Queue supervisor inside Puma; split into a job role once traffic grows.
+    SOLID_QUEUE_IN_PUMA: true
+    DB_HOST: spark-db
+    APP_HOST: <%= ENV.fetch("APP_HOST", "spark.example.com") %>
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+
+volumes:
+  - "spark_storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+builder:
+  arch: amd64
+
+accessories:
+  db:
+    # PostGIS image so Phase 1 can add geo search without a database migration of the server.
+    image: postgis/postgis:17-3.5
+    host: <%= ENV.fetch("KAMAL_WEB_HOST", "192.168.0.1") %>
+    port: "127.0.0.1:5432:5432"
+    env:
+      clear:
+        POSTGRES_USER: spark
+        POSTGRES_DB: spark_production
+      secret:
+        - POSTGRES_PASSWORD
+    files:
+      - config/db/init.sql:/docker-entrypoint-initdb.d/setup.sql
+    directories:
+      - data:/var/lib/postgresql/data
