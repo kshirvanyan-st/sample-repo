@@ -102,7 +102,7 @@ jobs:
         run: bin/rspec
 
       - name: Keep screenshots from failed system tests
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: screenshots
@@ -162,7 +162,7 @@ jobs:
         run: script/media_smoke
 
       - name: Keep logs on failure
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         if: failure()
         with:
           name: media-smoke-logs
