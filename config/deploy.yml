@@ -1,0 +1,62 @@
+# Kamal deploy config. Hosts and names come from environment variables so the
+# same file works locally and in .github/workflows/deploy.yml.
+#   KAMAL_WEB_HOST   IP of the app VPS
+#   APP_HOST         public domain, e.g. taxi.example.am
+#   KAMAL_IMAGE      e.g. ghcr.io/<owner>/taxi-am
+#   KAMAL_REGISTRY_USERNAME / KAMAL_REGISTRY_PASSWORD (see .kamal/secrets)
+service: taxi-am
+
+image: <%= ENV.fetch("KAMAL_IMAGE", "taxi-am") %>
+
+servers:
+  web:
+    - <%= ENV.fetch("KAMAL_WEB_HOST", "192.168.0.1") %>
+
+proxy:
+  ssl: true
+  host: <%= ENV.fetch("APP_HOST", "taxi.example.am") %>
+
+registry:
+  server: ghcr.io
+  username: <%= ENV.fetch("KAMAL_REGISTRY_USERNAME", "taxi-am") %>
+  password:
+    - KAMAL_REGISTRY_PASSWORD
+
+env:
+  secret:
+    - SECRET_KEY_BASE
+    - TAXI_AM_DATABASE_PASSWORD
+  clear:
+    SOLID_QUEUE_IN_PUMA: true
+    DB_HOST: taxi-am-db
+    APP_HOST: <%= ENV.fetch("APP_HOST", "taxi.example.am") %>
+
+aliases:
+  console: app exec --interactive --reuse "bin/rails console"
+  shell: app exec --interactive --reuse "bash"
+  logs: app logs -f
+  dbc: app exec --interactive --reuse "bin/rails dbconsole --include-password"
+
+volumes:
+  - "taxi_am_storage:/rails/storage"
+
+asset_path: /rails/public/assets
+
+builder:
+  arch: amd64
+
+accessories:
+  db:
+    image: postgis/postgis:17-3.5
+    host: <%= ENV.fetch("KAMAL_WEB_HOST", "192.168.0.1") %>
+    port: "127.0.0.1:5432:5432"
+    env:
+      clear:
+        POSTGRES_USER: taxi_am
+        POSTGRES_DB: taxi_am_production
+      secret:
+        - POSTGRES_PASSWORD
+    files:
+      - config/db/init.sql:/docker-entrypoint-initdb.d/setup.sql
+    directories:
+      - data:/var/lib/postgresql/data

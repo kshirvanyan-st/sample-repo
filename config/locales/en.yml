@@ -1,0 +1,21 @@
+en:
+  app:
+    name: "Taxi AM"
+  shared:
+    locale_switcher:
+      label: "Language"
+  home:
+    index:
+      title: "Taxi AM"
+      tagline: "A fair taxi for Yerevan: honest prices for riders, lower commission for drivers."
+      coming_soon: "Coming soon to Yerevan."
+      points:
+        fast:
+          title: "A car in minutes"
+          body: "We send the closest available driver, not the first one who taps."
+        fair:
+          title: "Price known up front"
+          body: "See the fare before you book. Pay in cash or by card."
+        local:
+          title: "Made in Armenia"
+          body: "In Armenian, Russian and English, with local support."
