@@ -1,0 +1,24 @@
+<div class="flex items-center justify-between">
+  <h1 class="font-bold text-3xl">Photos</h1>
+  <div class="flex gap-3 text-sm">
+    <% %w[ pending approved rejected ].each do |status| %>
+      <%= link_to status.humanize, admin_photos_path(status: status), class: @status == status ? "font-bold underline" : "" %>
+    <% end %>
+  </div>
+</div>
+<% unless Rails.configuration.x.moderation.manual_photo_review %>
+  <p class="text-sm text-gray-500 mt-2">New photos are approved automatically. Set <code>PHOTO_MODERATION=manual</code> to review them here first.</p>
+<% end %>
+
+<% if @photos.any? %>
+  <div class="grid grid-cols-3 md:grid-cols-6 gap-4 mt-6">
+    <% @photos.each do |photo| %>
+      <div>
+        <%= render "admin/photos/photo", photo: photo %>
+        <p class="text-xs mt-1"><%= render "admin/shared/user_chip", user: photo.profile.user %></p>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-gray-500 mt-6">No <%= @status %> photos.</p>
+<% end %>

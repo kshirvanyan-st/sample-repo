@@ -30,14 +30,11 @@ class Media::AuthController < Media::BaseController
 
     def authorize_publish
       return false unless broadcaster&.onboarded? && broadcaster.stream_key.present?
+      return false if broadcaster.banned? || broadcaster.streaming_suspended?
       return false unless ActiveSupport::SecurityUtils.secure_compare(credential, broadcaster.stream_key)
 
-      # Publishing straight from OBS without the Go Live page opens a stream with a default title.
-      stream = broadcaster.open_stream || broadcaster.streams.create!(title: "#{broadcaster.profile.display_name} is live")
-      stream.update!(ingest_protocol: payload["protocol"])
+      Stream.open_for_ingest!(broadcaster).update!(ingest_protocol: payload["protocol"])
       true
-    rescue ActiveRecord::RecordNotUnique
-      true # another request opened the stream at the same moment
     end
 
     # Rails' own calls to the MediaMTX control API (MediaServer).
@@ -47,6 +44,6 @@ class Media::AuthController < Media::BaseController
 
     def authorize_read
       stream = broadcaster&.live_stream
-      stream.present? && stream.readable_with?(credential)
+      stream.present? && !broadcaster.banned? && stream.readable_with?(credential)
     end
 end

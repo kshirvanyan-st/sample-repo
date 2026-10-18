@@ -3,7 +3,10 @@ class Report < ApplicationRecord
   belongs_to :reported, class_name: "User"
 
   enum :reason, { spam: 0, fake: 1, inappropriate: 2, harassment: 3, underage: 4, other: 5 }, validate: true
+  belongs_to :resolved_by, class_name: "User", optional: true
+
   enum :status, { open: 0, resolved: 1 }
+  enum :resolution, { dismissed: 0, banned: 1, content_removed: 2 }, prefix: true
 
   validates :details, length: { maximum: 1000 }
   validate :not_self

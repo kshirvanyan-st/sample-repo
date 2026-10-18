@@ -1,4 +1,4 @@
-# Safety net for missed hooks (runs every minute): starts pending streams MediaMTX is already
+# Safety net for missed hooks (runs every minute): starts streams MediaMTX is already
 # receiving, ends "live" streams it no longer serves, and closes pending streams nobody
 # started within a day.
 class StreamReconcileJob < ApplicationJob
@@ -8,8 +8,12 @@ class StreamReconcileJob < ApplicationJob
   def perform
     ready = MediaServer.new.ready_paths
 
-    Stream.pending.includes(:user).find_each do |stream|
-      stream.go_live! if stream.media_path.in?(ready)
+    # Video arriving without a live stream (missed hook, reconnect race): start one.
+    ready.each do |path|
+      broadcaster = Stream.broadcaster_for_path(path)
+      next if broadcaster.nil? || broadcaster.live_stream || broadcaster.banned? || broadcaster.streaming_suspended?
+
+      Stream.open_for_ingest!(broadcaster).go_live!
     end
     Stream.live.where(started_at: ...GRACE_PERIOD.ago).includes(:user).find_each do |stream|
       stream.end! unless stream.media_path.in?(ready)

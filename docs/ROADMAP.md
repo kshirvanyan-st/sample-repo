@@ -128,7 +128,7 @@ Choices confirmed with the user:
   - a live streams dashboard
   - kill stream, which calls the MediaMTX API `/v3/paths/kick` and suspends the broadcaster's key
   - reports queue, photo review, and user bans
-- Optional recording (`record: yes` in MediaMTX for flagged streams), kept for N days.
+- Optional recording (`record: yes` in MediaMTX for flagged streams), kept for N days. *(Deferred: needs object storage and a retention policy.)*
 - Load test: k6 for HTTP and Action Cable, and a WHEP viewer swarm for MediaMTX.
 - Seed data: fake profiles plus a looping test stream (an ffmpeg pusher in dev).
 

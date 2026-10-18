@@ -7,6 +7,9 @@ class Profile < ApplicationRecord
   belongs_to :user
   has_many :photos, -> { order(:position, :id) }, dependent: :destroy, inverse_of: :profile
 
+  # Finished onboarding and not banned: the profiles other people may see.
+  scope :visible, -> { where.not(onboarded_at: nil).where(user_id: User.active.select(:id)) }
+
   enum :gender, { male: 0, female: 1, other: 2 }, validate: true
   enum :looking_for, { men: 0, women: 1, everyone: 2 }, prefix: :looking_for, validate: true
 

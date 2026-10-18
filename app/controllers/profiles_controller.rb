@@ -1,6 +1,6 @@
 class ProfilesController < ApplicationController
   def show
-    @profile = Profile.where.not(onboarded_at: nil).find(params[:id])
+    @profile = Profile.visible.find(params[:id])
     raise ActiveRecord::RecordNotFound if blocked_by_profile_owner?
     @photos = @profile.visible_photos_for(Current.user)
   end

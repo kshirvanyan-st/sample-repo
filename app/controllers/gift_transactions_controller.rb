@@ -1,8 +1,8 @@
 class GiftTransactionsController < ApplicationController
-  rate_limit to: 30, within: 1.minute, only: :create, with: -> { head :too_many_requests }
+  rate_limit to: 30, within: 1.minute, only: :create, by: -> { Current.user.id }, with: -> { head :too_many_requests }
 
   def create
-    stream = Stream.where.not(user_id: Current.user.blocked_user_ids).find(params[:stream_id])
+    stream = Stream.visible_to(Current.user).find(params[:stream_id])
     gift = Gift.available.find(params[:gift_id])
     GiftTransaction.send!(sender: Current.user, stream:, gift:)
 

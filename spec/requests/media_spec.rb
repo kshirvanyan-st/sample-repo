@@ -43,6 +43,16 @@ RSpec.describe "MediaMTX callbacks", type: :request do
       expect(response).to have_http_status(:unauthorized)
     end
 
+    it "refuses banned or suspended broadcasters" do
+      broadcaster.update!(streaming_suspended_at: Time.current)
+      media_auth(action: "publish", path: path, token: broadcaster.stream_key)
+      expect(response).to have_http_status(:unauthorized)
+
+      broadcaster.update!(streaming_suspended_at: nil, banned_at: Time.current)
+      media_auth(action: "publish", path: path, token: broadcaster.stream_key)
+      expect(response).to have_http_status(:unauthorized)
+    end
+
     it "lets viewers with a token read a live stream" do
       stream = create(:stream, :live, user: broadcaster)
       media_auth(action: "read", path: path, query: "token=#{CGI.escape(stream.viewer_token_for(viewer))}")
@@ -76,12 +86,18 @@ RSpec.describe "MediaMTX callbacks", type: :request do
   describe "hooks" do
     let!(:stream) { create(:stream, user: broadcaster) }
 
-    it "marks the stream live when video starts and ended when it stops" do
+    it "marks the stream live when video starts and ends it after the grace period" do
       expect { media_hook(:ready, path: path) }.to have_enqueued_job(StreamLiveNotificationJob)
       expect(stream.reload).to be_live
 
-      media_hook(:not_ready, path: path)
-      expect(stream.reload).to be_ended
+      expect { media_hook(:not_ready, path: path) }.to have_enqueued_job(StreamEndJob).with(stream)
+      expect(stream.reload).to be_live
+    end
+
+    it "opens a new stream when video arrives with none open (reconnect after it ended)" do
+      stream.end!
+      media_hook(:ready, path: path)
+      expect(broadcaster.live_stream).to be_present.and(have_attributes(title: "#{broadcaster.profile.display_name} is live"))
     end
 
     it "requires the shared secret" do

@@ -1,0 +1,9 @@
+<% profile = user.profile %>
+<%= link_to admin_user_path(user), class: "inline-flex items-center gap-2 hover:underline" do %>
+  <% if (photo = profile&.photos&.first) %>
+    <%= image_tag photo.image.variant(:thumb), alt: "", class: "w-7 h-7 rounded-full object-cover" %>
+  <% end %>
+  <span class="font-medium"><%= profile&.display_name || user.email_address %></span>
+  <% if user.banned? %><span class="rounded bg-red-600 text-white text-xs px-1.5">banned</span><% end %>
+  <% if user.staff? %><span class="rounded bg-blue-600 text-white text-xs px-1.5"><%= user.role %></span><% end %>
+<% end %>

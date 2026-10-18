@@ -17,7 +17,7 @@ class ReportsController < ApplicationController
 
   private
     def set_profile
-      @profile = Profile.where.not(onboarded_at: nil).where.not(user_id: Current.user.id).find(params[:profile_id])
+      @profile = Profile.visible.where.not(user_id: Current.user.id).find(params[:profile_id])
     end
 
     def report_params

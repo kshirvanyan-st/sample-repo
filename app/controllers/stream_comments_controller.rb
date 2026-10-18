@@ -1,8 +1,8 @@
 class StreamCommentsController < ApplicationController
-  rate_limit to: 20, within: 1.minute, only: :create, with: -> { head :too_many_requests }
+  rate_limit to: 20, within: 1.minute, only: :create, by: -> { Current.user.id }, with: -> { head :too_many_requests }
 
   def create
-    stream = Stream.where.not(user_id: Current.user.blocked_user_ids).find(params[:stream_id])
+    stream = Stream.visible_to(Current.user).find(params[:stream_id])
     comment = stream.comments.build(body: params.dig(:stream_comment, :body), user: Current.user)
 
     if comment.save

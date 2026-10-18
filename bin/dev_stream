@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Keeps a test pattern streaming as a seeded user, so Live now always has something to watch:
+#   bin/dev_stream [email]   (default lilit@example.com; needs bin/dev, bin/media and ffmpeg)
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+email="${1:-lilit@example.com}"
+read -r path key < <(bin/rails runner "
+  u = User.find_by!(email_address: '$email').streaming_credentials!
+  puts [Stream.media_path_for(u), u.stream_key].join(' ')" 2>/dev/null | tail -1)
+
+echo "Streaming a test pattern as $email (Ctrl-C to stop)"
+exec ffmpeg -hide_banner -loglevel warning -re \
+  -f lavfi -i "testsrc2=size=1280x720:rate=30" -f lavfi -i "sine=frequency=330" \
+  -c:v libx264 -preset veryfast -tune zerolatency -g 60 -b:v 2500k -c:a aac -b:a 128k \
+  -f flv "${MEDIA_RTMP_URL:-rtmp://localhost:1935}/$path?token=$key"

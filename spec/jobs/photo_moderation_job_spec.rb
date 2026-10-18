@@ -12,4 +12,13 @@ RSpec.describe PhotoModerationJob, type: :job do
     described_class.perform_now(photo)
     expect(photo.reload).to be_rejected
   end
+
+  it "leaves photos pending for review in manual mode" do
+    photo = create(:photo)
+    Rails.configuration.x.moderation.manual_photo_review = true
+    described_class.perform_now(photo)
+    expect(photo.reload).to be_pending
+  ensure
+    Rails.configuration.x.moderation.manual_photo_review = false
+  end
 end

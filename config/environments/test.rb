@@ -50,4 +50,8 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = true
+
+  # Jobs are only enqueued in tests. script/media_smoke runs a real server that needs them
+  # performed (e.g. StreamEndJob), so it sets ACTIVE_JOB_ADAPTER=async.
+  config.active_job.queue_adapter = ENV.fetch("ACTIVE_JOB_ADAPTER", "test").to_sym
 end

@@ -20,6 +20,10 @@ The full roadmap, phases and architecture are in `docs/ROADMAP.md`. Work one pha
   `Wallet#credit!/#debit!` is the only writer (row lock + ledger entry + cached balance). Coins are
   credited only from the signed Stripe webhook (`Purchase#fulfill!`, idempotent via `StripeEvent`).
 - Controllers require authentication by default; opt out with `allow_unauthenticated_access`.
+- Look up other people's profiles with `Profile.visible` and streams with `Stream.visible_to(user)`:
+  they exclude banned users (and blocks). Staff actions go through `Moderation`, which writes the
+  `ModerationAction` audit log; admin controllers live in `app/controllers/admin/`.
+- Rate limits on signed-in actions are per user (`by: -> { Current.user.id }`), not per IP.
 
 ## Before every push
 Run `bin/ci` (RuboCop, gem + importmap audits, Brakeman, RSpec). It must pass; CI (`.github/workflows/ci.yml`) runs the same checks plus a Docker build.

@@ -1,0 +1,7 @@
+<li class="flex flex-wrap gap-x-2 text-sm py-2">
+  <span class="text-gray-400"><%= l(action.created_at, format: :short) %></span>
+  <strong><%= action.moderator.profile&.display_name || action.moderator.email_address %></strong>
+  <span><%= action.action.humanize.downcase %></span>
+  <span class="text-gray-600"><%= action.target_type %> #<%= action.target_id %></span>
+  <% if action.note %><span class="text-gray-500">“<%= action.note %>”</span><% end %>
+</li>

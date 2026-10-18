@@ -35,7 +35,7 @@
           <%= render "layouts/flash", type: type, message: message %>
         <% end %>
       </div>
-      <%= yield %>
+      <%= content_for?(:content) ? yield(:content) : yield %>
     </main>
   </body>
 </html>

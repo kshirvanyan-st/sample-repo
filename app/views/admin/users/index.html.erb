@@ -1,0 +1,17 @@
+<h1 class="font-bold text-3xl">Users</h1>
+
+<%= form_with url: admin_users_path, method: :get, class: "flex flex-wrap gap-2 mt-4" do |form| %>
+  <%= form.search_field :q, value: params[:q], placeholder: "Email or name", aria: { label: "Search users" }, class: "#{input_classes} mt-0 max-w-sm" %>
+  <%= form.select :filter, [ [ "Everyone", "" ], [ "Banned", "banned" ], [ "Staff", "staff" ] ], { selected: params[:filter] }, class: "#{input_classes} mt-0 w-auto" %>
+  <%= form.submit "Search", class: secondary_button_classes %>
+<% end %>
+
+<table class="w-full mt-6 text-sm bg-white rounded-xl border">
+  <thead class="text-left text-gray-500"><tr><th class="p-3">User</th><th class="p-3">Email</th><th class="p-3">Joined</th><th class="p-3">Coins</th></tr></thead>
+  <tbody class="divide-y">
+    <% @users.each do |user| %>
+      <tr><td class="p-3"><%= render "admin/shared/user_chip", user: user %></td><td class="p-3"><%= user.email_address %></td>
+        <td class="p-3"><%= time_ago_in_words(user.created_at) %> ago</td><td class="p-3"><%= user.coin_balance %></td></tr>
+    <% end %>
+  </tbody>
+</table>

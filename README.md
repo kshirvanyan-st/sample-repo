@@ -11,7 +11,24 @@ bin/media      # MediaMTX for live streaming (binary on PATH or Docker), talks t
 bin/rails db:seed   # demo profiles; sign in as demo@example.com / password123
 bin/rspec      # test suite
 script/media_smoke  # end-to-end streaming check with real MediaMTX + ffmpeg
+bin/dev_stream      # keep a test-pattern stream live as a seeded user (needs bin/media)
 ```
+
+### Moderation
+
+- Make someone staff: `bin/rails "users:grant[email@example.com,admin]"` (or `moderator`).
+  In production: `bin/kamal app exec 'bin/rails "users:grant[you@example.com,admin]"'`.
+- Staff see **Admin** in the nav (`/admin`): reports queue, photo review, live streams
+  (end, or end + suspend streaming), user search with ban/unban and roles, and an audit log
+  of every action. Non-staff get a 404.
+- Banning signs the user out everywhere, ends their stream, closes reports against them and
+  hides them from discovery, profiles, Liked me and Live now.
+- `PHOTO_MODERATION=manual` keeps new photos pending (visible only to their owner) until
+  approved in `/admin/photos`; the default approves them automatically.
+
+### Load tests
+
+k6 scripts for browsing/swiping and for a crowd on a live stream are in [`load/`](load/README.md).
 
 ### Live streaming
 

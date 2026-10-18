@@ -52,6 +52,24 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
 
+  namespace :admin do
+    root "dashboard#show"
+    resources :reports, only: %i[ index update ]
+    resources :users, only: %i[ index show ] do
+      member do
+        post :ban
+        post :unban
+        post :restore_streaming
+        patch :role
+      end
+    end
+    resources :photos, only: %i[ index update ]
+    resources :streams, only: :index do
+      post :shut_down, on: :member
+    end
+    resources :moderation_actions, only: :index, path: "audit-log"
+  end
+
   # Called by MediaMTX (see config/media/mediamtx.yml).
   namespace :media do
     post "auth" => "auth#create"

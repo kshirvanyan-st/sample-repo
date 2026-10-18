@@ -1,5 +1,5 @@
 class MessagesController < ApplicationController
-  rate_limit to: 30, within: 1.minute, only: :create, with: -> { head :too_many_requests }
+  rate_limit to: 30, within: 1.minute, only: :create, by: -> { Current.user.id }, with: -> { head :too_many_requests }
 
   def create
     @conversation = Conversation.for(Current.user).find(params[:conversation_id])
