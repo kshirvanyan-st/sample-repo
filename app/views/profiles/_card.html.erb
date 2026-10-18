@@ -1,0 +1,11 @@
+<%= link_to profile_path(profile), id: dom_id(profile, :card), class: "block w-64 rounded-xl overflow-hidden shadow bg-white" do %>
+  <% if (photo = profile.main_photo) %>
+    <%= image_tag photo.image.variant(:card), alt: profile.display_name, class: "w-full aspect-[3/4] object-cover" %>
+  <% else %>
+    <div class="w-full aspect-[3/4] bg-gray-100 flex items-center justify-center text-gray-400">No photo yet</div>
+  <% end %>
+  <div class="p-3">
+    <p class="font-semibold"><%= profile.display_name %>, <%= profile.age %></p>
+    <% if profile.city.present? %><p class="text-sm text-gray-500"><%= profile.city %></p><% end %>
+  </div>
+<% end %>

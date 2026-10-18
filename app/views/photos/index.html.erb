@@ -1,0 +1,29 @@
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl">My photos</h1>
+
+  <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mt-6">
+    <% @profile.photos.each.with_index do |photo, index| %>
+      <div id="<%= dom_id(photo) %>" class="relative">
+        <%= image_tag photo.image.variant(:card), alt: "Photo #{index + 1}", class: "rounded-lg w-full aspect-[3/4] object-cover" %>
+        <div class="absolute top-2 left-2 flex gap-1 text-xs">
+          <% if index.zero? %><span class="bg-pink-600 text-white px-2 py-0.5 rounded">Main</span><% end %>
+          <% unless photo.approved? %><span class="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded"><%= photo.status.humanize %></span><% end %>
+        </div>
+        <div class="flex gap-2 mt-2 text-sm">
+          <%= button_to "Make main", make_main_photo_path(photo), method: :patch, class: "underline" unless index.zero? %>
+          <%= button_to "Delete", photo_path(photo), method: :delete, class: "underline text-red-600", form: { data: { turbo_confirm: "Delete this photo?" } } %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @profile.photos.size < Photo::MAX_PER_PROFILE %>
+    <%= form_with model: Photo.new, url: photos_path, class: "mt-8 flex items-end gap-3" do |form| %>
+      <div class="grow">
+        <%= form.label :image, "Add a photo" %>
+        <%= form.file_field :image, required: true, accept: Photo::CONTENT_TYPES.join(","), class: input_classes %>
+      </div>
+      <%= form.submit "Upload", class: primary_button_classes %>
+    <% end %>
+  <% end %>
+</div>

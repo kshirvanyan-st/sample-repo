@@ -16,7 +16,7 @@ RSpec.describe "Registrations", type: :request do
 
     it "creates a user and signs them in" do
       expect { post registration_path, params: params }.to change(User, :count).by(1).and change(Session, :count).by(1)
-      expect(response).to redirect_to(root_path)
+      expect(response).to redirect_to(onboarding_path("basics"))
       expect(cookies[:session_id]).to be_present
     end
 

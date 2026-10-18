@@ -1,6 +1,20 @@
 Rails.application.routes.draw do
   resource :session
   resource :registration, only: %i[ new create ]
+
+  resources :onboarding, only: %i[ show update ], param: :step
+
+  resources :profiles, only: :show do
+    resource :follow, only: %i[ create destroy ]
+  end
+
+  scope module: :my do
+    resource :profile, only: %i[ edit update ], as: :my_profile, path: "me"
+  end
+
+  resources :photos, only: %i[ index create destroy ] do
+    patch :make_main, on: :member
+  end
   resources :passwords, param: :token
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

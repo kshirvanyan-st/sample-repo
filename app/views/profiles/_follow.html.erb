@@ -1,0 +1,8 @@
+<div id="<%= dom_id(profile, :follow) %>" class="flex items-center gap-3">
+  <% if Current.user.following?(profile.user) %>
+    <%= button_to "Unfollow", profile_follow_path(profile), method: :delete, class: secondary_button_classes %>
+  <% else %>
+    <%= button_to "Follow", profile_follow_path(profile), class: primary_button_classes %>
+  <% end %>
+  <span class="text-sm text-gray-600"><%= pluralize(profile.user.followers.count, "follower") %></span>
+</div>
