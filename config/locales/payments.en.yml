@@ -1,0 +1,114 @@
+en:
+  payments:
+    sms:
+      receipt: "Taxi AM: %{fare} paid in cash. %{from} → %{to}. Thank you!"
+      statement: "Taxi AM today: %{trips} trips, %{cash} in cash, commission %{commission}. Balance: %{balance}."
+    trip:
+      pay_cash: "Pay the driver in cash: %{fare}"
+      includes_fee: "Includes %{fee} from a ride you cancelled earlier."
+    quote:
+      outstanding_fee: "A cancellation fee of %{fee} from an earlier ride will be added to this trip."
+    sandbox:
+      show:
+        title: "Test payment"
+        notice: "This is the test bank. No real money moves."
+        for: "Top-up for %{name}"
+        pay: "Pay"
+        decline: "Decline"
+  ledger:
+    kinds:
+      commission: "Commission"
+      top_up: "Top-up"
+      cancellation_payout: "Cancellation fee"
+      adjustment: "Correction"
+      refund: "Refund"
+      fee_collection: "Rider's earlier cancellation fee"
+  dispatch:
+    errors:
+      low_balance: "Top up your balance to go online."
+      payments_off: "Online top-ups aren't available yet. Pay at the office."
+      bad_amount: "Choose an amount between 1 000 and 50 000 ֏."
+  moderation_actions:
+    change_settings: "Settings changed"
+    balance_top_up: "Cash top-up recorded"
+    balance_adjustment: "Balance corrected"
+  admin:
+    shared:
+      tabs:
+        finance: "Finance"
+        settings: "Settings"
+    settings:
+      edit:
+        title: "Settings"
+        commission_hint: "Taken from the driver's balance when a trip is completed (the rider pays the driver in cash)."
+        min_balance_hint: "Drivers can stay online until their balance falls below this, e.g. -2000 means they may owe up to 2 000 ֏."
+        save: "Save"
+      update:
+        saved: "Settings saved."
+    finance:
+      show:
+        title: "Finance"
+        intro: "Summed from the ledger and completed trips."
+        today: "Today"
+        month: "This month"
+        balances: "Right now"
+        trips: "Completed trips"
+        gmv: "Fares (paid in cash)"
+        commission: "Commission earned"
+        top_ups: "Top-ups"
+        payouts: "Cancellation fees paid to drivers"
+        adjustments: "Corrections"
+        owed_by_drivers: "Owed by drivers"
+        driver_credit: "Drivers' credit"
+        riders_owe: "Owed by riders (cancellations)"
+        debtors: "Drivers who owe the most"
+    driver_balances:
+      show:
+        title: "Balance: %{name}"
+        kind: "Type"
+        cash_top_up: "Cash paid at the office"
+        adjustment: "Correction (+ or −)"
+        amount: "Amount, ֏"
+        note: "Note"
+        record: "Record"
+        confirm: "Record this change to the driver's balance?"
+        hint: "Every change is kept in the ledger and the audit log; nothing can be edited or deleted."
+        when: "When"
+        what: "What"
+        balance_after: "Balance after"
+        trip: "trip #%{id}"
+      create:
+        invalid: "Enter an amount and a note (top-ups must be positive)."
+        saved: "Balance updated."
+    driver_applications:
+      show:
+        balance: "Balance: %{amount}"
+  driver_app:
+    balance:
+      button: "Balance: %{amount}"
+      title: "Balance"
+      close: "Close"
+      needed: "Top up %{amount} to go online."
+      rules: "Commission %{percent}% per trip, taken from this balance. You can work until it reaches %{min}."
+      today: "Today"
+      trips: "Trips"
+      cash: "Cash collected"
+      commission: "Commission"
+      payouts: "Cancellation fees"
+      top_up: "Top up by card"
+      office_only: "Online top-ups are coming soon. For now, pay at the office."
+      kinds:
+        commission: "Commission"
+        top_up: "Top-up"
+        cancellation_payout: "Cancellation fee"
+        adjustment: "Correction"
+        refund: "Refund"
+        fee_collection: "Rider's earlier fee"
+      result:
+        paid: "Payment received. Your balance is updated."
+        failed: "The payment didn't go through."
+  activerecord:
+    attributes:
+      business_setting:
+        commission_percent: "Commission, %"
+        min_balance: "Lowest balance to go online, ֏"

@@ -9,6 +9,8 @@ class DriverState
     {
       name: @driver.user.display_name,
       online: @driver.online?,
+      balance: @driver.balance,
+      needed: Settlement.needed_to_go_online(@driver),
       vehicle: vehicle && { description: vehicle.description, plate: vehicle.plate_number, vehicle_class: vehicle.vehicle_class },
       offer: offer_json(@driver.current_offer),
       trip: trip_json(@driver.active_trip)

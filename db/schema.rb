@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_210002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -43,6 +43,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "business_settings", force: :cascade do |t|
+    t.integer "commission_percent", default: 10, null: false
+    t.integer "min_balance", default: -2000, null: false
+    t.bigint "updated_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["updated_by_id"], name: "index_business_settings_on_updated_by_id"
+    t.check_constraint "commission_percent >= 0 AND commission_percent <= 50", name: "business_settings_commission_range"
+  end
+
+  create_table "daily_statements", force: :cascade do |t|
+    t.bigint "driver_profile_id", null: false
+    t.date "day", null: false
+    t.jsonb "totals", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.index ["driver_profile_id", "day"], name: "index_daily_statements_on_driver_profile_id_and_day", unique: true
+  end
+
   create_table "driver_locations", force: :cascade do |t|
     t.bigint "driver_profile_id", null: false
     t.geography "location", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}, null: false
@@ -65,6 +83,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "online_at"
+    t.integer "balance", default: 0, null: false
     t.index ["status", "submitted_at"], name: "index_driver_profiles_on_status_and_submitted_at"
     t.index ["user_id"], name: "index_driver_profiles_on_user_id", unique: true
     t.check_constraint "status >= 0 AND status <= 5", name: "driver_profiles_status_known"
@@ -97,6 +116,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
     t.index ["user_id"], name: "index_fare_quotes_on_user_id"
   end
 
+  create_table "ledger_entries", force: :cascade do |t|
+    t.bigint "driver_profile_id", null: false
+    t.integer "kind", null: false
+    t.integer "amount", null: false
+    t.integer "balance_after", null: false
+    t.string "reference_type"
+    t.bigint "reference_id"
+    t.bigint "created_by_id"
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.index ["created_by_id"], name: "index_ledger_entries_on_created_by_id"
+    t.index ["driver_profile_id", "created_at"], name: "index_ledger_entries_on_driver_profile_id_and_created_at"
+    t.index ["kind", "created_at"], name: "index_ledger_entries_on_kind_and_created_at"
+    t.index ["kind", "reference_type", "reference_id"], name: "index_ledger_entries_once_per_reference", unique: true, where: "(kind = ANY (ARRAY[0, 1, 2, 5]))"
+    t.check_constraint "amount <> 0", name: "ledger_entries_amount_not_zero"
+  end
+
   create_table "moderation_actions", force: :cascade do |t|
     t.bigint "moderator_id"
     t.bigint "user_id", null: false
@@ -105,6 +141,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
     t.datetime "created_at", null: false
     t.index ["moderator_id"], name: "index_moderation_actions_on_moderator_id"
     t.index ["user_id"], name: "index_moderation_actions_on_user_id"
+  end
+
+  create_table "payment_events", force: :cascade do |t|
+    t.string "provider", null: false
+    t.string "event_id", null: false
+    t.string "event_type"
+    t.datetime "created_at", null: false
+    t.index ["provider", "event_id"], name: "index_payment_events_on_provider_and_event_id", unique: true
   end
 
   create_table "phone_verifications", force: :cascade do |t|
@@ -166,6 +210,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
     t.check_constraint "base_fare >= 0 AND per_km >= 0 AND per_minute >= 0 AND minimum_fare >= 0", name: "tariffs_amounts_not_negative"
   end
 
+  create_table "top_ups", force: :cascade do |t|
+    t.bigint "driver_profile_id", null: false
+    t.integer "amount", null: false
+    t.integer "status", default: 0, null: false
+    t.string "provider", null: false
+    t.string "provider_payment_id"
+    t.datetime "paid_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["driver_profile_id"], name: "index_top_ups_on_driver_profile_id"
+    t.check_constraint "amount >= 1000 AND amount <= 50000", name: "top_ups_amount_range"
+  end
+
   create_table "trip_offers", force: :cascade do |t|
     t.bigint "trip_id", null: false
     t.bigint "driver_profile_id", null: false
@@ -207,6 +264,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "commission"
+    t.integer "outstanding_fee", default: 0, null: false
     t.index ["driver_profile_id", "created_at"], name: "index_trips_on_driver_profile_id_and_created_at"
     t.index ["driver_profile_id"], name: "index_trips_one_active_per_driver", unique: true, where: "(status = ANY (ARRAY[1, 2, 3]))"
     t.index ["fare_quote_id"], name: "index_trips_on_fare_quote_id"
@@ -225,6 +284,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
     t.datetime "banned_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "outstanding_fee", default: 0, null: false
     t.index ["phone"], name: "index_users_on_phone", unique: true
     t.check_constraint "role = ANY (ARRAY[0, 1, 2, 3])", name: "users_role_known"
   end
@@ -247,15 +307,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_200003) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "business_settings", "users", column: "updated_by_id"
+  add_foreign_key "daily_statements", "driver_profiles"
   add_foreign_key "driver_locations", "driver_profiles"
   add_foreign_key "driver_profiles", "users"
   add_foreign_key "expiry_notices", "driver_profiles"
   add_foreign_key "fare_quotes", "users"
+  add_foreign_key "ledger_entries", "driver_profiles"
+  add_foreign_key "ledger_entries", "users", column: "created_by_id"
   add_foreign_key "moderation_actions", "users"
   add_foreign_key "moderation_actions", "users", column: "moderator_id"
   add_foreign_key "saved_places", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "tariffs", "users", column: "updated_by_id"
+  add_foreign_key "top_ups", "driver_profiles"
   add_foreign_key "trip_offers", "driver_profiles"
   add_foreign_key "trip_offers", "trips"
   add_foreign_key "trip_points", "trips"

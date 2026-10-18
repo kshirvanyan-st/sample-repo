@@ -114,7 +114,7 @@ These are copied and adapted, not shared code:
    - **Live tracking:** the rider sees the car approach (Turbo Streams / cable broadcasts) and gets
      the driver's name, car, plate and ETA.
    - **Cancellations:** fees and rules set by admin.
-5. **Payments and driver money**
+5. **Payments and driver money** (done: cash rides, commission ledger, sandbox top-ups; real provider pending a contract)
    - **Cash first.** On completion, the driver's commission (for example 10–15%, set by admin) is
      debited from their **driver balance** with `Wallet`-style ledger entries.
    - **Driver top-ups:** drivers top up by card or at a kiosk. A driver below the minimum balance

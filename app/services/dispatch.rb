@@ -21,7 +21,8 @@ module Dispatch
     raise Error, "quote_expired" if quote.expired?
     raise Error, "unknown_class" unless (fare = quote.prices[vehicle_class.to_s])
 
-    trip = Trip.create!(rider: quote.user, fare_quote: quote, vehicle_class: vehicle_class, fare: fare,
+    owed = quote.user.outstanding_fee
+    trip = Trip.create!(rider: quote.user, fare_quote: quote, vehicle_class: vehicle_class, fare: fare + owed, outstanding_fee: owed,
       pickup: quote.pickup, pickup_address: quote.pickup_address, dropoff: quote.dropoff, dropoff_address: quote.dropoff_address)
     offer_next!(trip)
     trip
@@ -34,6 +35,7 @@ module Dispatch
   def self.candidates(trip)
     pickup = ActiveRecord::Base.connection.quote("SRID=4326;#{trip.pickup.as_text}")
     DriverProfile.approved.online
+      .where(balance: BusinessSetting.current.min_balance..)
       .joins(:user).merge(User.active)
       .joins(:vehicle).where(vehicles: { vehicle_class: Vehicle.vehicle_classes.fetch(trip.vehicle_class) })
       .joins(:location).merge(DriverLocation.fresh)

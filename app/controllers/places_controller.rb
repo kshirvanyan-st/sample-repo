@@ -14,6 +14,6 @@ class PlacesController < ApplicationController
 
   rescue_from HttpJson::Error do |error|
     Rails.logger.warn "Geocoding failed: #{error.message}"
-    render json: { error: t("places.unavailable") }, status: :service_unavailable
+    render json: { error: t_request("places.unavailable") }, status: :service_unavailable
   end
 end

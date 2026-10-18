@@ -1,0 +1,50 @@
+<% content_for :title, t(".title", name: @driver_profile.user.display_name) %>
+<section class="py-6">
+  <%= render "admin/shared/tabs" %>
+  <%= link_to t("admin.driver_applications.show.back"), admin_driver_application_path(@driver_profile), class: "mt-4 inline-block text-sm underline" %>
+  <h1 class="mt-2 text-2xl font-bold"><%= t(".title", name: @driver_profile.user.display_name) %></h1>
+  <p class="mt-1 text-3xl font-bold tabular-nums <%= "text-red-700" if @driver_profile.balance.negative? %>" id="balance"><%= amd(@driver_profile.balance) %></p>
+
+  <%= form_with url: admin_driver_application_balance_path(@driver_profile), class: "mt-6 grid gap-3 rounded-xl border p-4 md:grid-cols-4 md:items-end" do |form| %>
+    <div>
+      <%= form.label :kind, t(".kind"), class: "block text-sm font-medium" %>
+      <%= form.select :kind, [ [ t(".cash_top_up"), "top_up" ], [ t(".adjustment"), "adjustment" ] ], {}, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :amount, t(".amount"), class: "block text-sm font-medium" %>
+      <%= form.number_field :amount, required: true, step: 10, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :note, t(".note"), class: "block text-sm font-medium" %>
+      <%= form.text_field :note, required: true, maxlength: 200, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+    </div>
+    <%= form.submit t(".record"), class: "rounded-lg bg-yellow-400 px-4 py-2 font-medium text-gray-900",
+          data: { turbo_confirm: t(".confirm") } %>
+    <p class="text-xs text-gray-500 md:col-span-4"><%= t(".hint") %></p>
+  <% end %>
+
+  <table class="mt-6 w-full text-left text-sm">
+    <thead class="border-b text-gray-600">
+      <tr>
+        <th class="py-2 pr-4"><%= t(".when") %></th>
+        <th class="py-2 pr-4"><%= t(".what") %></th>
+        <th class="py-2 pr-4 text-right"><%= t(".amount") %></th>
+        <th class="py-2 text-right"><%= t(".balance_after") %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @entries.each do |entry| %>
+        <tr class="border-b" id="<%= dom_id(entry) %>">
+          <td class="py-2 pr-4 whitespace-nowrap"><%= l(entry.created_at, format: :short) %></td>
+          <td class="py-2 pr-4">
+            <%= t("ledger.kinds.#{entry.kind}") %>
+            <% if entry.reference.is_a?(Trip) %> · <%= t(".trip", id: entry.reference_id) %><% end %>
+            <% if entry.note.present? %><span class="text-gray-600"> · <%= entry.note %> (<%= entry.created_by&.display_name %>)</span><% end %>
+          </td>
+          <td class="py-2 pr-4 text-right tabular-nums <%= entry.amount.negative? ? "text-red-700" : "text-green-700" %>"><%= amd(entry.amount) %></td>
+          <td class="py-2 text-right tabular-nums"><%= amd(entry.balance_after) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</section>

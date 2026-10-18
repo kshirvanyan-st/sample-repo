@@ -21,8 +21,14 @@ and on pushes to `taxi-main`.
 - **Every user-facing string goes through I18n** and must exist in `hy`, `ru` and `en`
   (`spec/i18n_spec.rb` enforces matching keys; missing translations raise in dev/test).
   Armenian is the default locale. Have native speakers review new copy.
-- Money is in AMD, stored as integers (drams). Balances only change through an append-only ledger
-  (the Wallet pattern from Spark) once payments arrive.
+- Money is in AMD, stored as integers (drams). A driver's balance changes only through
+  `DriverWallet#credit!/#debit!` (row lock + `LedgerEntry` + cached `driver_profiles.balance`); ledger rows
+  are never updated or deleted. Trip money goes through `Settlement` (commission on completion,
+  cancellation payouts, riders' outstanding fees). Finance numbers are summed from the ledger (`Finance`).
+- Top-ups: money is credited only from a provider's signed callback (`Payments.process_callback` →
+  `TopUp#fulfill!`, idempotent via `PaymentEvent.record_once`), never from the redirect back. New providers
+  are an adapter in `app/services/payments/`. The sandbox bank is off in production unless `PAYMENTS_ADAPTER`
+  is set.
 - Auth is phone + SMS code only (no passwords): `SessionsController` (number) then
   `VerificationsController` (code). Codes are `PhoneVerification` rows (HMAC digest, 5 min, 5 tries,
   single use). Controllers require sign-in by default; opt out with `allow_unauthenticated_access`.

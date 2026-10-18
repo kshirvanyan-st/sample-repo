@@ -1,0 +1,10 @@
+<%# locals: (title:, totals:) %>
+<div class="rounded-xl border p-4">
+  <h2 class="font-semibold"><%= title %></h2>
+  <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+    <% %i[ trips gmv commission top_ups payouts adjustments ].each do |key| %>
+      <dt class="text-gray-600"><%= t("admin.finance.show.#{key}") %></dt>
+      <dd class="text-right font-medium tabular-nums"><%= key == :trips ? totals[key] : amd(totals[key]) %></dd>
+    <% end %>
+  </dl>
+</div>

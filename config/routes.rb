@@ -13,6 +13,10 @@ Rails.application.routes.draw do
   get "places/reverse", to: "places#reverse", as: :reverse_place
 
   get "driver", to: "driver_app#show", as: :driver_app
+  namespace :payments do
+    post "callbacks/:provider", to: "callbacks#create", as: :callback
+    resources :sandbox, only: %i[ show update ]
+  end
   namespace :api do
     namespace :v1 do
       namespace :driver do
@@ -26,6 +30,8 @@ Rails.application.routes.draw do
             post :decline
           end
         end
+        resource :wallet, only: :show
+        resources :top_ups, only: :create
         resources :trips, only: [] do
           member do
             post :arrive
@@ -41,7 +47,10 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :tariffs, only: %i[ index update ]
     resources :service_zones, except: %i[ show destroy ]
+    resource :settings, only: %i[ edit update ]
+    resource :finance, only: :show, controller: :finance
     resources :driver_applications, only: %i[ index show ] do
+      resource :balance, only: %i[ show create ], controller: :driver_balances
       member do
         post :approve
         post :request_changes

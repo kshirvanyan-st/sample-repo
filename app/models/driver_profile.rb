@@ -11,6 +11,8 @@ class DriverProfile < ApplicationRecord
   has_one :location, class_name: "DriverLocation", dependent: :delete
   has_many :trips, dependent: :restrict_with_exception
   has_many :trip_offers, dependent: :delete_all
+  has_many :ledger_entries, dependent: :restrict_with_exception
+  has_many :top_ups, dependent: :restrict_with_exception
   accepts_nested_attributes_for :vehicle, update_only: true
 
   enum :status, { draft: 0, submitted: 1, needs_changes: 2, approved: 3, rejected: 4, suspended: 5 }, validate: true
@@ -29,7 +31,10 @@ class DriverProfile < ApplicationRecord
     online_at.present?
   end
 
+  # Raises Dispatch::Error "low_balance" while the driver owes more than the platform allows.
   def go_online!
+    raise Dispatch::Error, "low_balance" unless Settlement.can_go_online?(self)
+
     update!(online_at: Time.current) unless online?
   end
 

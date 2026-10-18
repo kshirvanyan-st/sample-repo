@@ -9,9 +9,17 @@ module Localization
 
   private
     def switch_locale(&action)
-      locale = requested_locale || cookies[:locale].presence_in(available_locales) || browser_locale || I18n.default_locale
-      cookies.permanent[:locale] = locale if params[:locale] && requested_locale
-      I18n.with_locale(locale, &action)
+      cookies.permanent[:locale] = request_locale if requested_locale
+      I18n.with_locale(request_locale, &action)
+    end
+
+    def request_locale
+      @request_locale ||= requested_locale || cookies[:locale].presence_in(available_locales) || browser_locale || I18n.default_locale
+    end
+
+    # rescue_from handlers run after switch_locale has finished, so they translate through this.
+    def t_request(key, **options)
+      I18n.with_locale(request_locale) { I18n.t(key, **options) }
     end
 
     def requested_locale
