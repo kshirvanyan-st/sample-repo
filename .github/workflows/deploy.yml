@@ -60,7 +60,7 @@ jobs:
           if [ -n "$MEDIA_HOST" ]; then ssh-keyscan -H "$MEDIA_HOST" >> ~/.ssh/known_hosts; fi
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Deploy
         run: bin/kamal deploy
