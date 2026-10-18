@@ -1,0 +1,9 @@
+<%= form_with model: message, url: conversation_messages_path(conversation), id: "message_form", class: "flex gap-2 pt-3 border-t",
+      data: { action: "keydown.enter->chat#submitOnEnter" } do |form| %>
+  <%= form.text_area :body, rows: 1, maxlength: Message::MAX_LENGTH, required: true, autofocus: true, placeholder: "Write a message…",
+        aria: { label: "Message" }, class: "#{input_classes} mt-0 resize-none" %>
+  <%= form.submit "Send", class: primary_button_classes %>
+<% end %>
+<% if message.errors.any? %>
+  <p class="text-sm text-red-500 mt-1" id="message_errors"><%= message.errors.full_messages.to_sentence %></p>
+<% end %>

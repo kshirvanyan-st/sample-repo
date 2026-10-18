@@ -1,6 +1,7 @@
 class Match < ApplicationRecord
   belongs_to :user_a, class_name: "User"
   belongs_to :user_b, class_name: "User"
+  has_one :conversation, dependent: :destroy
 
   scope :for, ->(user) { where(user_a: user).or(where(user_b: user)) }
 

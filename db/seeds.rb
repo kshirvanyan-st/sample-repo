@@ -52,4 +52,14 @@ User.where(email_address: %w[ ani@example.com mariam@example.com lilit@example.c
   user.likes_given.find_or_create_by!(likee: demo) { |like| like.kind = :like }
 end
 
+# A match with a short chat so the Chats page has something in it.
+ani = User.find_by!(email_address: "ani@example.com")
+demo.likes_given.find_or_create_by!(likee: ani) { |like| like.kind = :like }
+conversation = Conversation.open_for!(Match.between!(demo, ani))
+if conversation.messages.none?
+  [ [ ani, "Hi! I saw you like the mountains too 🏔️" ], [ demo, "Hey Ani! Yes, Aragats last weekend." ], [ ani, "Nice, which trail?" ] ].each do |sender, body|
+    conversation.messages.create!(sender: sender, body: body)
+  end
+end
+
 puts "Seeded #{Profile.count} profiles. Sign in as demo@example.com / password123."

@@ -14,6 +14,10 @@ module ApplicationHelper
       .count
   end
 
+  def unread_chats_count
+    Message.unread_for(Current.user).count
+  end
+
   def distance_label(profile)
     return unless profile.respond_to?(:distance_km) && profile.distance_km
 

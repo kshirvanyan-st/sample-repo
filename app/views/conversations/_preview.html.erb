@@ -1,0 +1,27 @@
+<% other = conversation.other(viewer).profile %>
+<% last = conversation.messages.last %>
+<% unread = conversation.unread_for(viewer).count %>
+<li id="<%= dom_id(conversation, :preview) %>">
+  <%= link_to conversation_path(conversation), class: "flex items-center gap-3 p-3 hover:bg-gray-50" do %>
+    <% if (photo = other.main_photo) %>
+      <%= image_tag photo.image.variant(:thumb), alt: other.display_name, class: "w-12 h-12 rounded-full object-cover" %>
+    <% else %>
+      <div class="w-12 h-12 rounded-full bg-gray-200"></div>
+    <% end %>
+    <div class="min-w-0 grow">
+      <p class="font-semibold"><%= other.display_name %></p>
+      <p class="text-sm truncate <%= unread.positive? ? "text-gray-900 font-medium" : "text-gray-500" %>">
+        <% if last %>
+          <%= "You: " if last.sender_id == viewer.id %><%= last.body %>
+        <% else %>
+          Say hi to <%= other.display_name %>!
+        <% end %>
+      </p>
+    </div>
+    <% if unread.positive? %>
+      <span class="rounded-full bg-pink-600 text-white text-xs px-2 py-0.5"><%= unread %></span>
+    <% elsif last %>
+      <span class="text-xs text-gray-400"><%= time_ago_in_words(last.created_at) %></span>
+    <% end %>
+  <% end %>
+</li>

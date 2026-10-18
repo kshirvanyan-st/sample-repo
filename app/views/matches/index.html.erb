@@ -7,6 +7,7 @@
       <div id="<%= dom_id(match) %>">
         <%= render "profiles/card", profile: profile %>
         <div class="flex gap-3 mt-2 text-sm items-center">
+          <%= button_to "Message", match_conversation_path(match), class: "#{primary_button_classes} py-1.5" %>
           <span class="text-gray-500">Matched <%= time_ago_in_words(match.created_at) %> ago</span>
           <%= button_to "Unmatch", match_path(match), method: :delete, class: "underline text-red-600 cursor-pointer", form: { data: { turbo_confirm: "Unmatch #{profile.display_name}?" } } %>
         </div>

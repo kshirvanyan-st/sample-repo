@@ -13,7 +13,14 @@ Rails.application.routes.draw do
   resource :discover, only: :show, controller: "discover"
   resources :likes, only: :create
   get "liked-me" => "likes#index", as: :liked_me
-  resources :matches, only: %i[ index destroy ]
+  resources :matches, only: %i[ index destroy ] do
+    resource :conversation, only: :create
+  end
+
+  resources :conversations, only: %i[ index show ], path: "chats" do
+    patch :read, on: :member
+    resources :messages, only: :create
+  end
 
   scope module: :my do
     resource :profile, only: %i[ edit update ], as: :my_profile, path: "me"

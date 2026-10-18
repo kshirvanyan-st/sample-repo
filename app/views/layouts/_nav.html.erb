@@ -10,6 +10,9 @@
       <%= link_to matches_path do %>
         Matches <span class="matches-count ml-1 rounded-full bg-gray-100 px-2"><%= Current.user.matches.count %></span>
       <% end %>
+      <%= link_to conversations_path do %>
+        Chats <span class="chats-count ml-1 rounded-full bg-pink-600 text-white px-2 empty:hidden"><%= unread_chats_count.nonzero? %></span>
+      <% end %>
     </div>
     <%= link_to "Profile", profile_path(Current.user.profile), class: "ml-auto hidden sm:inline" %>
     <%= button_to "Sign out", session_path, method: :delete, form_class: "ml-auto sm:ml-0", class: "text-gray-500 cursor-pointer" %>
@@ -17,7 +20,7 @@
 </nav>
 
 <nav class="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t z-10" aria-label="Main">
-  <div class="grid grid-cols-4 h-16 text-xs font-medium text-center">
+  <div class="grid grid-cols-5 h-16 text-xs font-medium text-center">
     <%= link_to discover_path, class: "flex flex-col items-center justify-center gap-1" do %>
       <span class="text-lg leading-none">♥</span>Discover
     <% end %>
@@ -26,6 +29,10 @@
     <% end %>
     <%= link_to matches_path, class: "flex flex-col items-center justify-center gap-1" do %>
       <span class="matches-count rounded-full bg-gray-100 px-2 leading-5"><%= Current.user.matches.count %></span>Matches
+    <% end %>
+    <%= link_to conversations_path, class: "flex flex-col items-center justify-center gap-1 relative" do %>
+      <span class="text-lg leading-none">✉</span>Chats
+      <span class="chats-count absolute top-1 right-3 rounded-full bg-pink-600 text-white px-1.5 text-[10px] leading-4 empty:hidden"><%= unread_chats_count.nonzero? %></span>
     <% end %>
     <%= link_to profile_path(Current.user.profile), class: "flex flex-col items-center justify-center gap-1" do %>
       <span class="text-lg leading-none">☺</span>Profile
