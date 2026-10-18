@@ -13,21 +13,21 @@ RSpec.describe "Matching", type: :system do
     ani = create(:user, :onboarded, profile_attributes: { display_name: "Ani", gender: :female, looking_for: :men })
 
     sign_in(aram)
-    click_link "Discover"
+    within("nav", match: :first) { click_link "Discover" }
     expect(page).to have_text("Ani,")
     click_button "♥ Like"
     expect(page).to have_text("That's everyone for now")
     click_button "Sign out"
 
     sign_in(ani)
-    click_link "Liked me"
+    within("nav", match: :first) { click_link "Liked me" }
     expect(page).to have_text("Aram")
     click_button "♥ Like back"
     expect(page).to have_text("It's a match with Aram!")
     click_button "Sign out"
 
     sign_in(aram)
-    click_link "Matches"
+    within("nav", match: :first) { click_link "Matches" }
     expect(page).to have_text("Ani")
   end
 end

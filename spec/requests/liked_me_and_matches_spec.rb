@@ -22,8 +22,8 @@ RSpec.describe "Liked me and matches", type: :request do
     post likes_path, params: { profile_id: admirer.profile.id, kind: "like", source: "liked_me" }, as: :turbo_stream
     expect(response.body).to include(%(action="remove"))
     expect(response.body).to include("match with Admirer")
-    expect(response.body).to include(%(<turbo-stream action="update" target="matches_count"><template>1</template>))
-    expect(response.body).to include(%(<turbo-stream action="update" target="liked_me_count"><template>0</template>))
+    expect(response.body).to include(%(<turbo-stream action="update" targets=".matches-count"><template>1</template>))
+    expect(response.body).to include(%(<turbo-stream action="update" targets=".liked-me-count"><template>0</template>))
   end
 
   it "lists matches and unmatches" do
