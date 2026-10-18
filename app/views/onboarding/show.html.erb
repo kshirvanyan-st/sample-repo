@@ -1,0 +1,13 @@
+<div class="mx-auto md:w-2/3 w-full">
+  <ol class="flex gap-2 text-sm mb-6">
+    <% Profile::ONBOARDING_STEPS.each.with_index(1) do |step, number| %>
+      <li class="px-3 py-1 rounded-full <%= step == @step ? "bg-pink-600 text-white" : "bg-gray-100 text-gray-600" %>">
+        <%= number %>. <%= step.humanize %>
+      </li>
+    <% end %>
+  </ol>
+
+  <%= turbo_frame_tag "onboarding", target: "_top" do %>
+    <%= render "onboarding/#{@step}", profile: @profile %>
+  <% end %>
+</div>

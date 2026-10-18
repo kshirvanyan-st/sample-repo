@@ -1,14 +1,29 @@
-<section class="text-center py-16">
-  <h1 class="font-bold text-5xl text-pink-600">Spark</h1>
-  <p class="mt-4 text-lg text-gray-600">Meet people nearby, match, chat and go live.</p>
+<% if authenticated? %>
+  <% profile = Current.user.profile %>
+  <section class="py-8 flex flex-col md:flex-row gap-8 items-start">
+    <%= render "profiles/card", profile: profile %>
 
-  <div class="mt-8 flex justify-center gap-4">
-    <% if authenticated? %>
-      <p class="text-gray-700">Signed in as <strong><%= Current.user.email_address %></strong></p>
-      <%= button_to "Sign out", session_path, method: :delete, class: "rounded-md px-3.5 py-2.5 bg-gray-200 hover:bg-gray-300 font-medium cursor-pointer" %>
-    <% else %>
-      <%= link_to "Sign up", new_registration_path, class: "rounded-md px-3.5 py-2.5 bg-pink-600 hover:bg-pink-500 text-white font-medium" %>
-      <%= link_to "Sign in", new_session_path, class: "rounded-md px-3.5 py-2.5 bg-gray-200 hover:bg-gray-300 font-medium" %>
-    <% end %>
-  </div>
-</section>
+    <div>
+      <h1 class="font-bold text-3xl">Hi, <%= profile.display_name %>!</h1>
+      <p class="text-gray-600 mt-2">
+        <%= pluralize(Current.user.followers.count, "follower") %> · <%= Current.user.following.count %> following
+      </p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <%= link_to "Edit profile", edit_my_profile_path, class: secondary_button_classes %>
+        <%= link_to "My photos", photos_path, class: secondary_button_classes %>
+        <%= button_to "Sign out", session_path, method: :delete, class: secondary_button_classes %>
+      </div>
+      <p class="text-sm text-gray-500 mt-6">Discovery and matches are coming next.</p>
+    </div>
+  </section>
+<% else %>
+  <section class="text-center py-16">
+    <h1 class="font-bold text-5xl text-pink-600">Spark</h1>
+    <p class="mt-4 text-lg text-gray-600">Meet people nearby, match, chat and go live.</p>
+
+    <div class="mt-8 flex justify-center gap-4">
+      <%= link_to "Sign up", new_registration_path, class: primary_button_classes %>
+      <%= link_to "Sign in", new_session_path, class: secondary_button_classes %>
+    </div>
+  </section>
+<% end %>

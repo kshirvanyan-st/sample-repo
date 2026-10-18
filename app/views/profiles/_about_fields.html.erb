@@ -1,0 +1,13 @@
+<div class="my-5" data-controller="geolocation">
+  <%= form.label :city %>
+  <%= form.text_field :city, maxlength: 100, class: input_classes %>
+  <%= form.hidden_field :latitude, data: { geolocation_target: "latitude" } %>
+  <%= form.hidden_field :longitude, data: { geolocation_target: "longitude" } %>
+  <button type="button" class="mt-2 text-sm underline text-gray-700" data-action="geolocation#locate">Use my current location</button>
+  <span class="text-sm text-gray-500 ml-2" data-geolocation-target="status"></span>
+</div>
+
+<div class="my-5">
+  <%= form.label :bio, "About me" %>
+  <%= form.text_area :bio, rows: 4, maxlength: 500, class: input_classes %>
+</div>

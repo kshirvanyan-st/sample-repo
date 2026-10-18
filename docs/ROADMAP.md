@@ -38,7 +38,7 @@ Choices confirmed with the user:
 
 ## Stack
 - Ruby 3.4 and Rails 8.x
-- PostgreSQL 17 + PostGIS
+- PostgreSQL 17, with the `cube` + `earthdistance` contrib extensions for "people nearby" (PostGIS image in CI and production, but no PostGIS dependency in the app)
 - Hotwire and Tailwind
 - Active Storage + libvips
 - Solid Queue, Solid Cable and Solid Cache
@@ -59,7 +59,7 @@ Choices confirmed with the user:
 - Expand `ci.yml`.
 
 ### Phase 1 — Profiles and photos (PR #2)
-- `Profile` model: name, birthdate (18+), gender, looking_for, city, bio, `lonlat:st_point`.
+- `Profile` model: name, birthdate (18+), gender, looking_for, city, bio, `latitude`/`longitude` (GiST index on `ll_to_earth`).
 - `has_many_attached :photos` with variants, at most 9 photos, and moderation status.
 - An onboarding wizard.
 - `Follow(follower, followee)` is added here, because both dating and streaming use it.

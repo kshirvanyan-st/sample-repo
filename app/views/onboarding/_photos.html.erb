@@ -1,0 +1,13 @@
+<h1 class="font-bold text-4xl">Add your photos</h1>
+<p class="text-gray-600 mt-2">Up to <%= Photo::MAX_PER_PROFILE %> photos (JPEG, PNG or WebP). The first one becomes your main photo.</p>
+
+<%= form_with scope: :profile, url: onboarding_path("photos"), method: :patch do |form| %>
+  <%= render "shared/errors", record: profile %>
+
+  <div class="my-5">
+    <%= form.label :images, "Photos" %>
+    <%= form.file_field :images, multiple: true, accept: Photo::CONTENT_TYPES.join(","), class: input_classes %>
+  </div>
+
+  <%= form.submit "Finish", class: primary_button_classes %>
+<% end %>

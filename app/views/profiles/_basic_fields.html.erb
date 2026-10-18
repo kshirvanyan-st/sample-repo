@@ -1,0 +1,19 @@
+<div class="my-5">
+  <%= form.label :display_name, "Name" %>
+  <%= form.text_field :display_name, required: true, maxlength: 50, class: input_classes %>
+</div>
+
+<div class="my-5">
+  <%= form.label :birthdate %>
+  <%= form.date_field :birthdate, required: true, max: Profile::MINIMUM_AGE.years.ago.to_date, class: input_classes %>
+</div>
+
+<div class="my-5">
+  <%= form.label :gender, "I am" %>
+  <%= form.select :gender, Profile.genders.keys.map { |g| [ g.humanize, g ] }, {}, class: input_classes %>
+</div>
+
+<div class="my-5">
+  <%= form.label :looking_for, "Looking for" %>
+  <%= form.select :looking_for, Profile.looking_fors.keys.map { |l| [ l.humanize, l ] }, {}, class: input_classes %>
+</div>

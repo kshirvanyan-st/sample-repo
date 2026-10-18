@@ -1,0 +1,14 @@
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl">Edit profile</h1>
+
+  <%= form_with model: @profile, url: my_profile_path, method: :patch do |form| %>
+    <%= render "shared/errors", record: @profile %>
+    <%= render "profiles/basic_fields", form: form %>
+    <%= render "profiles/about_fields", form: form %>
+
+    <div class="flex items-center gap-4">
+      <%= form.submit "Save", class: primary_button_classes %>
+      <%= link_to "Manage photos", photos_path, class: "underline text-gray-700" %>
+    </div>
+  <% end %>
+</div>
