@@ -16,6 +16,9 @@
   <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
     <% @coin_packs.each do |pack| %>
       <%= button_to purchases_path, params: { coin_pack_id: pack.id }, class: "w-full h-full rounded-xl border p-4 text-left hover:border-pink-500 cursor-pointer bg-white", data: { turbo: false } do %>
+        <% if @store_variant == "best_value_badge" && pack.name == "Best value" %>
+          <span class="inline-block rounded-full bg-pink-600 text-white text-xs font-semibold px-2 py-0.5 mb-1">★ Best value</span>
+        <% end %>
         <p class="text-2xl font-bold">🪙 <%= pack.total_coins %></p>
         <% if pack.bonus_coins.positive? %><p class="text-sm text-green-700">+<%= pack.bonus_coins %> bonus</p><% end %>
         <p class="text-sm text-gray-500 mt-1"><%= pack.name %></p>

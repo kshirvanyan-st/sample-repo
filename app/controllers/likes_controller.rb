@@ -12,6 +12,8 @@ class LikesController < ApplicationController
     @target = rateable_profiles.find(params[:profile_id])
     like = Current.user.likes_given.create_or_find_by!(likee: @target.user) { |l| l.kind = kind }
     @match = Match.between(Current.user, @target.user) if like.positive?
+    ahoy.track "rated", kind: like.kind, source: params[:source].presence || "deck"
+    ahoy.track "matched" if @match && @match.created_at >= like.created_at # created by this like
 
     respond_to do |format|
       format.turbo_stream { render params[:source] == "liked_me" ? :remove_card : :next_card }

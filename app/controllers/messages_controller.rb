@@ -6,6 +6,7 @@ class MessagesController < ApplicationController
     @message = @conversation.messages.build(message_params.merge(sender: Current.user))
 
     if @message.save
+      ahoy.track "message_sent", first: @conversation.messages.where(sender: Current.user).one?
       respond_to do |format|
         # The message itself arrives over the conversation's Turbo Stream broadcast.
         format.turbo_stream { render turbo_stream: turbo_stream.replace("message_form", partial: "messages/form", locals: { conversation: @conversation, message: Message.new }) }

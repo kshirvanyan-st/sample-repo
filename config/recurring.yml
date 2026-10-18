@@ -13,6 +13,21 @@ production:
   reconcile_streams:
     class: StreamReconcileJob
     schedule: every minute
+  daily_metrics:
+    class: DailyMetricsJob
+    schedule: every hour at minute 5
+  revenue_alerts:
+    class: RevenueAlertsJob
+    schedule: every day at 7:10am
+  blazer_checks_5_minutes:
+    command: 'Blazer.run_checks(schedule: "5 minutes")'
+    schedule: every 5 minutes
+  blazer_checks_hourly:
+    command: 'Blazer.run_checks(schedule: "1 hour")'
+    schedule: every hour at minute 20
+  blazer_checks_daily:
+    command: 'Blazer.run_checks(schedule: "1 day"); Blazer.send_failing_checks'
+    schedule: every day at 7:20am
   clear_solid_queue_finished_jobs:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12

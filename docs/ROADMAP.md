@@ -144,7 +144,9 @@ This phase shows where money comes from and what to change to earn more.
 - `field_test`: A/B tests, for example coin pack prices or first-purchase bonus size.
 - Stripe Dashboard: the source of truth for payments, refunds and chargebacks. Rails also stores every
   purchase in `ledger_entries`, so revenue can be joined with user behavior.
-- Prometheus + Grafana, run as Kamal accessories on the media VPS:
+- *(Deferred in favor of in-app watch time: `streams.viewer_seconds` gives server cost per viewer-hour on
+  the dashboard; MediaMTX metrics stay enabled on 127.0.0.1:9998 for when Grafana is worth running.)*
+  Prometheus + Grafana, run as Kamal accessories on the media VPS:
   - MediaMTX metrics (`metrics: yes`, port 9998): viewers, bytes sent, streams
   - node_exporter: server bandwidth and CPU
 

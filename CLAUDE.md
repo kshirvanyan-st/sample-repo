@@ -23,6 +23,9 @@ The full roadmap, phases and architecture are in `docs/ROADMAP.md`. Work one pha
 - Look up other people's profiles with `Profile.visible` and streams with `Stream.visible_to(user)`:
   they exclude banned users (and blocks). Staff actions go through `Moderation`, which writes the
   `ModerationAction` audit log; admin controllers live in `app/controllers/admin/`.
+- Product analytics: `ahoy.track "event_name", props` in controllers (server-side Ahoy; visits give
+  DAU/retention). Money numbers come from `purchases`/`ledger_entries`, never from events.
+  New A/B tests go in `config/field_test.yml`; record out-of-request goals via `Experiments.converted`.
 - Rate limits on signed-in actions are per user (`by: -> { Current.user.id }`), not per IP.
 
 ## Before every push

@@ -11,9 +11,11 @@ RSpec.describe StreamPresenceChannel, type: :channel do
     expect(subscription).to be_confirmed
     expect(stream.reload.viewers_count).to eq(1)
 
+    travel 90.seconds
     unsubscribe
     expect(stream.reload.viewers_count).to eq(0)
     expect(stream.peak_viewers).to eq(1)
+    expect(stream.viewer_seconds).to be_within(2).of(90)
   end
 
   it "doesn't count the broadcaster" do

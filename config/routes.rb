@@ -68,6 +68,12 @@ Rails.application.routes.draw do
       post :shut_down, on: :member
     end
     resources :moderation_actions, only: :index, path: "audit-log"
+    resource :revenue, only: :show, controller: "revenue"
+
+    constraints AdminConstraint do
+      mount Blazer::Engine, at: "blazer"
+      mount FieldTest::Engine, at: "experiments"
+    end
   end
 
   # Called by MediaMTX (see config/media/mediamtx.yml).

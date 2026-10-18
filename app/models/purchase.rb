@@ -12,7 +12,7 @@ class Purchase < ApplicationRecord
 
   # Idempotent: a redelivered or duplicate "paid" event credits the coins only once.
   def fulfill!(payment_intent_id: nil)
-    with_lock do
+    fulfilled = with_lock do
       if pending?
         update!(status: :paid, paid_at: Time.current, stripe_payment_intent_id: payment_intent_id || stripe_payment_intent_id)
         Wallet.new(user).credit!(coins, kind: :purchase, reference: self)
@@ -21,6 +21,8 @@ class Purchase < ApplicationRecord
         false
       end
     end
+    Experiments.converted(user, goal: :purchase) if fulfilled
+    fulfilled
   end
 
   # Takes back the coins that are still unspent; spent coins can't be clawed back.
