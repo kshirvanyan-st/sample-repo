@@ -15,6 +15,10 @@ class User < ApplicationRecord
   has_many :reports_filed, class_name: "Report", foreign_key: :reporter_id, inverse_of: :reporter, dependent: :destroy
   has_many :reports_received, class_name: "Report", foreign_key: :reported_id, inverse_of: :reported, dependent: :destroy
   has_many :streams, dependent: :destroy
+  has_many :ledger_entries, dependent: :restrict_with_error
+  has_many :purchases, dependent: :restrict_with_error
+  has_many :gifts_sent, class_name: "GiftTransaction", foreign_key: :sender_id, inverse_of: :sender, dependent: :restrict_with_error
+  has_many :gifts_received, class_name: "GiftTransaction", foreign_key: :recipient_id, inverse_of: :recipient, dependent: :restrict_with_error
 
   has_secure_token :stream_path, length: 24, on: :initialize
   has_secure_token :stream_key, length: 32, on: :initialize

@@ -5,6 +5,7 @@ class Stream < ApplicationRecord
   belongs_to :user
   has_many :viewers, class_name: "StreamViewer", dependent: :delete_all
   has_many :comments, -> { order(:created_at, :id) }, class_name: "StreamComment", dependent: :delete_all, inverse_of: :stream
+  has_many :gift_transactions, dependent: :restrict_with_error
 
   enum :status, { pending: 0, live: 1, ended: 2 }
   enum :category, { just_chatting: 0, dating_talk: 1, music: 2, gaming: 3, travel: 4, other: 5 }, validate: true
@@ -68,6 +69,10 @@ class Stream < ApplicationRecord
     count = viewers.distinct.count(:user_id)
     update_columns(viewers_count: count, peak_viewers: [ peak_viewers, count ].max)
     broadcast_update_later_to self, targets: ".viewer-count", html: count.to_s
+  end
+
+  def gift_coins
+    gift_transactions.sum(:coins)
   end
 
   def duration

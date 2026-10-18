@@ -45,6 +45,15 @@
               form: { data: { turbo_confirm: "Reset your stream key? OBS will need the new one." } } %>
       </details>
 
+      <div class="grid sm:grid-cols-2 gap-4">
+        <div class="rounded-xl border p-3 bg-white">
+          <p class="font-semibold">Gifts this stream</p>
+          <p class="text-2xl font-bold mt-1">🪙 <span class="stream-earnings"><%= @stream.gift_coins %></span></p>
+          <%= link_to "All earnings", earnings_path, class: "text-sm underline" %>
+        </div>
+        <%= render "gift_transactions/leaderboard", stream: @stream %>
+      </div>
+
       <div class="flex gap-3">
         <%= link_to "View as a viewer", stream_path(@stream), class: secondary_button_classes, target: "_blank" %>
         <%= button_to "End stream", finish_stream_path(@stream), method: :patch, class: "rounded-md px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer",
@@ -54,7 +63,7 @@
       <div class="rounded-xl border p-6">
         <p class="font-semibold">Stream ended</p>
         <p class="text-gray-600 mt-1">
-          <% if @stream.started_at %>Live for <%= stream_duration(@stream) %> · peak <%= pluralize(@stream.peak_viewers, "viewer") %><% else %>You didn't go live this time.<% end %>
+          <% if @stream.started_at %>Live for <%= stream_duration(@stream) %> · peak <%= pluralize(@stream.peak_viewers, "viewer") %> · 🪙 <%= @stream.gift_coins %> in gifts<% else %>You didn't go live this time.<% end %>
         </p>
         <%= link_to "Go live again", go_live_path, class: "#{primary_button_classes} inline-block mt-4" %>
       </div>

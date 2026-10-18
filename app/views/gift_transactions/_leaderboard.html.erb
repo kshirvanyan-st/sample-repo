@@ -1,0 +1,13 @@
+<% top = GiftTransaction.top_gifters(stream) %>
+<div id="<%= dom_id(stream, :leaderboard) %>" class="mt-4 rounded-xl border p-3 bg-white">
+  <p class="font-semibold">Top gifters</p>
+  <% if top.any? %>
+    <ol class="mt-2 space-y-1 text-sm">
+      <% top.each.with_index(1) do |(user, coins), rank| %>
+        <li class="flex justify-between"><span><%= %w[🥇 🥈 🥉][rank - 1] || "#{rank}." %> <%= user.profile.display_name %></span><span class="font-medium">🪙 <%= coins %></span></li>
+      <% end %>
+    </ol>
+  <% else %>
+    <p class="text-sm text-gray-500 mt-1">No gifts yet. Be the first!</p>
+  <% end %>
+</div>

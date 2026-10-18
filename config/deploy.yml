@@ -29,6 +29,8 @@ env:
     - SECRET_KEY_BASE
     - SPARK_DATABASE_PASSWORD
     - MEDIA_HOOK_SECRET
+    - STRIPE_SECRET_KEY
+    - STRIPE_WEBHOOK_SECRET
   clear:
     MEDIA_WEBRTC_URL: https://<%= ENV.fetch("MEDIA_DOMAIN", "media.example.com") %>
     MEDIA_HLS_URL: https://<%= ENV.fetch("MEDIA_DOMAIN", "media.example.com") %>

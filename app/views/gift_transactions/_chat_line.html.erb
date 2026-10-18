@@ -1,0 +1,4 @@
+<div id="<%= dom_id(gift_transaction) %>" class="rounded-md bg-yellow-50 px-2 py-1">
+  <span class="font-semibold text-pink-700"><%= gift_transaction.sender.profile.display_name %></span>
+  sent <%= gift_transaction.gift.emoji %> <strong><%= gift_transaction.gift.name %></strong>
+</div>

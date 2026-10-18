@@ -38,6 +38,19 @@ Rails is the control plane; [MediaMTX](https://github.com/bluenviron/mediamtx) m
 
 Images are pushed to GitHub Container Registry using the workflow's `GITHUB_TOKEN`.
 
+### Coin payments (Stripe)
+
+1. In the Stripe dashboard, add a webhook endpoint `https://<APP_HOST>/stripe/webhooks` for
+   `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `checkout.session.expired`
+   and `charge.refunded`.
+2. Add the **secrets** `STRIPE_SECRET_KEY` and `STRIPE_WEBHOOK_SECRET` (the endpoint's signing secret).
+3. Create the coin packs and gifts once: `bin/kamal app exec "bin/rails db:seed"`.
+
+Coins are credited only by the signed webhook, never by the redirect back from Checkout. Every coin
+movement is a row in the append-only `ledger_entries` table (`Wallet` is the only writer). Locally,
+without Stripe keys, buying a pack adds the coins directly (development only); with test keys, use
+`stripe listen --forward-to localhost:3000/stripe/webhooks`.
+
 ### Live streaming server (optional)
 
 Streaming runs on a second VPS (Caddy needs ports 80/443, which kamal-proxy holds on the web host):

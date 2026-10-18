@@ -7,6 +7,7 @@
     <button type="button" data-action="playback#unmute" data-playback-target="unmute"
             class="absolute bottom-3 right-3 rounded bg-white/90 px-3 py-1 text-sm font-medium cursor-pointer">🔊 Tap to unmute</button>
     <p data-playback-target="status" class="absolute inset-0 flex items-center justify-center text-white/80 text-sm pointer-events-none">Connecting…</p>
+    <div id="gift_overlay" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
   <% elsif stream.pending? %>
     <p class="absolute inset-0 flex items-center justify-center text-white">Starting soon…</p>
   <% else %>

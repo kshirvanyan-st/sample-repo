@@ -35,6 +35,8 @@ jobs:
       MEDIA_HOST: ${{ vars.MEDIA_HOST }}
       MEDIA_DOMAIN: ${{ vars.MEDIA_DOMAIN }}
       MEDIA_HOOK_SECRET: ${{ secrets.MEDIA_HOOK_SECRET }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      STRIPE_WEBHOOK_SECRET: ${{ secrets.STRIPE_WEBHOOK_SECRET }}
 
     steps:
       - name: Checkout code

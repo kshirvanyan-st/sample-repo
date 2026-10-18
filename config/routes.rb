@@ -23,7 +23,13 @@ Rails.application.routes.draw do
       patch :finish
     end
     resources :comments, only: %i[ create destroy ], controller: "stream_comments"
+    resources :gifts, only: :create, controller: "gift_transactions"
   end
+
+  resource :coins, only: :show
+  resources :purchases, only: :create
+  resource :earnings, only: :show
+  post "stripe/webhooks" => "stripe_webhooks#create"
   get "go-live" => "streams#new", as: :go_live
   patch "go-live/key" => "streams#reset_key", as: :reset_stream_key
 
