@@ -4,14 +4,16 @@ class StreamsController < ApplicationController
   # Live now: people you follow first, then the biggest audiences.
   def index
     following_ids = Current.user.following.ids
-    @streams = Stream.live.where.not(user_id: Current.user.blocked_user_ids)
+    @streams = Stream.live.visible_to(Current.user)
       .includes(user: { profile: { photos: { image_attachment: :blob } } })
       .order(Arel.sql(Stream.sanitize_sql_array([ "CASE WHEN streams.user_id IN (?) THEN 0 ELSE 1 END", following_ids.presence || [ 0 ] ])))
       .order(viewers_count: :desc, started_at: :desc)
   end
 
   def new
-    if (open = Current.user.open_stream)
+    if Current.user.streaming_suspended?
+      redirect_to streams_path, alert: "Your streaming has been suspended by a moderator."
+    elsif (open = Current.user.open_stream)
       redirect_to studio_stream_path(open)
     else
       @stream = Current.user.streams.new(title: "#{Current.user.profile.display_name}'s live", category: :just_chatting)
@@ -19,6 +21,8 @@ class StreamsController < ApplicationController
   end
 
   def create
+    return redirect_to(streams_path, alert: "Your streaming has been suspended by a moderator.") if Current.user.streaming_suspended?
+
     @stream = Current.user.streams.new(stream_params)
 
     if @stream.save
@@ -31,7 +35,7 @@ class StreamsController < ApplicationController
   end
 
   def show
-    @stream = Stream.where.not(user_id: Current.user.blocked_user_ids).find(params[:id])
+    @stream = Stream.visible_to(Current.user).find(params[:id])
     @viewer_token = @stream.viewer_token_for(Current.user) unless @stream.ended?
   end
 

@@ -14,7 +14,7 @@ class BlocksController < ApplicationController
   private
     # Only the blocker can find the profile again to unblock it.
     def set_profile
-      @profile = Profile.where.not(onboarded_at: nil).where.not(user_id: Current.user.id).find(params[:profile_id])
+      @profile = Profile.visible.where.not(user_id: Current.user.id).find(params[:profile_id])
       head :not_found if Block.exists?(blocker: @profile.user, blocked: Current.user)
     end
 end

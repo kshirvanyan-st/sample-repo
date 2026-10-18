@@ -36,10 +36,35 @@ RSpec.describe "Stream jobs" do
       expect(stream.reload).to be_live
     end
 
+    it "starts a stream for video that arrives with none open, unless the broadcaster is suspended" do
+      broadcaster = create(:user, :onboarded)
+      suspended = create(:user, :onboarded, streaming_suspended_at: Time.current)
+      allow_any_instance_of(MediaServer).to receive(:ready_paths).and_return([ Stream.media_path_for(broadcaster), Stream.media_path_for(suspended) ])
+      described_class.perform_now
+      expect(broadcaster.live_stream).to be_present
+      expect(suspended.live_stream).to be_nil
+    end
+
     it "does nothing when the media server is unreachable" do
       stream = create(:stream, :live)
       allow_any_instance_of(MediaServer).to receive(:ready_paths).and_raise(MediaServer::Unavailable, "down")
       expect { described_class.perform_now }.not_to raise_error
+      expect(stream.reload).to be_live
+    end
+  end
+
+  describe StreamEndJob do
+    let(:stream) { create(:stream, :live) }
+
+    it "ends the stream when the video is still gone" do
+      allow_any_instance_of(MediaServer).to receive(:ready_paths).and_return([])
+      described_class.perform_now(stream)
+      expect(stream.reload).to be_ended
+    end
+
+    it "keeps the stream when the broadcaster reconnected" do
+      allow_any_instance_of(MediaServer).to receive(:ready_paths).and_return([ stream.media_path ])
+      described_class.perform_now(stream)
       expect(stream.reload).to be_live
     end
   end

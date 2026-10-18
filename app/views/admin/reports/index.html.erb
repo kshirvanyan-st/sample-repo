@@ -1,0 +1,35 @@
+<div class="flex items-center justify-between">
+  <h1 class="font-bold text-3xl">Reports</h1>
+  <div class="flex gap-3 text-sm">
+    <%= link_to "Open", admin_reports_path, class: @status == :open ? "font-bold underline" : "" %>
+    <%= link_to "Resolved", admin_reports_path(status: "resolved"), class: @status == :resolved ? "font-bold underline" : "" %>
+  </div>
+</div>
+
+<% if @reports.any? %>
+  <ul class="mt-6 space-y-3">
+    <% @reports.each do |report| %>
+      <li id="<%= dom_id(report) %>" class="rounded-xl border bg-white p-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex flex-wrap items-center gap-2">
+            <%= render "admin/shared/user_chip", user: report.reported %>
+            <span class="rounded bg-red-50 text-red-700 text-xs px-2 py-0.5"><%= report.reason.humanize %></span>
+            <% if (count = @report_counts[report.reported_id]).to_i > 1 %><span class="text-xs text-red-700 font-semibold"><%= count %> open reports</span><% end %>
+          </div>
+          <span class="text-sm text-gray-500">by <%= report.reporter.profile&.display_name || report.reporter.email_address %> · <%= time_ago_in_words(report.created_at) %> ago</span>
+        </div>
+        <% if report.details.present? %><p class="mt-2 text-gray-700">“<%= report.details %>”</p><% end %>
+        <% if report.open? %>
+          <div class="flex gap-3 mt-3">
+            <%= link_to "Review user", admin_user_path(report.reported), class: primary_button_classes + " py-1.5 text-sm" %>
+            <%= button_to "Dismiss", admin_report_path(report), method: :patch, class: secondary_button_classes + " py-1.5 text-sm" %>
+          </div>
+        <% else %>
+          <p class="mt-2 text-sm text-gray-500"><%= report.resolution&.humanize %> by <%= report.resolved_by&.profile&.display_name %> <%= time_ago_in_words(report.resolved_at) %> ago</p>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p class="text-gray-500 mt-6">Nothing here. 🎉</p>
+<% end %>

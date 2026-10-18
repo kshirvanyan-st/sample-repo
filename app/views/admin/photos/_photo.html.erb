@@ -1,0 +1,8 @@
+<div id="<%= dom_id(photo, :admin) %>" class="space-y-1">
+  <%= image_tag photo.image.variant(:thumb), alt: "Photo #{photo.id}", class: "w-full aspect-square object-cover rounded-lg #{"opacity-40" if photo.rejected?}" %>
+  <p class="text-xs text-gray-500"><%= photo.status %></p>
+  <div class="flex gap-1 text-xs">
+    <% unless photo.approved? %><%= button_to "Approve", admin_photo_path(photo, decision: "approve"), method: :patch, class: "underline text-green-700 cursor-pointer" %><% end %>
+    <% unless photo.rejected? %><%= button_to "Reject", admin_photo_path(photo, decision: "reject"), method: :patch, class: "underline text-red-700 cursor-pointer" %><% end %>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+<h1 class="font-bold text-3xl">Live now</h1>
+
+<% if @streams.any? %>
+  <table class="w-full mt-6 text-sm bg-white rounded-xl border">
+    <thead class="text-left text-gray-500"><tr><th class="p-3">Stream</th><th class="p-3">Broadcaster</th><th class="p-3">Viewers</th><th class="p-3">Reports</th><th class="p-3"></th></tr></thead>
+    <tbody class="divide-y">
+      <% @streams.each do |stream| %>
+        <tr id="<%= dom_id(stream, :admin) %>">
+          <td class="p-3"><%= link_to stream.title, stream_path(stream), class: "underline", target: "_blank" %><br><span class="text-gray-500">live <%= time_ago_in_words(stream.started_at) %></span></td>
+          <td class="p-3"><%= render "admin/shared/user_chip", user: stream.user %></td>
+          <td class="p-3"><%= stream.viewers_count %></td>
+          <td class="p-3"><%= @report_counts[stream.user_id].to_i %></td>
+          <td class="p-3 space-y-2">
+            <%= button_to "End stream", shut_down_admin_stream_path(stream), class: secondary_button_classes + " py-1 text-sm",
+                  form: { data: { turbo_confirm: "End this stream for everyone?" } } %>
+            <%= button_to "End + suspend", shut_down_admin_stream_path(stream, suspend: "1"), class: "rounded-md px-3 py-1 bg-red-600 text-white text-sm font-medium cursor-pointer",
+                  form: { data: { turbo_confirm: "End this stream and stop them from going live again?" } } %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  <p class="text-gray-500 mt-6">Nobody is live.</p>
+<% end %>

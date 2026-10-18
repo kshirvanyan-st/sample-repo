@@ -1,5 +1,5 @@
 class PurchasesController < ApplicationController
-  rate_limit to: 10, within: 1.minute, only: :create, with: -> { redirect_to coins_path, alert: "Too many attempts, try again in a minute." }
+  rate_limit to: 10, within: 1.minute, only: :create, by: -> { Current.user.id }, with: -> { redirect_to coins_path, alert: "Too many attempts, try again in a minute." }
 
   def create
     coin_pack = CoinPack.available.find(params[:coin_pack_id])

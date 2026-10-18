@@ -1,0 +1,14 @@
+<%# Nested inside the application layout, with the admin sub-navigation on top. %>
+<% content_for :content do %>
+  <nav class="flex flex-wrap items-center gap-4 text-sm font-medium border-b pb-3 mb-6" aria-label="Admin">
+    <span class="font-bold text-gray-900">Admin</span>
+    <%= link_to "Dashboard", admin_root_path %>
+    <%= link_to admin_reports_path do %>Reports <span class="rounded-full bg-red-100 text-red-700 px-2"><%= Report.open.count %></span><% end %>
+    <%= link_to admin_photos_path do %>Photos <span class="rounded-full bg-yellow-100 text-yellow-800 px-2"><%= Photo.pending.count %></span><% end %>
+    <%= link_to admin_streams_path do %>Live <span class="rounded-full bg-gray-100 px-2"><%= Stream.live.count %></span><% end %>
+    <%= link_to "Users", admin_users_path %>
+    <%= link_to "Audit log", admin_moderation_actions_path %>
+  </nav>
+  <%= yield %>
+<% end %>
+<%= render template: "layouts/application" %>

@@ -11,6 +11,7 @@ cd "$(dirname "$0")/.."
 
 PORT="${SMOKE_PORT:-3123}"
 export RAILS_ENV=test
+export ACTIVE_JOB_ADAPTER=async # the server must run jobs (StreamEndJob) to end streams
 export MEDIA_HOOK_SECRET="smoke-secret"
 export MEDIA_HOOKS_URL="http://127.0.0.1:$PORT/media/hooks"
 export MTX_AUTHHTTPADDRESS="http://127.0.0.1:$PORT/media/auth?secret=$MEDIA_HOOK_SECRET"
@@ -71,8 +72,18 @@ runner "puts MediaServer.new.ready_paths.inspect" | grep -q "$STREAM_PATH" || fa
 code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:9997/v3/paths/list")
 [ "$code" = 401 ] || fail "the API without credentials returned $code"
 
-echo "6. stopping the push ends the stream"
+echo "6. reconnecting within the grace period keeps the same stream"
+before=$(runner "puts User.find_by!(email_address: '$EMAIL').live_stream.id")
+kill "$push"; sleep 1
+ffmpeg -loglevel error -re -f lavfi -i testsrc=size=640x360:rate=30 -f lavfi -i sine=frequency=440 -t 60 \
+  -c:v libx264 -preset ultrafast -tune zerolatency -g 30 -c:a aac -f flv "$RTMP/$STREAM_PATH?token=$STREAM_KEY" \
+  >> tmp/media_smoke_ffmpeg.log 2>&1 & push=$!; pids+=($push)
+sleep 15 # past StreamEndJob's grace period
+after=$(runner "puts User.find_by!(email_address: '$EMAIL').streams.order(:id).last.then { |s| [s.id, s.status].join(':') }")
+[ "$after" = "$before:live" ] || fail "after a reconnect expected stream $before to still be live, got $after"
+
+echo "7. stopping the push ends the stream"
 kill "$push"
-wait_for 15 "the stream to end" bash -c "[ \"\$(RAILS_ENV=test bin/rails runner \"puts User.find_by!(email_address: '$EMAIL').streams.last&.status\" 2>/dev/null | tail -1)\" = ended ]"
+wait_for 40 "the stream to end (after the reconnect grace period)" bash -c "[ \"\$(RAILS_ENV=test bin/rails runner \"puts User.find_by!(email_address: '$EMAIL').streams.last&.status\" 2>/dev/null | tail -1)\" = ended ]"
 
 echo "Media smoke test passed."

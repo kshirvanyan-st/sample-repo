@@ -1,0 +1,21 @@
+<h1 class="font-bold text-3xl">Moderation dashboard</h1>
+
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mt-6">
+  <% { "Open reports" => [ @counts[:open_reports], admin_reports_path ],
+       "Photos to review" => [ @counts[:pending_photos], admin_photos_path ],
+       "Live now" => [ @counts[:live_streams], admin_streams_path ],
+       "Sign-ups today" => [ @counts[:signups_today], admin_users_path ],
+       "Banned users" => [ @counts[:banned_users], admin_users_path(filter: "banned") ] }.each do |label, (count, path)| %>
+    <%= link_to path, class: "rounded-xl border bg-white p-4 hover:border-pink-500" do %>
+      <p class="text-sm text-gray-500"><%= label %></p>
+      <p class="text-3xl font-bold mt-1"><%= count %></p>
+    <% end %>
+  <% end %>
+</div>
+
+<h2 class="font-semibold text-xl mt-10">Recent actions</h2>
+<% if @recent_actions.any? %>
+  <ul class="mt-2 divide-y"><%= render partial: "admin/shared/action", collection: @recent_actions %></ul>
+<% else %>
+  <p class="text-gray-500 mt-2">No moderation actions yet.</p>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_140006) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_150003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -157,6 +157,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_140006) do
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
+  create_table "moderation_actions", force: :cascade do |t|
+    t.bigint "moderator_id", null: false
+    t.string "action", null: false
+    t.string "target_type", null: false
+    t.bigint "target_id", null: false
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.index ["created_at"], name: "index_moderation_actions_on_created_at"
+    t.index ["moderator_id"], name: "index_moderation_actions_on_moderator_id"
+    t.index ["target_type", "target_id"], name: "index_moderation_actions_on_target"
+  end
+
   create_table "photos", force: :cascade do |t|
     t.bigint "profile_id", null: false
     t.integer "position", default: 0, null: false
@@ -213,8 +225,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_140006) do
     t.integer "status", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "resolved_by_id"
+    t.datetime "resolved_at"
+    t.integer "resolution"
     t.index ["reported_id"], name: "index_reports_on_reported_id"
     t.index ["reporter_id"], name: "index_reports_on_reporter_id"
+    t.index ["resolved_by_id"], name: "index_reports_on_resolved_by_id"
     t.index ["status"], name: "index_reports_on_status"
   end
 
@@ -281,6 +297,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_140006) do
     t.string "stream_key"
     t.integer "coin_balance", default: 0, null: false
     t.integer "earnings_balance", default: 0, null: false
+    t.integer "role", default: 0, null: false
+    t.datetime "banned_at"
+    t.string "ban_reason"
+    t.datetime "streaming_suspended_at"
+    t.index ["banned_at"], name: "index_users_on_banned_at", where: "(banned_at IS NOT NULL)"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
     t.index ["stream_path"], name: "index_users_on_stream_path", unique: true
     t.check_constraint "coin_balance >= 0", name: "users_coin_balance_not_negative"
@@ -305,12 +326,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_140006) do
   add_foreign_key "matches", "users", column: "user_b_id"
   add_foreign_key "messages", "conversations", on_delete: :cascade
   add_foreign_key "messages", "users", column: "sender_id"
+  add_foreign_key "moderation_actions", "users", column: "moderator_id"
   add_foreign_key "photos", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "purchases", "coin_packs"
   add_foreign_key "purchases", "users"
   add_foreign_key "reports", "users", column: "reported_id"
   add_foreign_key "reports", "users", column: "reporter_id"
+  add_foreign_key "reports", "users", column: "resolved_by_id"
   add_foreign_key "sessions", "users"
   add_foreign_key "stream_comments", "streams", on_delete: :cascade
   add_foreign_key "stream_comments", "users", on_delete: :cascade

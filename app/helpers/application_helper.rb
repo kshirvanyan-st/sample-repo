@@ -11,6 +11,7 @@ module ApplicationHelper
     Like.positive.where(likee: Current.user)
       .where.not(liker_id: Current.user.likes_given.select(:likee_id))
       .where.not(liker_id: Current.user.blocked_user_ids)
+      .where(liker_id: User.active.select(:id))
       .count
   end
 

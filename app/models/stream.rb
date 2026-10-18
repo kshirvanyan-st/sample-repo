@@ -13,6 +13,8 @@ class Stream < ApplicationRecord
   validates :title, presence: true, length: { maximum: 80 }
 
   scope :open, -> { where(status: %i[ pending live ]) }
+  # Streams a viewer may see: not from someone blocked either way, not from a banned broadcaster.
+  scope :visible_to, ->(viewer) { where.not(user_id: viewer.blocked_user_ids).where(user_id: User.active.select(:id)) }
 
   after_update_commit :broadcast_status, if: :saved_change_to_status?
 
@@ -27,6 +29,14 @@ class Stream < ApplicationRecord
     return if stream_path == path.to_s || stream_path.blank?
 
     User.find_by(stream_path: stream_path)
+  end
+
+  # The stream a publish attaches to: the one opened on the Go live page, or a new one with a
+  # default title when the broadcaster starts OBS directly (or reconnects after it ended).
+  def self.open_for_ingest!(broadcaster)
+    broadcaster.open_stream || broadcaster.streams.create!(title: "#{broadcaster.profile.display_name} is live")
+  rescue ActiveRecord::RecordNotUnique
+    broadcaster.open_stream # opened by a concurrent request
   end
 
   def self.viewer_token_verifier

@@ -14,8 +14,7 @@ module Discovery
     end
 
     def candidates
-      scope = Profile
-        .where.not(onboarded_at: nil)
+      scope = Profile.visible
         .where.not(user_id: @viewer.id)
         .where.not(user_id: @viewer.likes_given.select(:likee_id))
         .where.not(user_id: @viewer.blocked_user_ids)

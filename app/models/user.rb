@@ -1,5 +1,9 @@
 class User < ApplicationRecord
   has_secure_password
+
+  enum :role, { member: 0, moderator: 1, admin: 2 }
+
+  scope :active, -> { where(banned_at: nil) }
   has_many :sessions, dependent: :destroy
   has_one :profile, dependent: :destroy
 
@@ -41,6 +45,18 @@ class User < ApplicationRecord
 
   def live_stream
     streams.live.order(:started_at).last
+  end
+
+  def staff?
+    moderator? || admin?
+  end
+
+  def banned?
+    banned_at.present?
+  end
+
+  def streaming_suspended?
+    streaming_suspended_at.present?
   end
 
   def onboarded?

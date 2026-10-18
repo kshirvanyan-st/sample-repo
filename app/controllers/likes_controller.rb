@@ -1,9 +1,9 @@
 class LikesController < ApplicationController
-  rate_limit to: 120, within: 1.minute, only: :create, with: -> { head :too_many_requests }
+  rate_limit to: 120, within: 1.minute, only: :create, by: -> { Current.user.id }, with: -> { head :too_many_requests }
 
   # Who liked me: positive likes from people you haven't rated yet.
   def index
-    @profiles = Profile.where(user_id: liker_ids).where.not(onboarded_at: nil)
+    @profiles = Profile.visible.where(user_id: liker_ids)
       .includes(photos: { image_attachment: :blob }).order(updated_at: :desc)
   end
 
@@ -30,7 +30,7 @@ class LikesController < ApplicationController
     end
 
     def rateable_profiles
-      Profile.where.not(onboarded_at: nil)
+      Profile.visible
         .where.not(user_id: Current.user.id)
         .where.not(user_id: Current.user.blocked_user_ids)
     end
