@@ -1,0 +1,141 @@
+en:
+  shared:
+    user_menu:
+      driver: "Driver"
+      drive_with_us: "Drive with us"
+  driver_profiles:
+    statuses:
+      draft: "Draft"
+      submitted: "Under review"
+      needs_changes: "Changes needed"
+      approved: "Approved"
+      rejected: "Rejected"
+      suspended: "Suspended"
+  vehicles:
+    classes:
+      economy: "Economy"
+      comfort: "Comfort"
+  driver_applications:
+    locked: "Your application is being reviewed and can't be changed right now."
+    show:
+      title: "Drive with Taxi AM"
+      status: "Application status"
+      edit: "Edit application"
+      explain:
+        draft: "Fill in your license, documents and car, then submit the application."
+        submitted: "We're checking your documents. We'll text you when there's a decision, usually within one working day."
+        needs_changes: "We need something fixed before we can approve you. See the note below."
+        approved: "You're approved to drive. The driver app is coming soon."
+        rejected: "We can't approve this application."
+        suspended: "You can't take rides for now. See the note below, update your documents and submit again."
+    edit:
+      title: "Driver application"
+      intro: "You can save and come back later. When everything is filled in, submit it for review."
+      review_note: "Note from our team"
+      license: "Driver's license"
+      identity: "Identity"
+      vehicle: "Your car"
+      replace: "choose a file to replace"
+      files_hint: "Photos (JPEG, PNG, WebP, HEIC) or PDF, up to %{max} MB each."
+      save: "Save draft"
+      submit: "Submit for review"
+    update:
+      saved: "Draft saved."
+      submitted: "Application submitted. We'll text you when it's reviewed."
+      invalid: "Please fix the items below."
+  drivers:
+    sms:
+      approved: "Taxi AM: you're approved as a driver. Welcome!"
+      needs_changes: "Taxi AM: your driver application needs changes. Open the app to see what's missing."
+      rejected: "Taxi AM: we couldn't approve your driver application."
+      suspended: "Taxi AM: your driver account is suspended. Open the app to see why."
+    documents:
+      license: "driver's license"
+      registration: "car registration"
+      insurance: "car insurance"
+    expiry:
+      reminder: "Taxi AM: your %{document} expires on %{date}. Renew it in time to keep driving."
+      suspended_note: "Your %{document} has expired. Upload the new one and submit the application again."
+  moderation_actions:
+    change_role: "Role changed"
+    ban: "Banned"
+    unban: "Unbanned"
+    approve_driver: "Driver approved"
+    request_driver_changes: "Changes requested"
+    reject_driver: "Driver rejected"
+    suspend_driver: "Driver suspended"
+  admin:
+    shared:
+      tabs:
+        label: "Admin sections"
+        users: "Users"
+        drivers: "Drivers"
+    driver_applications:
+      note_required: "Write a note for the driver."
+      invalid_transition: "This application has already changed. Reload and check it again."
+      index:
+        title: "Driver applications"
+        filter: "Filter by status"
+        empty: "Nothing here."
+        vehicle: "Car"
+        review: "Review"
+      show:
+        back: "Back to the list"
+        submitted_at: "submitted %{time}"
+        license: "License"
+        vehicle: "Car"
+        missing: "Missing"
+        decision: "Decision"
+        approve: "Approve"
+        note: "Note for the driver (sent with changes, rejection or suspension)"
+        request_changes: "Ask for changes"
+        reject: "Reject"
+        suspend: "Suspend"
+        confirm_reject: "Reject this application?"
+        confirm_suspend: "Suspend this driver?"
+        history: "History"
+        no_decision:
+          draft: "The driver hasn't submitted this yet."
+          needs_changes: "Waiting for the driver to update and resubmit."
+          rejected: "This application was rejected."
+        system: "system"
+      approve:
+        done: "%{name} is approved."
+      request_changes:
+        done: "Asked %{name} for changes."
+      reject:
+        done: "%{name}'s application is rejected."
+      suspend:
+        done: "%{name} is suspended."
+  activerecord:
+    models:
+      driver_profile: "Driver application"
+      vehicle: "Car"
+    attributes:
+      driver_profile:
+        license_number: "License number"
+        license_expires_on: "License valid until"
+        license_front: "License, front"
+        license_back: "License, back"
+        id_document: "Passport or ID card"
+        selfie: "Photo of your face"
+        submitted_at: "Submitted"
+        vehicle: "Car"
+      vehicle:
+        make: "Make"
+        model: "Model"
+        color: "Color"
+        year: "Year"
+        plate_number: "Plate number"
+        vehicle_class: "Class"
+        registration_expires_on: "Registration valid until"
+        insurance_expires_on: "Insurance valid until"
+        registration_document: "Registration certificate"
+        insurance_document: "Insurance policy"
+        photo: "Photo of the car"
+    errors:
+      messages:
+        document_type: "must be a photo (JPEG, PNG, WebP, HEIC) or a PDF"
+        document_size: "must be smaller than %{max} MB"
+        expired: "has already passed"
+        too_old_for_comfort: "must be Economy for cars older than %{years} years"

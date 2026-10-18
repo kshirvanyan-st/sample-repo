@@ -1,0 +1,9 @@
+<nav aria-label="<%= t(".label") %>" class="flex gap-4 border-b pb-2 text-sm">
+  <%= link_to t(".users"), admin_users_path, class: controller_name == "users" ? "font-semibold" : "text-gray-600" %>
+  <%= link_to admin_driver_applications_path, class: controller_name == "driver_applications" ? "font-semibold" : "text-gray-600" do %>
+    <%= t(".drivers") %>
+    <% if (waiting = DriverProfile.submitted.count).positive? %>
+      <span class="ml-1 rounded-full bg-yellow-400 px-2 text-xs font-semibold text-gray-900"><%= waiting %></span>
+    <% end %>
+  <% end %>
+</nav>

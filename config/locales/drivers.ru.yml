@@ -1,0 +1,141 @@
+ru:
+  shared:
+    user_menu:
+      driver: "Водитель"
+      drive_with_us: "Стать водителем"
+  driver_profiles:
+    statuses:
+      draft: "Черновик"
+      submitted: "На проверке"
+      needs_changes: "Нужны исправления"
+      approved: "Одобрено"
+      rejected: "Отклонено"
+      suspended: "Приостановлено"
+  vehicles:
+    classes:
+      economy: "Эконом"
+      comfort: "Комфорт"
+  driver_applications:
+    locked: "Ваша заявка на проверке, сейчас её нельзя изменить."
+    show:
+      title: "Работа водителем в Taxi AM"
+      status: "Статус заявки"
+      edit: "Изменить заявку"
+      explain:
+        draft: "Заполните данные о правах, документах и автомобиле, затем отправьте заявку."
+        submitted: "Мы проверяем документы. Пришлём SMS, когда будет решение, обычно в течение одного рабочего дня."
+        needs_changes: "Прежде чем одобрить заявку, нужно кое-что исправить. Смотрите комментарий ниже."
+        approved: "Вы одобрены как водитель. Приложение для водителей скоро появится."
+        rejected: "Мы не можем одобрить эту заявку."
+        suspended: "Сейчас вы не можете принимать заказы. Смотрите комментарий ниже, обновите документы и отправьте заявку снова."
+    edit:
+      title: "Заявка водителя"
+      intro: "Можно сохранить и вернуться позже. Когда всё заполнено, отправьте заявку на проверку."
+      review_note: "Комментарий нашей команды"
+      license: "Водительское удостоверение"
+      identity: "Личность"
+      vehicle: "Ваш автомобиль"
+      replace: "выберите файл, чтобы заменить"
+      files_hint: "Фото (JPEG, PNG, WebP, HEIC) или PDF, до %{max} МБ каждый."
+      save: "Сохранить черновик"
+      submit: "Отправить на проверку"
+    update:
+      saved: "Черновик сохранён."
+      submitted: "Заявка отправлена. Пришлём SMS после проверки."
+      invalid: "Исправьте, пожалуйста, пункты ниже."
+  drivers:
+    sms:
+      approved: "Taxi AM: вы одобрены как водитель. Добро пожаловать!"
+      needs_changes: "Taxi AM: в заявке водителя нужны исправления. Откройте приложение, чтобы узнать подробности."
+      rejected: "Taxi AM: мы не смогли одобрить вашу заявку водителя."
+      suspended: "Taxi AM: ваш аккаунт водителя приостановлен. Причина — в приложении."
+    documents:
+      license: "водительское удостоверение"
+      registration: "свидетельство о регистрации автомобиля"
+      insurance: "страховка автомобиля"
+    expiry:
+      reminder: "Taxi AM: %{document} — срок действия до %{date}. Продлите заранее, чтобы продолжать работать."
+      suspended_note: "Истёк срок действия документа: %{document}. Загрузите новый и отправьте заявку снова."
+  moderation_actions:
+    change_role: "Роль изменена"
+    ban: "Заблокирован"
+    unban: "Разблокирован"
+    approve_driver: "Водитель одобрен"
+    request_driver_changes: "Запрошены исправления"
+    reject_driver: "Водитель отклонён"
+    suspend_driver: "Водитель приостановлен"
+  admin:
+    shared:
+      tabs:
+        label: "Разделы админки"
+        users: "Пользователи"
+        drivers: "Водители"
+    driver_applications:
+      note_required: "Напишите комментарий для водителя."
+      invalid_transition: "Заявка уже изменилась. Обновите страницу и проверьте её снова."
+      index:
+        title: "Заявки водителей"
+        filter: "Фильтр по статусу"
+        empty: "Здесь пусто."
+        vehicle: "Автомобиль"
+        review: "Проверить"
+      show:
+        back: "К списку"
+        submitted_at: "отправлена %{time}"
+        license: "Удостоверение"
+        vehicle: "Автомобиль"
+        missing: "Нет файла"
+        decision: "Решение"
+        approve: "Одобрить"
+        note: "Комментарий для водителя (отправляется при запросе исправлений, отказе или приостановке)"
+        request_changes: "Запросить исправления"
+        reject: "Отклонить"
+        suspend: "Приостановить"
+        confirm_reject: "Отклонить эту заявку?"
+        confirm_suspend: "Приостановить этого водителя?"
+        history: "История"
+        no_decision:
+          draft: "Водитель ещё не отправил заявку."
+          needs_changes: "Ждём, пока водитель исправит и снова отправит заявку."
+          rejected: "Эта заявка отклонена."
+        system: "система"
+      approve:
+        done: "%{name} одобрен."
+      request_changes:
+        done: "У %{name} запрошены исправления."
+      reject:
+        done: "Заявка %{name} отклонена."
+      suspend:
+        done: "%{name} приостановлен."
+  activerecord:
+    models:
+      driver_profile: "Заявка водителя"
+      vehicle: "Автомобиль"
+    attributes:
+      driver_profile:
+        license_number: "Номер удостоверения"
+        license_expires_on: "Удостоверение действует до"
+        license_front: "Удостоверение, лицевая сторона"
+        license_back: "Удостоверение, оборотная сторона"
+        id_document: "Паспорт или ID-карта"
+        selfie: "Фото лица"
+        submitted_at: "Отправлена"
+        vehicle: "Автомобиль"
+      vehicle:
+        make: "Марка"
+        model: "Модель"
+        color: "Цвет"
+        year: "Год"
+        plate_number: "Госномер"
+        vehicle_class: "Класс"
+        registration_expires_on: "Регистрация действует до"
+        insurance_expires_on: "Страховка действует до"
+        registration_document: "Свидетельство о регистрации"
+        insurance_document: "Страховой полис"
+        photo: "Фото автомобиля"
+    errors:
+      messages:
+        document_type: "должен быть фото (JPEG, PNG, WebP, HEIC) или PDF"
+        document_size: "должен быть меньше %{max} МБ"
+        expired: "уже прошёл"
+        too_old_for_comfort: "должен быть «Эконом» для автомобилей старше %{years} лет"

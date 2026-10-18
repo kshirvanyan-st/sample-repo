@@ -1,0 +1,10 @@
+<%# locals: (driver_profile:) %>
+<% messages = driver_profile.errors.reject { |error| error.attribute.to_s.start_with?("vehicle.") }.map(&:full_message) %>
+<% messages += driver_profile.vehicle.errors.full_messages if driver_profile.vehicle %>
+<% if messages.any? %>
+  <ul class="rounded-lg bg-red-50 px-4 py-2 text-sm text-red-800" role="alert">
+    <% messages.uniq.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+  </ul>
+<% end %>

@@ -33,6 +33,14 @@ and on pushes to `taxi-main`.
   (404 for everyone else). Staff actions go through `Moderation`, which writes the `ModerationAction`
   audit log. Admin controllers live in `app/controllers/admin/`. The first admin:
   `bin/rails taxi:make_admin PHONE=+374...`.
+- Drivers: `DriverProfile` (status draft → submitted → approved / needs_changes / rejected / suspended)
+  with one `Vehicle`. Decisions go through `Moderation.approve_driver!` etc. (status guards, audit row,
+  SMS). Only `approved` drivers will be dispatched. `DocumentExpiryJob` (daily, `config/recurring.yml`)
+  sends 30- and 7-day reminders once each (`ExpiryNotice`) and suspends on expiry.
+- Uploaded documents: list them in the model's `DOCUMENTS` and include `DocumentAttachments` (type is
+  sniffed from the bytes, max size). Serve them only through `DocumentsController` (owner or admin),
+  never with public Active Storage URLs.
+- Locale files: `config/locales/{hy,ru,en}.yml` plus feature files like `drivers.hy.yml`.
 - Rate limits: sign-in per IP and per number; signed-in actions per user (`by: -> { Current.user.id }`).
 - Geo: store points as PostGIS `geography(Point, 4326)` (longitude first); never compare raw lat/lng floats.
 

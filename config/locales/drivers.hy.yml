@@ -1,0 +1,141 @@
+hy:
+  shared:
+    user_menu:
+      driver: "Վարորդ"
+      drive_with_us: "Դառնալ վարորդ"
+  driver_profiles:
+    statuses:
+      draft: "Սևագիր"
+      submitted: "Ստուգման մեջ"
+      needs_changes: "Անհրաժեշտ են փոփոխություններ"
+      approved: "Հաստատված"
+      rejected: "Մերժված"
+      suspended: "Կասեցված"
+  vehicles:
+    classes:
+      economy: "Էկոնոմ"
+      comfort: "Կոմֆորտ"
+  driver_applications:
+    locked: "Ձեր հայտը ստուգվում է, և այժմ այն հնարավոր չէ փոխել։"
+    show:
+      title: "Աշխատել որպես վարորդ Taxi AM-ում"
+      status: "Հայտի կարգավիճակը"
+      edit: "Խմբագրել հայտը"
+      explain:
+        draft: "Լրացրեք վարորդական իրավունքի, փաստաթղթերի և մեքենայի տվյալները, ապա ուղարկեք հայտը։"
+        submitted: "Մենք ստուգում ենք ձեր փաստաթղթերը։ Որոշման մասին կտեղեկացնենք SMS-ով, սովորաբար մեկ աշխատանքային օրվա ընթացքում։"
+        needs_changes: "Հաստատելուց առաջ պետք է որոշ բան ուղղել։ Տե՛ս ստորև նշումը։"
+        approved: "Դուք հաստատված եք որպես վարորդ։ Վարորդի հավելվածը շուտով հասանելի կլինի։"
+        rejected: "Մենք չենք կարող հաստատել այս հայտը։"
+        suspended: "Այժմ չեք կարող պատվերներ ընդունել։ Տե՛ս ստորև նշումը, թարմացրեք փաստաթղթերը և կրկին ուղարկեք հայտը։"
+    edit:
+      title: "Վարորդի հայտ"
+      intro: "Կարող եք պահպանել և վերադառնալ ավելի ուշ։ Երբ ամեն ինչ լրացված է, ուղարկեք այն ստուգման։"
+      review_note: "Մեր թիմի նշումը"
+      license: "Վարորդական իրավունք"
+      identity: "Անձը հաստատող տվյալներ"
+      vehicle: "Ձեր մեքենան"
+      replace: "ընտրեք ֆայլ՝ փոխարինելու համար"
+      files_hint: "Լուսանկարներ (JPEG, PNG, WebP, HEIC) կամ PDF, յուրաքանչյուրը մինչև %{max} ՄԲ։"
+      save: "Պահպանել սևագիրը"
+      submit: "Ուղարկել ստուգման"
+    update:
+      saved: "Սևագիրը պահպանված է։"
+      submitted: "Հայտն ուղարկված է։ Ստուգումից հետո կտեղեկացնենք SMS-ով։"
+      invalid: "Խնդրում ենք ուղղել ստորև նշված կետերը։"
+  drivers:
+    sms:
+      approved: "Taxi AM. դուք հաստատված եք որպես վարորդ։ Բարի գալուստ։"
+      needs_changes: "Taxi AM. ձեր վարորդի հայտում անհրաժեշտ են փոփոխություններ։ Մանրամասները՝ հավելվածում։"
+      rejected: "Taxi AM. մենք չկարողացանք հաստատել ձեր վարորդի հայտը։"
+      suspended: "Taxi AM. ձեր վարորդի հաշիվը կասեցված է։ Պատճառը՝ հավելվածում։"
+    documents:
+      license: "վարորդական իրավունք"
+      registration: "մեքենայի հաշվառման վկայական"
+      insurance: "մեքենայի ապահովագրություն"
+    expiry:
+      reminder: "Taxi AM. ձեր փաստաթղթի (%{document}) ժամկետը լրանում է %{date}։ Երկարաձգեք ժամանակին՝ աշխատանքը շարունակելու համար։"
+      suspended_note: "Փաստաթղթի (%{document}) ժամկետը լրացել է։ Վերբեռնեք նորը և կրկին ուղարկեք հայտը։"
+  moderation_actions:
+    change_role: "Դերը փոխվել է"
+    ban: "Արգելափակվել է"
+    unban: "Ապաարգելափակվել է"
+    approve_driver: "Վարորդը հաստատվել է"
+    request_driver_changes: "Պահանջվել են փոփոխություններ"
+    reject_driver: "Վարորդը մերժվել է"
+    suspend_driver: "Վարորդը կասեցվել է"
+  admin:
+    shared:
+      tabs:
+        label: "Ադմինի բաժիններ"
+        users: "Օգտատերեր"
+        drivers: "Վարորդներ"
+    driver_applications:
+      note_required: "Գրեք նշում վարորդի համար։"
+      invalid_transition: "Հայտն արդեն փոխվել է։ Թարմացրեք էջը և կրկին ստուգեք։"
+      index:
+        title: "Վարորդների հայտեր"
+        filter: "Զտել ըստ կարգավիճակի"
+        empty: "Այստեղ ոչինչ չկա։"
+        vehicle: "Մեքենա"
+        review: "Ստուգել"
+      show:
+        back: "Վերադառնալ ցանկին"
+        submitted_at: "ուղարկվել է %{time}"
+        license: "Վարորդական իրավունք"
+        vehicle: "Մեքենա"
+        missing: "Բացակայում է"
+        decision: "Որոշում"
+        approve: "Հաստատել"
+        note: "Նշում վարորդի համար (ուղարկվում է փոփոխություններ պահանջելիս, մերժելիս կամ կասեցնելիս)"
+        request_changes: "Պահանջել փոփոխություններ"
+        reject: "Մերժել"
+        suspend: "Կասեցնել"
+        confirm_reject: "Մերժե՞լ այս հայտը։"
+        confirm_suspend: "Կասեցնե՞լ այս վարորդին։"
+        history: "Պատմություն"
+        no_decision:
+          draft: "Վարորդը դեռ չի ուղարկել հայտը։"
+          needs_changes: "Սպասում ենք, որ վարորդը թարմացնի և կրկին ուղարկի հայտը։"
+          rejected: "Այս հայտը մերժված է։"
+        system: "համակարգ"
+      approve:
+        done: "%{name}-ը հաստատված է։"
+      request_changes:
+        done: "%{name}-ից պահանջվել են փոփոխություններ։"
+      reject:
+        done: "%{name}-ի հայտը մերժված է։"
+      suspend:
+        done: "%{name}-ը կասեցված է։"
+  activerecord:
+    models:
+      driver_profile: "Վարորդի հայտ"
+      vehicle: "Մեքենա"
+    attributes:
+      driver_profile:
+        license_number: "Վարորդական իրավունքի համար"
+        license_expires_on: "Իրավունքը վավեր է մինչև"
+        license_front: "Վարորդական իրավունք, առջևի կողմ"
+        license_back: "Վարորդական իրավունք, հետևի կողմ"
+        id_document: "Անձնագիր կամ ID քարտ"
+        selfie: "Դեմքի լուսանկար"
+        submitted_at: "Ուղարկվել է"
+        vehicle: "Մեքենա"
+      vehicle:
+        make: "Մակնիշ"
+        model: "Մոդել"
+        color: "Գույն"
+        year: "Տարեթիվ"
+        plate_number: "Պետհամարանիշ"
+        vehicle_class: "Դաս"
+        registration_expires_on: "Հաշվառումը վավեր է մինչև"
+        insurance_expires_on: "Ապահովագրությունը վավեր է մինչև"
+        registration_document: "Հաշվառման վկայական"
+        insurance_document: "Ապահովագրական պայմանագիր"
+        photo: "Մեքենայի լուսանկար"
+    errors:
+      messages:
+        document_type: "պետք է լինի լուսանկար (JPEG, PNG, WebP, HEIC) կամ PDF"
+        document_size: "պետք է լինի %{max} ՄԲ-ից փոքր"
+        expired: "արդեն անցել է"
+        too_old_for_comfort: "պետք է լինի «Էկոնոմ» %{years} տարուց հին մեքենաների համար"

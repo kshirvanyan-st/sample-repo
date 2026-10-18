@@ -7,7 +7,11 @@ RSpec.describe "Translations" do
   end
 
   it "has the same keys in hy, ru and en" do
-    keys = %w[ hy ru en ].to_h { |locale| [ locale, flat_keys(YAML.load_file(Rails.root.join("config/locales/#{locale}.yml"))[locale]).sort ] }
+    keys = %w[ hy ru en ].to_h do |locale|
+      # hy.yml plus feature files such as drivers.hy.yml
+      files = Rails.root.glob("config/locales/{#{locale},*.#{locale}}.yml")
+      [ locale, flat_keys(files.map { |file| YAML.load_file(file)[locale] }.reduce(:deep_merge)).sort ]
+    end
     expect(keys["ru"]).to eq(keys["en"])
     expect(keys["hy"]).to eq(keys["en"])
   end

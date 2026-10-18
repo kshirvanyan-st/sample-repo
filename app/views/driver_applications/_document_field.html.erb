@@ -1,0 +1,12 @@
+<%# locals: (form:, record:, name:) %>
+<% attachment = record.public_send(name) %>
+<div>
+  <%= form.label name, class: "block text-sm font-medium" %>
+  <% if attachment.attached? && attachment.attachment.persisted? %>
+    <p class="mt-1 text-sm text-green-700">
+      ✓ <%= link_to attachment.filename.to_s.truncate(30), document_path(attachment.attachment), target: "_blank", class: "underline" %>
+      <span class="text-gray-500">· <%= t("driver_applications.edit.replace") %></span>
+    </p>
+  <% end %>
+  <%= form.file_field name, accept: DocumentAttachments::CONTENT_TYPES.join(","), class: "mt-1 block w-full text-sm" %>
+</div>
