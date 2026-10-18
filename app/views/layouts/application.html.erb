@@ -25,6 +25,7 @@
 
   <body>
     <% if authenticated? && Current.user.onboarded? %>
+      <%= turbo_stream_from Current.user, :notifications %>
       <%= render "layouts/nav" %>
     <% end %>
 

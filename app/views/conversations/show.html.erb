@@ -1,0 +1,27 @@
+<% profile = @other.profile %>
+<%= turbo_stream_from @conversation %>
+
+<div class="mx-auto md:w-2/3 w-full flex flex-col h-[calc(100dvh-12rem)] sm:h-[calc(100dvh-8rem)]"
+     data-controller="chat" data-chat-current-user-id-value="<%= Current.user.id %>" data-chat-read-url-value="<%= read_conversation_path(@conversation) %>">
+  <header class="flex items-center gap-3 pb-3 border-b">
+    <%= link_to "←", conversations_path, class: "text-xl px-1", aria: { label: "Back to chats" } %>
+    <%= link_to profile_path(profile), class: "flex items-center gap-3" do %>
+      <% if (photo = profile.main_photo) %>
+        <%= image_tag photo.image.variant(:thumb), alt: profile.display_name, class: "w-10 h-10 rounded-full object-cover" %>
+      <% end %>
+      <span class="font-semibold"><%= profile.display_name %>, <%= profile.age %></span>
+    <% end %>
+  </header>
+
+  <div class="grow overflow-y-auto py-4 space-y-2" data-chat-target="scroller">
+    <% if @messages.empty? %>
+      <p class="text-center text-gray-500 text-sm" id="empty_chat">You matched with <%= profile.display_name %>. Say hi!</p>
+    <% end %>
+    <div id="messages" class="space-y-2">
+      <%= render partial: "messages/message", collection: @messages %>
+    </div>
+    <p id="read_receipt" class="text-right text-xs text-gray-400" data-chat-target="receipt"><%= "Seen" if @messages.last&.sender_id == Current.user.id && @messages.last.read_at %></p>
+  </div>
+
+  <%= render "messages/form", conversation: @conversation, message: Message.new %>
+</div>

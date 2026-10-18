@@ -1,0 +1,7 @@
+<%# Rendered for both people (and in broadcasts), so alignment is applied by chat_controller. %>
+<div id="<%= dom_id(message) %>" class="flex" data-chat-target="message" data-sender-id="<%= message.sender_id %>">
+  <div data-bubble class="max-w-[75%] rounded-2xl px-4 py-2 bg-gray-100 text-gray-900">
+    <p class="whitespace-pre-line break-words"><%= message.body %></p>
+    <time datetime="<%= message.created_at.iso8601 %>" class="block text-[11px] opacity-70 mt-1"><%= l(message.created_at, format: :short) %></time>
+  </div>
+</div>

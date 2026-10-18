@@ -1,0 +1,13 @@
+<div class="mx-auto md:w-2/3 w-full">
+  <h1 class="font-bold text-4xl">Chats</h1>
+
+  <% if @conversations.any? %>
+    <ul class="mt-6 divide-y border rounded-xl bg-white">
+      <% @conversations.each do |conversation| %>
+        <%= render "conversations/preview", conversation: conversation, viewer: Current.user %>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-gray-600 mt-4">No chats yet. Open one of your <%= link_to "matches", matches_path, class: "underline" %> and say hi!</p>
+  <% end %>
+</div>

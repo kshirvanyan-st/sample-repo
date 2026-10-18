@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_110005) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_120002) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -54,6 +54,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_110005) do
     t.check_constraint "blocker_id <> blocked_id", name: "blocks_not_self"
   end
 
+  create_table "conversations", force: :cascade do |t|
+    t.bigint "match_id", null: false
+    t.datetime "last_message_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["match_id"], name: "index_conversations_on_match_id", unique: true
+  end
+
   create_table "follows", force: :cascade do |t|
     t.bigint "follower_id", null: false
     t.bigint "followee_id", null: false
@@ -83,6 +91,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_110005) do
     t.index ["user_a_id", "user_b_id"], name: "index_matches_on_user_a_id_and_user_b_id", unique: true
     t.index ["user_b_id"], name: "index_matches_on_user_b_id"
     t.check_constraint "user_a_id < user_b_id", name: "matches_ordered_pair"
+  end
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "conversation_id", null: false
+    t.bigint "sender_id", null: false
+    t.text "body", null: false
+    t.datetime "read_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_id", "created_at"], name: "index_messages_on_conversation_id_and_created_at"
+    t.index ["conversation_id", "sender_id"], name: "index_messages_unread", where: "(read_at IS NULL)"
+    t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -148,12 +168,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_110005) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "blocks", "users", column: "blocked_id"
   add_foreign_key "blocks", "users", column: "blocker_id"
+  add_foreign_key "conversations", "matches", on_delete: :cascade
   add_foreign_key "follows", "users", column: "followee_id"
   add_foreign_key "follows", "users", column: "follower_id"
   add_foreign_key "likes", "users", column: "likee_id"
   add_foreign_key "likes", "users", column: "liker_id"
   add_foreign_key "matches", "users", column: "user_a_id"
   add_foreign_key "matches", "users", column: "user_b_id"
+  add_foreign_key "messages", "conversations", on_delete: :cascade
+  add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "photos", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "reports", "users", column: "reported_id"
