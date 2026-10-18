@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_180004) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_190003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
   enable_extension "postgis"
@@ -67,6 +67,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_180004) do
     t.index ["driver_profile_id", "document", "expires_on", "stage"], name: "index_expiry_notices_once", unique: true
   end
 
+  create_table "fare_quotes", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.geography "pickup", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}, null: false
+    t.string "pickup_address"
+    t.geography "dropoff", limit: {:srid=>4326, :type=>"st_point", :geographic=>true}, null: false
+    t.string "dropoff_address"
+    t.integer "distance_m", null: false
+    t.integer "duration_s", null: false
+    t.boolean "approximate", default: false, null: false
+    t.jsonb "route", default: {}, null: false
+    t.jsonb "prices", default: {}, null: false
+    t.jsonb "tariffs", default: {}, null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_fare_quotes_on_user_id"
+  end
+
   create_table "moderation_actions", force: :cascade do |t|
     t.bigint "moderator_id"
     t.bigint "user_id", null: false
@@ -102,6 +120,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_180004) do
     t.index ["user_id"], name: "index_saved_places_on_user_id"
   end
 
+  create_table "service_zones", force: :cascade do |t|
+    t.string "name", null: false
+    t.boolean "active", default: true, null: false
+    t.geography "area", limit: {:srid=>4326, :type=>"multi_polygon", :geographic=>true}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["area"], name: "index_service_zones_on_area", using: :gist
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "ip_address"
@@ -109,6 +136,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_180004) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "tariffs", force: :cascade do |t|
+    t.integer "vehicle_class", null: false
+    t.integer "base_fare", null: false
+    t.integer "per_km", null: false
+    t.integer "per_minute", null: false
+    t.integer "minimum_fare", null: false
+    t.bigint "updated_by_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["updated_by_id"], name: "index_tariffs_on_updated_by_id"
+    t.index ["vehicle_class"], name: "index_tariffs_on_vehicle_class", unique: true
+    t.check_constraint "base_fare >= 0 AND per_km >= 0 AND per_minute >= 0 AND minimum_fare >= 0", name: "tariffs_amounts_not_negative"
   end
 
   create_table "users", force: :cascade do |t|
@@ -143,9 +184,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_180004) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "driver_profiles", "users"
   add_foreign_key "expiry_notices", "driver_profiles"
+  add_foreign_key "fare_quotes", "users"
   add_foreign_key "moderation_actions", "users"
   add_foreign_key "moderation_actions", "users", column: "moderator_id"
   add_foreign_key "saved_places", "users"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tariffs", "users", column: "updated_by_id"
   add_foreign_key "vehicles", "driver_profiles"
 end

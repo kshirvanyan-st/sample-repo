@@ -1,0 +1,20 @@
+<% content_for :head, stylesheet_link_tag("/vendor/maplibre-gl-6.12.0/maplibre-gl.css") %>
+<%= form_with model: [ :admin, @service_zone ], class: "mt-6 space-y-4 md:w-2/3" do |form| %>
+  <%= render "shared/errors", record: @service_zone %>
+  <div>
+    <%= form.label :name, class: "block text-sm font-medium" %>
+    <%= form.text_field :name, required: true, maxlength: 60, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+  </div>
+  <label class="flex items-center gap-2"><%= form.check_box :active %> <%= ServiceZone.human_attribute_name(:active) %></label>
+  <% if @service_zone.area %>
+    <div class="h-72 w-full overflow-hidden rounded-xl border" data-controller="route-map"
+         data-route-map-style-url-value="<%= Rails.configuration.x.maps.style_url %>"
+         data-route-map-zone-value="<%= @service_zone.area_geojson %>"></div>
+  <% end %>
+  <div>
+    <%= form.label :area_geojson, class: "block text-sm font-medium" %>
+    <%= form.text_area :area_geojson, rows: 8, required: true, class: "mt-1 block w-full rounded-lg border px-3 py-2 font-mono text-xs" %>
+    <p class="mt-1 text-xs text-gray-500"><%= t("admin.service_zones.form.hint") %></p>
+  </div>
+  <%= form.submit t("admin.service_zones.form.save"), class: "rounded-lg bg-yellow-400 px-4 py-2 font-medium text-gray-900" %>
+<% end %>

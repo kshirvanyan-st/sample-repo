@@ -15,6 +15,7 @@
         <div>
           <p class="font-medium"><%= place.title %></p>
           <p class="text-sm text-gray-600"><%= place.address %></p>
+          <% unless place.location %><p class="text-xs text-amber-700"><%= t(".not_on_map") %></p><% end %>
         </div>
         <div class="flex gap-3 text-sm">
           <%= link_to t(".edit"), edit_saved_place_path(place), class: "underline" %>

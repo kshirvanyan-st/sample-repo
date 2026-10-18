@@ -5,8 +5,13 @@ Rails.application.routes.draw do
   resources :saved_places, except: :show
   resource :driver_application, path: "drive", only: %i[ show edit update ]
   resources :documents, only: :show
+  resources :fare_quotes, path: "ride", only: %i[ new create show ]
+  get "places/search", to: "places#search", as: :search_places
+  get "places/reverse", to: "places#reverse", as: :reverse_place
 
   namespace :admin do
+    resources :tariffs, only: %i[ index update ]
+    resources :service_zones, except: %i[ show destroy ]
     resources :driver_applications, only: %i[ index show ] do
       member do
         post :approve

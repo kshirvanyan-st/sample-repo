@@ -1,0 +1,40 @@
+<% content_for :title, t(".title") %>
+<% content_for :head, stylesheet_link_tag("/vendor/maplibre-gl-6.12.0/maplibre-gl.css") %>
+<section class="mx-auto max-w-2xl py-6">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <ol class="mt-3 space-y-1 text-sm">
+    <li><span class="inline-block size-2 rounded-full bg-green-600"></span> <%= @fare_quote.pickup_address.presence || t(".pin") %></li>
+    <li><span class="inline-block size-2 rounded-full bg-red-600"></span> <%= @fare_quote.dropoff_address.presence || t(".pin") %></li>
+  </ol>
+
+  <div class="mt-4 h-72 w-full overflow-hidden rounded-xl border"
+       data-controller="route-map"
+       data-route-map-style-url-value="<%= Rails.configuration.x.maps.style_url %>"
+       data-route-map-route-value="<%= @fare_quote.route.to_json %>"
+       data-route-map-pickup-value="<%= [ @fare_quote.pickup.x, @fare_quote.pickup.y ].to_json %>"
+       data-route-map-dropoff-value="<%= [ @fare_quote.dropoff.x, @fare_quote.dropoff.y ].to_json %>"
+       role="img" aria-label="<%= t(".map") %>"></div>
+
+  <p class="mt-3 text-gray-700">
+    <%= t(".trip", km: number_with_precision(@fare_quote.distance_km, precision: 1, strip_insignificant_zeros: true), minutes: @fare_quote.duration_min) %>
+    <% if @fare_quote.approximate %><span class="text-amber-700">· <%= t(".approximate") %></span><% end %>
+  </p>
+
+  <ul class="mt-4 space-y-3">
+    <% @fare_quote.prices_by_class.each do |vehicle_class, price| %>
+      <li class="flex items-center justify-between rounded-xl border p-4" id="price_<%= vehicle_class %>">
+        <div>
+          <p class="font-semibold"><%= t("vehicles.classes.#{vehicle_class}") %></p>
+          <p class="text-sm text-gray-600"><%= t("fare_quotes.show.class_hint.#{vehicle_class}") %></p>
+        </div>
+        <p class="whitespace-nowrap text-xl font-bold"><%= amd(price) %></p>
+      </li>
+    <% end %>
+  </ul>
+
+  <p class="mt-3 text-sm text-gray-600">
+    <%= @fare_quote.expired? ? t(".expired") : t(".valid_until", time: l(@fare_quote.expires_at, format: "%H:%M")) %>
+  </p>
+  <button type="button" disabled class="mt-4 w-full rounded-lg bg-yellow-400 px-4 py-3 text-lg font-semibold text-gray-900 opacity-50"><%= t(".book_soon") %></button>
+  <%= link_to t(".change"), new_fare_quote_path, class: "mt-3 inline-block underline" %>
+</section>

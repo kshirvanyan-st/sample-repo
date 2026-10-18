@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Builds OSRM driving-route data for Armenia (OpenStreetMap, via Geofabrik) with Docker.
+#   bin/osrm-prepare [DIR]      default DIR: storage/osrm
+# Used by the CI "routing" job, and once on the server before starting the OSRM accessory
+# (re-run monthly to pick up new roads). The result is DIR/armenia-latest.osrm*, owned by the current
+# user so CI can cache it.
+set -euo pipefail
+
+dir="${1:-storage/osrm}"
+image="${OSRM_IMAGE:-ghcr.io/project-osrm/osrm-backend:v5.27.1}"
+extract_url="${OSM_EXTRACT_URL:-https://download.geofabrik.de/asia/armenia-latest.osm.pbf}"
+
+mkdir -p "$dir"
+dir="$(cd "$dir" && pwd)"
+
+if [ -f "$dir/armenia-latest.osrm.mldgr" ]; then
+  echo "OSRM data already in $dir"
+  exit 0
+fi
+
+[ -f "$dir/armenia-latest.osm.pbf" ] || curl -fL --retry 3 -o "$dir/armenia-latest.osm.pbf" "$extract_url"
+
+docker run --rm --user "$(id -u):$(id -g)" -v "$dir:/data" "$image" osrm-extract -p /opt/car.lua /data/armenia-latest.osm.pbf
+docker run --rm --user "$(id -u):$(id -g)" -v "$dir:/data" "$image" osrm-partition /data/armenia-latest.osrm
+docker run --rm --user "$(id -u):$(id -g)" -v "$dir:/data" "$image" osrm-customize /data/armenia-latest.osrm
+echo "OSRM data ready in $dir"

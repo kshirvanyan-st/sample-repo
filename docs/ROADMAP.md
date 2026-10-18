@@ -95,7 +95,7 @@ These are copied and adapted, not shared code:
      model, color, plate
    - admin review queue (approve, reject, ask for more) through `Moderation` with the audit log
    - document expiry reminders
-3. **Maps, places and pricing**
+3. **Maps, places and pricing** (done)
    - **map and places:** MapLibre map, address search, map pin, reverse geocoding
    - **OSRM:** routes, distance and ETA, run as a Kamal accessory, plus a CI job that runs OSRM on a
      tiny extract (same idea as `media_smoke`)
