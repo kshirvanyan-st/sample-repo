@@ -2,12 +2,19 @@ ru:
   app:
     name: "Taxi AM"
   shared:
+    user_menu:
+      label: "Аккаунт"
+      saved_places: "Мои места"
+      admin: "Админка"
+      sign_out: "Выйти"
+      sign_in: "Войти"
     locale_switcher:
       label: "Язык"
   home:
     index:
       title: "Taxi AM"
       tagline: "Честное такси для Еревана: понятные цены для пассажиров и низкая комиссия для водителей."
+      sign_in: "Войти по номеру телефона"
       coming_soon: "Скоро в Ереване."
       points:
         fast:
@@ -19,3 +26,100 @@ ru:
         local:
           title: "Сделано в Армении"
           body: "На армянском, русском и английском, с местной поддержкой."
+  sms:
+    sign_in_code: "Код Taxi AM: %{code}. Никому его не сообщайте."
+  roles:
+    rider: "Пассажир"
+    driver: "Водитель"
+    dispatcher: "Диспетчер"
+    admin: "Администратор"
+  sessions:
+    rate_limited: "Слишком много попыток. Попробуйте позже."
+    new:
+      title: "Вход"
+      intro: "Введите номер телефона, и мы пришлём SMS с 6-значным кодом."
+      phone: "Номер телефона"
+      submit: "Получить код"
+      terms: "Мы используем номер только для входа и для связи с водителем."
+    create:
+      invalid_phone: "Введите правильный мобильный номер, например 091 123456."
+      cooling_down: "Мы только что отправили код. Подождите немного, прежде чем запрашивать новый."
+      code_sent: "Мы отправили вам код по SMS."
+      delivery_failed: "Не удалось отправить SMS. Попробуйте через минуту."
+  verifications:
+    new:
+      title: "Введите код"
+      intro: "Мы отправили 6-значный код на номер %{phone}."
+      code: "Код"
+      submit: "Войти"
+      resend: "Отправить новый код"
+      change_number: "Изменить номер"
+    create:
+      wrong_code: "Код неверный или устарел. Проверьте его или запросите новый."
+      banned: "Этот аккаунт заблокирован. Если это ошибка, напишите в поддержку."
+      signed_in: "Вы вошли."
+  profiles:
+    edit:
+      title: "Ваш профиль"
+      submit: "Сохранить"
+    update:
+      saved: "Профиль сохранён."
+  saved_places:
+    kinds:
+      home: "Дом"
+      work: "Работа"
+      other: "Другое"
+    index:
+      title: "Мои места"
+      add: "Добавить"
+      add_other: "Добавить место"
+      edit: "Изменить"
+      delete: "Удалить"
+      confirm_delete: "Удалить это место?"
+    new:
+      title: "Новое место"
+    edit:
+      title: "Изменить место"
+    form:
+      submit: "Сохранить место"
+    create:
+      saved: "Место сохранено."
+    update:
+      saved: "Место сохранено."
+    destroy:
+      deleted: "Место удалено."
+  admin:
+    users:
+      self: "Здесь нельзя изменить собственный аккаунт."
+      index:
+        title: "Пользователи"
+        search: "Поиск по телефону"
+        search_submit: "Найти"
+        banned: "заблокирован"
+        role_for: "Роль для %{user}"
+        change_role: "Изменить"
+        ban: "Заблокировать"
+        unban: "Разблокировать"
+        confirm_ban: "Заблокировать %{user}? Пользователь выйдет на всех устройствах."
+      role:
+        changed: "%{user} теперь: %{role}."
+        invalid: "Неизвестная роль."
+      ban:
+        banned: "%{user} заблокирован."
+      unban:
+        unbanned: "%{user} разблокирован."
+  activerecord:
+    models:
+      user: "Пользователь"
+      saved_place: "Место"
+    attributes:
+      user:
+        phone: "Телефон"
+        name: "Имя"
+        role: "Роль"
+        locale: "Язык"
+        created_at: "Регистрация"
+      saved_place:
+        kind: "Тип"
+        label: "Название"
+        address: "Адрес"

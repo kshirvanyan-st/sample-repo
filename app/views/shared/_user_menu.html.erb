@@ -1,0 +1,12 @@
+<nav aria-label="<%= t(".label") %>" class="flex flex-wrap items-center gap-3 text-sm">
+  <% if authenticated? %>
+    <%= link_to Current.user.display_name, edit_profile_path, class: "font-medium" %>
+    <%= link_to t(".saved_places"), saved_places_path, class: "text-gray-600" %>
+    <% if Current.user.admin? %>
+      <%= link_to t(".admin"), admin_users_path, class: "text-gray-600" %>
+    <% end %>
+    <%= button_to t(".sign_out"), session_path, method: :delete, class: "text-gray-600 underline", form_class: "inline" %>
+  <% else %>
+    <%= link_to t(".sign_in"), new_session_path, class: "rounded-lg bg-yellow-400 px-3 py-1.5 font-medium text-gray-900" %>
+  <% end %>
+</nav>

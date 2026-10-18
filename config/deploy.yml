@@ -26,6 +26,11 @@ env:
   secret:
     - SECRET_KEY_BASE
     - TAXI_AM_DATABASE_PASSWORD
+    # SMS sign-in codes (set TWILIO_MESSAGING_SERVICE_SID, or TWILIO_FROM for a single sender)
+    - TWILIO_ACCOUNT_SID
+    - TWILIO_AUTH_TOKEN
+    - TWILIO_MESSAGING_SERVICE_SID
+    - TWILIO_FROM
   clear:
     SOLID_QUEUE_IN_PUMA: true
     DB_HOST: taxi-am-db

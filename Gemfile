@@ -11,6 +11,11 @@ gem "activerecord-postgis-adapter", "~> 11.1"
 
 # Locale data (dates, numbers, pluralization) for hy and ru [https://github.com/svenfuchs/rails-i18n]
 gem "rails-i18n", "~> 8.0"
+
+# Phone sign-in: E.164 parsing (Armenia by default) and SMS codes through Twilio
+gem "phonelib", "~> 0.10.27"
+gem "twilio-ruby", "~> 7.12"
+
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]

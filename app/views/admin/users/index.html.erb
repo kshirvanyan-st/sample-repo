@@ -1,0 +1,51 @@
+<% content_for :title, t(".title") %>
+<section class="py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <%= form_with url: admin_users_path, method: :get, class: "mt-4 flex gap-2" do |form| %>
+    <%= form.search_field :q, value: params[:q], placeholder: t(".search"), aria: { label: t(".search") }, class: "w-64 rounded-lg border px-3 py-2" %>
+    <%= form.submit t(".search_submit"), name: nil, class: "rounded-lg border px-4 py-2" %>
+  <% end %>
+  <div class="mt-6 overflow-x-auto">
+    <table class="w-full text-left text-sm">
+      <thead class="border-b text-gray-600">
+        <tr>
+          <th class="py-2 pr-4"><%= User.human_attribute_name(:phone) %></th>
+          <th class="py-2 pr-4"><%= User.human_attribute_name(:name) %></th>
+          <th class="py-2 pr-4"><%= User.human_attribute_name(:role) %></th>
+          <th class="py-2 pr-4"><%= User.human_attribute_name(:created_at) %></th>
+          <th class="py-2"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr class="border-b" id="<%= dom_id(user) %>">
+            <td class="py-2 pr-4 whitespace-nowrap"><%= user.display_phone %></td>
+            <td class="py-2 pr-4"><%= user.name %><% if user.banned? %> <span class="rounded bg-red-100 px-1.5 text-red-800"><%= t(".banned") %></span><% end %></td>
+            <td class="py-2 pr-4">
+              <% if user == Current.user %>
+                <%= t("roles.#{user.role}") %>
+              <% else %>
+                <%= form_with url: role_admin_user_path(user, q: params[:q]), method: :patch, class: "flex gap-2" do |form| %>
+                  <%= form.select :role, User.roles.keys.map { |role| [ t("roles.#{role}"), role ] }, { selected: user.role },
+                        aria: { label: t(".role_for", user: user.display_name) }, class: "rounded border px-2 py-1" %>
+                  <%= form.submit t(".change_role"), class: "rounded border px-2 py-1" %>
+                <% end %>
+              <% end %>
+            </td>
+            <td class="py-2 pr-4 whitespace-nowrap"><%= l(user.created_at, format: :short) %></td>
+            <td class="py-2">
+              <% unless user == Current.user %>
+                <% if user.banned? %>
+                  <%= button_to t(".unban"), unban_admin_user_path(user, q: params[:q]), class: "underline" %>
+                <% else %>
+                  <%= button_to t(".ban"), ban_admin_user_path(user, q: params[:q]), class: "text-red-700 underline",
+                        form: { data: { turbo_confirm: t(".confirm_ban", user: user.display_name) } } %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,19 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-sm py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <p class="mt-2 text-gray-600"><%= @user.display_phone %> · <%= t("roles.#{@user.role}") %></p>
+  <%= form_with model: @user, url: profile_path, method: :patch, class: "mt-6 space-y-4" do |form| %>
+    <%= render "shared/errors", record: @user %>
+    <div>
+      <%= form.label :name, class: "block text-sm font-medium" %>
+      <%= form.text_field :name, required: true, autofocus: @user.name.blank?, autocomplete: "given-name", maxlength: 60,
+            class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+    </div>
+    <div>
+      <%= form.label :locale, class: "block text-sm font-medium" %>
+      <%= form.select :locale, { "Հայերեն" => "hy", "Русский" => "ru", "English" => "en" }, { selected: @user.locale || I18n.locale.to_s },
+            class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+    </div>
+    <%= form.submit t(".submit"), class: "w-full rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-gray-900" %>
+  <% end %>
+</section>

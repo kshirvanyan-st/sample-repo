@@ -1,0 +1,18 @@
+<%= form_with model: saved_place, class: "mt-6 space-y-4" do |form| %>
+  <%= render "shared/errors", record: saved_place %>
+  <div>
+    <%= form.label :kind, class: "block text-sm font-medium" %>
+    <%= form.select :kind, SavedPlace.kinds.keys.map { |kind| [ t("saved_places.kinds.#{kind}"), kind ] }, {},
+          class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+  </div>
+  <div>
+    <%= form.label :label, class: "block text-sm font-medium" %>
+    <%= form.text_field :label, maxlength: 40, class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+  </div>
+  <div>
+    <%= form.label :address, class: "block text-sm font-medium" %>
+    <%= form.text_field :address, required: true, maxlength: 200, autocomplete: "street-address",
+          class: "mt-1 block w-full rounded-lg border px-3 py-2" %>
+  </div>
+  <%= form.submit t("saved_places.form.submit"), class: "w-full rounded-lg bg-yellow-400 px-4 py-2 font-semibold text-gray-900" %>
+<% end %>

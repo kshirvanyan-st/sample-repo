@@ -2,12 +2,19 @@ hy:
   app:
     name: "Taxi AM"
   shared:
+    user_menu:
+      label: "Հաշիվ"
+      saved_places: "Իմ վայրերը"
+      admin: "Ադմին"
+      sign_out: "Ելք"
+      sign_in: "Մուտք"
     locale_switcher:
       label: "Լեզու"
   home:
     index:
       title: "Taxi AM"
       tagline: "Արդար տաքսի Երևանի համար՝ ազնիվ գներ ուղևորների և ցածր միջնորդավճար վարորդների համար։"
+      sign_in: "Մուտք հեռախոսահամարով"
       coming_soon: "Շուտով Երևանում։"
       points:
         fast:
@@ -19,3 +26,100 @@ hy:
         local:
           title: "Ստեղծված է Հայաստանում"
           body: "Հայերեն, ռուսերեն և անգլերեն՝ տեղական աջակցությամբ։"
+  sms:
+    sign_in_code: "Taxi AM կոդ՝ %{code}։ Ոչ մեկին մի՛ ասեք այն։"
+  roles:
+    rider: "Ուղևոր"
+    driver: "Վարորդ"
+    dispatcher: "Դիսպետչեր"
+    admin: "Ադմինիստրատոր"
+  sessions:
+    rate_limited: "Չափազանց շատ փորձեր։ Խնդրում ենք փորձել ավելի ուշ։"
+    new:
+      title: "Մուտք"
+      intro: "Մուտքագրեք ձեր հեռախոսահամարը, և մենք SMS-ով կուղարկենք 6-նիշանոց կոդ։"
+      phone: "Հեռախոսահամար"
+      submit: "Ստանալ կոդը"
+      terms: "Ձեր համարն օգտագործում ենք միայն մուտքի և վարորդի հետ կապի համար։"
+    create:
+      invalid_phone: "Մուտքագրեք ճիշտ բջջային համար, օրինակ՝ 091 123456։"
+      cooling_down: "Մենք հենց նոր կոդ ուղարկեցինք։ Մի փոքր սպասեք, նախքան նորը խնդրելը։"
+      code_sent: "Մենք SMS-ով ուղարկեցինք կոդը։"
+      delivery_failed: "Չհաջողվեց ուղարկել SMS-ը։ Փորձեք մեկ րոպեից։"
+  verifications:
+    new:
+      title: "Մուտքագրեք կոդը"
+      intro: "Մենք 6-նիշանոց կոդ ուղարկեցինք %{phone} համարին։"
+      code: "Կոդ"
+      submit: "Մուտք"
+      resend: "Ուղարկել նոր կոդ"
+      change_number: "Փոխել համարը"
+    create:
+      wrong_code: "Կոդը սխալ է կամ ժամկետանց։ Ստուգեք այն կամ խնդրեք նորը։"
+      banned: "Այս հաշիվը կասեցված է։ Եթե կարծում եք, որ սա սխալ է, դիմեք աջակցման ծառայությանը։"
+      signed_in: "Դուք մուտք գործեցիք։"
+  profiles:
+    edit:
+      title: "Ձեր պրոֆիլը"
+      submit: "Պահպանել"
+    update:
+      saved: "Պրոֆիլը պահպանված է։"
+  saved_places:
+    kinds:
+      home: "Տուն"
+      work: "Աշխատանք"
+      other: "Այլ"
+    index:
+      title: "Իմ վայրերը"
+      add: "Ավելացնել"
+      add_other: "Ավելացնել վայր"
+      edit: "Խմբագրել"
+      delete: "Ջնջել"
+      confirm_delete: "Ջնջե՞լ այս վայրը։"
+    new:
+      title: "Նոր վայր"
+    edit:
+      title: "Խմբագրել վայրը"
+    form:
+      submit: "Պահպանել վայրը"
+    create:
+      saved: "Վայրը պահպանված է։"
+    update:
+      saved: "Վայրը պահպանված է։"
+    destroy:
+      deleted: "Վայրը ջնջված է։"
+  admin:
+    users:
+      self: "Այստեղ չեք կարող փոխել ձեր սեփական հաշիվը։"
+      index:
+        title: "Օգտատերեր"
+        search: "Որոնել ըստ հեռախոսի"
+        search_submit: "Որոնել"
+        banned: "արգելափակված"
+        role_for: "%{user}-ի դերը"
+        change_role: "Փոխել"
+        ban: "Արգելափակել"
+        unban: "Ապաարգելափակել"
+        confirm_ban: "Արգելափակե՞լ %{user}-ին։ Նա դուրս կգա բոլոր սարքերից։"
+      role:
+        changed: "%{user}-ի դերն այժմ՝ %{role}։"
+        invalid: "Անհայտ դեր։"
+      ban:
+        banned: "%{user}-ն արգելափակված է։"
+      unban:
+        unbanned: "%{user}-ն այլևս արգելափակված չէ։"
+  activerecord:
+    models:
+      user: "Օգտատեր"
+      saved_place: "Վայր"
+    attributes:
+      user:
+        phone: "Հեռախոս"
+        name: "Անուն"
+        role: "Դեր"
+        locale: "Լեզու"
+        created_at: "Գրանցում"
+      saved_place:
+        kind: "Տեսակ"
+        label: "Անվանում"
+        address: "Հասցե"
