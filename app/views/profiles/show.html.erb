@@ -8,7 +8,7 @@
     <% if @profile.user == Current.user %>
       <%= link_to "Edit profile", edit_my_profile_path, class: secondary_button_classes %>
     <% else %>
-      <%= render "profiles/follow", profile: @profile %>
+      <%= render "profiles/follow", profile: @profile unless Current.user.blocking?(@profile.user) %>
     <% end %>
   </div>
 
@@ -21,4 +21,15 @@
       <%= image_tag photo.image.variant(:card), alt: @profile.display_name, class: "rounded-lg w-full aspect-[3/4] object-cover" %>
     <% end %>
   </div>
+
+  <% unless @profile.user == Current.user %>
+    <div class="flex gap-4 mt-8 text-sm text-gray-500">
+      <% if Current.user.blocking?(@profile.user) %>
+        <%= button_to "Unblock", profile_block_path(@profile), method: :delete, class: "underline cursor-pointer" %>
+      <% else %>
+        <%= button_to "Block", profile_block_path(@profile), class: "underline cursor-pointer", form: { data: { turbo_confirm: "Block #{@profile.display_name}? You won't see each other anymore." } } %>
+      <% end %>
+      <%= link_to "Report", new_profile_report_path(@profile), class: "underline" %>
+    </div>
+  <% end %>
 </div>

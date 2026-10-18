@@ -6,4 +6,18 @@ module ApplicationHelper
   def input_classes = INPUT_CLASSES
   def primary_button_classes = PRIMARY_BUTTON_CLASSES
   def secondary_button_classes = SECONDARY_BUTTON_CLASSES
+
+  def liked_me_count
+    Like.positive.where(likee: Current.user)
+      .where.not(liker_id: Current.user.likes_given.select(:likee_id))
+      .where.not(liker_id: Current.user.blocked_user_ids)
+      .count
+  end
+
+  def distance_label(profile)
+    return unless profile.respond_to?(:distance_km) && profile.distance_km
+
+    km = profile.distance_km.to_f
+    km < 1 ? "less than 1 km away" : "#{km.round} km away"
+  end
 end

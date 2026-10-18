@@ -5,6 +5,7 @@
     <%= render "shared/errors", record: @profile %>
     <%= render "profiles/basic_fields", form: form %>
     <%= render "profiles/about_fields", form: form %>
+    <%= render "profiles/discovery_fields", form: form %>
 
     <div class="flex items-center gap-4">
       <%= form.submit "Save", class: primary_button_classes %>

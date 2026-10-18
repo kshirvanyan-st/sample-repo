@@ -1,0 +1,17 @@
+<h1 class="font-bold text-4xl">Liked me</h1>
+
+<% if @profiles.any? %>
+  <div class="flex flex-wrap gap-6 mt-6">
+    <% @profiles.each do |profile| %>
+      <div id="<%= dom_id(profile, :liked_me) %>">
+        <%= render "profiles/card", profile: profile %>
+        <div class="flex gap-2 mt-2">
+          <%= render "discover/rate_button", profile: profile, kind: "skip", label: "Skip", classes: secondary_button_classes, source: "liked_me" %>
+          <%= render "discover/rate_button", profile: profile, kind: "like", label: "♥ Like back", classes: primary_button_classes, source: "liked_me" %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <p class="text-gray-600 mt-4">No new likes yet. Keep swiping in <%= link_to "Discover", discover_path, class: "underline" %>!</p>
+<% end %>

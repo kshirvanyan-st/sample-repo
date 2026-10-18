@@ -1,0 +1,7 @@
+<%= turbo_stream.remove dom_id(@target, :liked_me) %>
+<% if @match %>
+  <%= turbo_stream.update "flash" do %>
+    <%= render "layouts/flash", type: :notice, message: match_notice %>
+  <% end %>
+<% end %>
+<%= render "likes/nav_counts" %>

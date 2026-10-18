@@ -1,0 +1,9 @@
+<%= turbo_stream.update "deck" do %>
+  <%= render "discover/deck", profile: Discovery::Feed.new(Current.user).next_profile %>
+<% end %>
+<% if @match %>
+  <%= turbo_stream.update "flash" do %>
+    <%= render "layouts/flash", type: :notice, message: match_notice %>
+  <% end %>
+<% end %>
+<%= render "likes/nav_counts" %>

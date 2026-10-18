@@ -48,3 +48,23 @@ RSpec.describe Profile, type: :model do
     end
   end
 end
+
+RSpec.describe Profile, "discovery preferences", type: :model do
+  subject(:profile) { build(:profile) }
+
+  it { is_expected.to validate_numericality_of(:age_min).only_integer.is_in(18..99) }
+  it { is_expected.to validate_numericality_of(:age_max).only_integer.is_in(18..99) }
+  it { is_expected.to validate_numericality_of(:max_distance_km).only_integer.is_in(1..500).allow_nil }
+
+  it "requires the minimum age to be at most the maximum" do
+    profile.assign_attributes(age_min: 40, age_max: 30)
+    expect(profile).not_to be_valid
+    expect(profile.errors[:age_max]).to be_present
+  end
+
+  it "knows who it wants to see" do
+    expect(build(:profile, looking_for: :men).wants?(build(:profile, gender: :male))).to be(true)
+    expect(build(:profile, looking_for: :men).wants?(build(:profile, gender: :female))).to be(false)
+    expect(build(:profile, looking_for: :everyone).wants?(build(:profile, gender: :other))).to be(true)
+  end
+end
