@@ -1,0 +1,23 @@
+{
+  "name": "taxi-am-driver",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@rails/actioncable": "8.1.400",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/react": "16.3.3",
+    "@vitejs/plugin-react": "6.1.1",
+    "jsdom": "30.1.1",
+    "vite": "8.3.2",
+    "vite-plugin-ruby": "5.2.5",
+    "vitest": "5.0.3"
+  }
+}

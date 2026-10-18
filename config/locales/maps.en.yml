@@ -35,7 +35,8 @@ en:
         comfort: "Newer, roomier cars"
       valid_until: "Prices are held until %{time}."
       expired: "These prices have expired. Check them again."
-      book_soon: "Booking opens soon"
+      book: "Book"
+      book_class: "Book %{vehicle_class}"
       change: "Change the route"
   saved_places:
     index:

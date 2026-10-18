@@ -102,7 +102,7 @@ These are copied and adapted, not shared code:
    - **tariffs in AMD:** Economy and Comfort, with base, per-km, per-minute and minimum fare, set by
      admin
    - **fare estimate before booking,** and **service zones** (Yerevan first) as PostGIS polygons
-4. **Booking, dispatch and live tracking (the core)**
+4. **Booking, dispatch and live tracking (the core)** (done, with the slim driver PWA)
    - **Trip state machine:** requested → offered → accepted → driver_arriving → arrived → in_progress
      → completed, or cancelled (by rider, driver or system), with a reason
    - **Dispatcher:**

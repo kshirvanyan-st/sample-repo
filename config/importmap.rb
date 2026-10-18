@@ -9,3 +9,5 @@ pin "map_helpers"
 # MapLibre is three ES modules that import each other by relative path, so they are served
 # unchanged from public/ instead of through the asset pipeline (which renames files).
 pin "maplibre-gl", to: "/vendor/maplibre-gl-6.12.0/maplibre-gl.mjs" # @6.12.0
+pin "@rails/actioncable", to: "actioncable.esm.js"
+pin "cable"

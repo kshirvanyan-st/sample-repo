@@ -8,7 +8,8 @@ class Tariff < ApplicationRecord
   enum :vehicle_class, Vehicle.vehicle_classes, validate: true
 
   validates :vehicle_class, uniqueness: true
-  validates(*AMOUNTS, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 1_000_000 })
+  validates(*AMOUNTS, :cancellation_fee, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 1_000_000 })
+  validates :free_cancellation_minutes, numericality: { only_integer: true, in: 0..30 }
 
   scope :ordered, -> { order(:vehicle_class) }
 

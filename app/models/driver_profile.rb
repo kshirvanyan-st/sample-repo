@@ -8,6 +8,9 @@ class DriverProfile < ApplicationRecord
   belongs_to :user
   has_one :vehicle, dependent: :destroy
   has_many :expiry_notices, dependent: :delete_all
+  has_one :location, class_name: "DriverLocation", dependent: :delete
+  has_many :trips, dependent: :restrict_with_exception
+  has_many :trip_offers, dependent: :delete_all
   accepts_nested_attributes_for :vehicle, update_only: true
 
   enum :status, { draft: 0, submitted: 1, needs_changes: 2, approved: 3, rejected: 4, suspended: 5 }, validate: true
@@ -20,6 +23,27 @@ class DriverProfile < ApplicationRecord
   end
 
   scope :queue, -> { submitted.order(:submitted_at) }
+  scope :online, -> { where.not(online_at: nil) }
+
+  def online?
+    online_at.present?
+  end
+
+  def go_online!
+    update!(online_at: Time.current) unless online?
+  end
+
+  def go_offline!
+    update!(online_at: nil)
+  end
+
+  def active_trip
+    trips.busy.first
+  end
+
+  def current_offer
+    trip_offers.live.includes(:trip).order(:created_at).last
+  end
 
   def editable?
     draft? || needs_changes? || suspended?

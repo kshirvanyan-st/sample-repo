@@ -43,4 +43,19 @@ FactoryBot.define do
       end
     end
   end
+
+  factory :trip do
+    association :rider, factory: :user
+    fare_quote { FareQuote.build_for(user: rider, pickup: Geo.point(**Places::REPUBLIC_SQUARE), dropoff: Geo.point(**Places::CASCADE)).tap(&:save!) }
+    vehicle_class { :economy }
+    pickup { fare_quote.pickup }
+    dropoff { fare_quote.dropoff }
+    fare { fare_quote.prices["economy"] }
+
+    factory :trip_on_the_way do
+      association :driver_profile, factory: %i[ driver_profile approved ]
+      status { :accepted }
+      accepted_at { 1.minute.ago }
+    end
+  end
 end

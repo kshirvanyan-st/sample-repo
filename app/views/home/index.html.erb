@@ -1,7 +1,9 @@
 <section class="py-16 text-center">
   <h1 class="text-5xl font-bold text-yellow-500"><%= t(".title") %></h1>
   <p class="mt-4 text-lg text-gray-600"><%= t(".tagline") %></p>
-  <% if authenticated? %>
+  <% if authenticated? && (open_trip = Current.user.trips.open.first) %>
+    <%= link_to t(".current_trip"), trip_path(open_trip), class: "mt-8 inline-block rounded-xl bg-yellow-400 px-6 py-3 text-lg font-semibold text-gray-900" %>
+  <% elsif authenticated? %>
     <%= link_to t(".where_to"), new_fare_quote_path, class: "mt-8 inline-block rounded-xl bg-yellow-400 px-6 py-3 text-lg font-semibold text-gray-900" %>
   <% else %>
     <%= link_to t(".sign_in"), new_session_path, class: "mt-8 inline-block rounded-xl bg-yellow-400 px-6 py-3 text-lg font-semibold text-gray-900" %>

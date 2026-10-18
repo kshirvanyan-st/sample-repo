@@ -41,6 +41,14 @@ jobs:
       - name: Scan for security vulnerabilities in JavaScript dependencies
         run: bin/importmap audit
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Scan the driver app's npm packages
+        run: npm audit --omit=dev
+
   lint:
     runs-on: ubuntu-latest
     env:
@@ -98,6 +106,15 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install JavaScript packages
+        run: npm ci
+
       - name: Prepare database and assets
         run: bin/rails db:test:prepare tailwindcss:build
 
@@ -111,6 +128,70 @@ jobs:
           name: screenshots
           path: ${{ github.workspace }}/tmp/capybara
           if-no-files-found: ignore
+
+  # The React driver app: unit tests and a production build.
+  driver_app:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install JavaScript packages
+        run: npm ci
+
+      - name: Run Vitest
+        run: npm test
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Build with Vite
+        run: bin/vite build
+
+  # 20 riders booking at once against 5 drivers, with real threads and commits: no driver may be
+  # double-booked and every request must end up accepted or "no drivers".
+  dispatch:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgis/postgis:17-3.5
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd="pg_isready" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    env:
+      RAILS_ENV: test
+      DATABASE_URL: postgis://postgres:postgres@localhost:5432
+      RAILS_MAX_THREADS: 25
+      CONCURRENCY_SPECS: 1
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Prepare database
+        run: bin/rails db:test:prepare
+
+      - name: Run the dispatch race (three times)
+        run: for run in 1 2 3; do bin/rspec --tag concurrency || exit 1; done
 
   # Real driving routes through Yerevan from OSRM built on the Armenia OpenStreetMap extract.
   routing:

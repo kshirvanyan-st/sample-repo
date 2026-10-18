@@ -8,7 +8,7 @@ module Admin
 
     def update
       tariff = Tariff.find(params[:id])
-      if tariff.update(params.expect(tariff: Tariff::AMOUNTS).merge(updated_by: Current.user))
+      if tariff.update(params.expect(tariff: [ *Tariff::AMOUNTS, :cancellation_fee, :free_cancellation_minutes ]).merge(updated_by: Current.user))
         redirect_to admin_tariffs_path, notice: t(".saved", name: t("vehicles.classes.#{tariff.vehicle_class}"))
       else
         redirect_to admin_tariffs_path, alert: tariff.errors.full_messages.to_sentence

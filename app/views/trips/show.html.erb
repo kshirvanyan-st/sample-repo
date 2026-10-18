@@ -1,0 +1,30 @@
+<% content_for :title, t(".title") %>
+<% content_for :head, stylesheet_link_tag("/vendor/maplibre-gl-6.12.0/maplibre-gl.css") %>
+<%= turbo_stream_from @trip %>
+<% car = @trip.driver_profile&.location if @trip.status.in?(Trip::BUSY) %>
+<section class="mx-auto max-w-2xl space-y-4 py-6"
+         data-controller="trip-tracker"
+         data-trip-tracker-style-url-value="<%= Rails.configuration.x.maps.style_url %>"
+         data-trip-tracker-trip-id-value="<%= @trip.id %>"
+         data-trip-tracker-status-value="<%= @trip.status %>"
+         data-trip-tracker-route-value="<%= @trip.fare_quote.route.to_json %>"
+         data-trip-tracker-pickup-value="<%= [ @trip.pickup.x, @trip.pickup.y ].to_json %>"
+         data-trip-tracker-dropoff-value="<%= [ @trip.dropoff.x, @trip.dropoff.y ].to_json %>"
+         data-trip-tracker-car-value="<%= (car ? [ car.location.x, car.location.y ] : []).to_json %>">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <ol class="space-y-1 text-sm">
+    <li><span class="inline-block size-2 rounded-full bg-green-600"></span> <%= @trip.pickup_address.presence || t("fare_quotes.show.pin") %></li>
+    <li><span class="inline-block size-2 rounded-full bg-red-600"></span> <%= @trip.dropoff_address.presence || t("fare_quotes.show.pin") %></li>
+  </ol>
+  <div class="h-72 w-full overflow-hidden rounded-xl border" data-trip-tracker-target="map" role="img" aria-label="<%= t(".map") %>"></div>
+
+  <%= render "status", trip: @trip %>
+
+  <div data-trip-tracker-target="cancel" <%= "hidden" unless @trip.status.in?(%w[ searching accepted arrived ]) %>>
+    <% if (tariff = @trip.tariff) && tariff.cancellation_fee.positive? %>
+      <p class="text-sm text-gray-600"><%= t(".fee_rule", minutes: tariff.free_cancellation_minutes, fee: amd(tariff.cancellation_fee)) %></p>
+    <% end %>
+    <%= button_to t(".cancel"), cancel_trip_path(@trip), class: "mt-2 w-full rounded-lg border border-red-300 px-4 py-2 text-red-700",
+          form: { data: { turbo_confirm: t(".confirm_cancel") } } %>
+  </div>
+</section>

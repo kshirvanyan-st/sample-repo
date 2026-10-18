@@ -10,5 +10,9 @@ module Routing
       Route.new(distance_m: distance.round, duration_s: (distance / SPEED_M_PER_S).round,
         geometry: { "type" => "LineString", "coordinates" => [ [ from.x, from.y ], [ to.x, to.y ] ] }, approximate: true)
     end
+
+    def etas(origins, destination)
+      origins.map { |origin| route(origin, destination).duration_s }
+    end
   end
 end

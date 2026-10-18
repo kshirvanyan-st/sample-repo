@@ -9,6 +9,7 @@ fi
 cd "$CLAUDE_PROJECT_DIR"
 
 bundle install --quiet
+npm ci --no-audit --no-fund --silent
 command -v rbenv >/dev/null && rbenv rehash
 
 if command -v pg_ctlcluster >/dev/null; then
