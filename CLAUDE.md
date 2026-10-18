@@ -23,6 +23,17 @@ and on pushes to `taxi-main`.
   Armenian is the default locale. Have native speakers review new copy.
 - Money is in AMD, stored as integers (drams). Balances only change through an append-only ledger
   (the Wallet pattern from Spark) once payments arrive.
+- Auth is phone + SMS code only (no passwords): `SessionsController` (number) then
+  `VerificationsController` (code). Codes are `PhoneVerification` rows (HMAC digest, 5 min, 5 tries,
+  single use). Controllers require sign-in by default; opt out with `allow_unauthenticated_access`.
+- Phone numbers are stored as E.164 via `User.normalize_phone` (phonelib, Armenia by default).
+- Send SMS only through `SmsSender.deliver` (Twilio in production, log in dev, `SmsSender::TestAdapter`
+  in specs). Never log or persist a plain code.
+- Roles: `User#role` (rider, driver, dispatcher, admin). Guard staff pages with `require_role`
+  (404 for everyone else). Staff actions go through `Moderation`, which writes the `ModerationAction`
+  audit log. Admin controllers live in `app/controllers/admin/`. The first admin:
+  `bin/rails taxi:make_admin PHONE=+374...`.
+- Rate limits: sign-in per IP and per number; signed-in actions per user (`by: -> { Current.user.id }`).
 - Geo: store points as PostGIS `geography(Point, 4326)` (longitude first); never compare raw lat/lng floats.
 
 ## Before every push

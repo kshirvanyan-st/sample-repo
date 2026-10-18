@@ -86,7 +86,7 @@ These are copied and adapted, not shared code:
    - orphan `taxi-main` with `rails new` (PostgreSQL + PostGIS adapter, Tailwind) and RSpec
    - CI, Kamal skeleton, SessionStart hook, `CLAUDE.md`, `docs/ROADMAP.md`
    - I18n set up for hy/ru/en from the first view
-1. **Phone sign-in and roles**
+1. **Phone sign-in and roles** (done: Twilio SMS behind `SmsSender`)
    - phone plus SMS code login (rate-limited per phone and per IP, codes hashed and expiring)
    - `User` roles: rider, driver, dispatcher, admin
    - rider profile and saved places (home, work)

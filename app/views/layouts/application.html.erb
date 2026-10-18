@@ -24,11 +24,15 @@
   </head>
 
   <body>
-    <header class="container mx-auto px-5 py-4 flex items-center justify-between">
+    <header class="container mx-auto px-5 py-4 flex flex-wrap items-center justify-between gap-3">
       <%= link_to t("app.name"), root_path, class: "font-bold text-xl text-yellow-500" %>
-      <%= render "shared/locale_switcher" %>
+      <div class="flex flex-wrap items-center gap-4">
+        <%= render "shared/user_menu" %>
+        <%= render "shared/locale_switcher" %>
+      </div>
     </header>
-    <main class="container mx-auto px-5">
+    <main class="container mx-auto px-5 pb-16">
+      <%= render "shared/flash" %>
       <%= yield %>
     </main>
   </body>

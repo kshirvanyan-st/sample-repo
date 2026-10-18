@@ -2,12 +2,19 @@ en:
   app:
     name: "Taxi AM"
   shared:
+    user_menu:
+      label: "Account"
+      saved_places: "My places"
+      admin: "Admin"
+      sign_out: "Sign out"
+      sign_in: "Sign in"
     locale_switcher:
       label: "Language"
   home:
     index:
       title: "Taxi AM"
       tagline: "A fair taxi for Yerevan: honest prices for riders, lower commission for drivers."
+      sign_in: "Sign in with your phone"
       coming_soon: "Coming soon to Yerevan."
       points:
         fast:
@@ -19,3 +26,100 @@ en:
         local:
           title: "Made in Armenia"
           body: "In Armenian, Russian and English, with local support."
+  sms:
+    sign_in_code: "Taxi AM code: %{code}. Don't share it with anyone."
+  roles:
+    rider: "Rider"
+    driver: "Driver"
+    dispatcher: "Dispatcher"
+    admin: "Admin"
+  sessions:
+    rate_limited: "Too many attempts. Please try again later."
+    new:
+      title: "Sign in"
+      intro: "Enter your phone number and we'll text you a 6-digit code."
+      phone: "Phone number"
+      submit: "Send code"
+      terms: "We use your number only to sign you in and to connect you with your driver."
+    create:
+      invalid_phone: "Enter a valid mobile number, e.g. 091 123456."
+      cooling_down: "We've just sent you a code. Wait a moment before asking for another one."
+      code_sent: "We've sent you a code by SMS."
+      delivery_failed: "We couldn't send the SMS. Please try again in a minute."
+  verifications:
+    new:
+      title: "Enter the code"
+      intro: "We sent a 6-digit code to %{phone}."
+      code: "Code"
+      submit: "Sign in"
+      resend: "Send a new code"
+      change_number: "Change number"
+    create:
+      wrong_code: "That code is wrong or has expired. Check it, or ask for a new one."
+      banned: "This account has been suspended. Contact support if you think this is a mistake."
+      signed_in: "You're signed in."
+  profiles:
+    edit:
+      title: "Your profile"
+      submit: "Save"
+    update:
+      saved: "Profile saved."
+  saved_places:
+    kinds:
+      home: "Home"
+      work: "Work"
+      other: "Other"
+    index:
+      title: "My places"
+      add: "Add"
+      add_other: "Add a place"
+      edit: "Edit"
+      delete: "Delete"
+      confirm_delete: "Delete this place?"
+    new:
+      title: "New place"
+    edit:
+      title: "Edit place"
+    form:
+      submit: "Save place"
+    create:
+      saved: "Place saved."
+    update:
+      saved: "Place saved."
+    destroy:
+      deleted: "Place deleted."
+  admin:
+    users:
+      self: "You can't change your own account here."
+      index:
+        title: "Users"
+        search: "Search by phone"
+        search_submit: "Search"
+        banned: "banned"
+        role_for: "Role for %{user}"
+        change_role: "Change"
+        ban: "Ban"
+        unban: "Unban"
+        confirm_ban: "Ban %{user}? They will be signed out everywhere."
+      role:
+        changed: "%{user} is now: %{role}."
+        invalid: "Unknown role."
+      ban:
+        banned: "%{user} is banned."
+      unban:
+        unbanned: "%{user} is no longer banned."
+  activerecord:
+    models:
+      user: "User"
+      saved_place: "Place"
+    attributes:
+      user:
+        phone: "Phone"
+        name: "Name"
+        role: "Role"
+        locale: "Language"
+        created_at: "Joined"
+      saved_place:
+        kind: "Type"
+        label: "Name"
+        address: "Address"

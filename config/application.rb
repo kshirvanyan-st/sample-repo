@@ -34,6 +34,10 @@ module TaxiAm
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = "Asia/Yerevan"
+
+    # SMS delivery (see app/services/sms_sender.rb). Development logs messages.
+    config.x.sms.adapter = :log
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.

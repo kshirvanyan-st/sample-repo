@@ -1,0 +1,28 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-lg py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <ul class="mt-6 divide-y rounded-xl border">
+    <% %w[ home work ].each do |kind| %>
+      <% unless @saved_places.any? { |place| place.kind == kind } %>
+        <li class="flex items-center justify-between p-4">
+          <span class="font-medium"><%= t("saved_places.kinds.#{kind}") %></span>
+          <%= link_to t(".add"), new_saved_place_path(kind: kind), class: "text-sm text-yellow-700 underline" %>
+        </li>
+      <% end %>
+    <% end %>
+    <% @saved_places.each do |place| %>
+      <li class="flex items-center justify-between gap-4 p-4" id="<%= dom_id(place) %>">
+        <div>
+          <p class="font-medium"><%= place.title %></p>
+          <p class="text-sm text-gray-600"><%= place.address %></p>
+        </div>
+        <div class="flex gap-3 text-sm">
+          <%= link_to t(".edit"), edit_saved_place_path(place), class: "underline" %>
+          <%= button_to t(".delete"), saved_place_path(place), method: :delete, class: "text-red-700 underline",
+                form: { data: { turbo_confirm: t(".confirm_delete") } } %>
+        </div>
+      </li>
+    <% end %>
+  </ul>
+  <%= link_to t(".add_other"), new_saved_place_path, class: "mt-4 inline-block rounded-lg bg-yellow-400 px-4 py-2 font-medium text-gray-900" %>
+</section>

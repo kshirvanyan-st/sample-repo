@@ -1,0 +1,17 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-sm py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <p class="mt-2 text-gray-600"><%= t(".intro", phone: Phonelib.parse(pending_phone).international) %></p>
+  <%= form_with url: verification_path, class: "mt-6 space-y-4" do |form| %>
+    <div>
+      <%= form.label :code, t(".code"), class: "block text-sm font-medium" %>
+      <%= form.text_field :code, required: true, autofocus: true, autocomplete: "one-time-code", inputmode: "numeric",
+            pattern: "[0-9 ]{6,7}", maxlength: 7, class: "mt-1 block w-full rounded-lg border px-3 py-2 text-center text-2xl tracking-widest" %>
+    </div>
+    <%= form.submit t(".submit"), class: "w-full rounded-lg bg-yellow-400 px-4 py-2 text-lg font-semibold text-gray-900" %>
+  <% end %>
+  <div class="mt-4 flex justify-between text-sm">
+    <%= button_to t(".resend"), session_path, params: { phone: pending_phone }, class: "text-gray-600 underline" %>
+    <%= link_to t(".change_number"), new_session_path, class: "text-gray-600 underline" %>
+  </div>
+</section>

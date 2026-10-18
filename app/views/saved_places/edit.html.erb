@@ -1,0 +1,5 @@
+<% content_for :title, t(".title") %>
+<section class="mx-auto max-w-sm py-10">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <%= render "form", saved_place: @saved_place %>
+</section>

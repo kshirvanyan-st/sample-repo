@@ -1,0 +1,46 @@
+class SavedPlacesController < ApplicationController
+  before_action :set_saved_place, only: %i[ edit update destroy ]
+  rate_limit to: 30, within: 1.minute, only: %i[ create update destroy ], by: -> { Current.user.id }
+
+  def index
+    @saved_places = Current.user.saved_places.ordered
+  end
+
+  def new
+    @saved_place = Current.user.saved_places.new(kind: params[:kind].presence_in(SavedPlace.kinds.keys) || "other")
+  end
+
+  def create
+    @saved_place = Current.user.saved_places.new(saved_place_params)
+    if @saved_place.save
+      redirect_to saved_places_path, notice: t(".saved")
+    else
+      render :new, status: :unprocessable_content
+    end
+  end
+
+  def edit
+  end
+
+  def update
+    if @saved_place.update(saved_place_params)
+      redirect_to saved_places_path, notice: t(".saved")
+    else
+      render :edit, status: :unprocessable_content
+    end
+  end
+
+  def destroy
+    @saved_place.destroy!
+    redirect_to saved_places_path, notice: t(".deleted"), status: :see_other
+  end
+
+  private
+    def set_saved_place
+      @saved_place = Current.user.saved_places.find(params[:id])
+    end
+
+    def saved_place_params
+      params.expect(saved_place: %i[ kind label address ])
+    end
+end
