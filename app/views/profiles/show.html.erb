@@ -12,6 +12,12 @@
     <% end %>
   </div>
 
+  <% if (live = @profile.user.live_stream) %>
+    <%= link_to stream_path(live), class: "mt-4 inline-flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-red-700 font-medium" do %>
+      <%= live_badge %> Live now: <%= live.title %>
+    <% end %>
+  <% end %>
+
   <% if @profile.bio.present? %>
     <p class="mt-6 whitespace-pre-line"><%= @profile.bio %></p>
   <% end %>

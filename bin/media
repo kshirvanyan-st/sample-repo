@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Runs MediaMTX for development against the local Rails server (bin/dev on port 3000).
+# Uses a `mediamtx` binary from PATH or $MEDIAMTX_BIN, otherwise Docker.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+export MEDIA_HOOK_SECRET="${MEDIA_HOOK_SECRET:-development-media-secret}"
+export MEDIA_HOOKS_URL="${MEDIA_HOOKS_URL:-http://localhost:${PORT:-3000}/media/hooks}"
+export MTX_AUTHHTTPADDRESS="${MTX_AUTHHTTPADDRESS:-http://localhost:${PORT:-3000}/media/auth?secret=$MEDIA_HOOK_SECRET}"
+
+bin="${MEDIAMTX_BIN:-$(command -v mediamtx || true)}"
+if [ -n "$bin" ]; then
+  exec "$bin" config/media/mediamtx.yml
+elif command -v docker >/dev/null; then
+  exec docker run --rm --network host -e MEDIA_HOOK_SECRET -e MEDIA_HOOKS_URL -e MTX_AUTHHTTPADDRESS \
+    -v "$PWD/config/media/mediamtx.yml:/mediamtx.yml:ro" bluenviron/mediamtx:1.21.2-ffmpeg /mediamtx.yml
+else
+  echo "MediaMTX not found: install it (https://github.com/bluenviron/mediamtx/releases) or Docker." >&2
+  exit 1
+fi

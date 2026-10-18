@@ -4,6 +4,8 @@
 #   APP_HOST         public domain, e.g. spark.example.com
 #   KAMAL_IMAGE      e.g. ghcr.io/<owner>/spark
 #   KAMAL_REGISTRY_USERNAME / KAMAL_REGISTRY_PASSWORD (see .kamal/secrets)
+#   MEDIA_HOST       IP of the media VPS (MediaMTX + Caddy); live streaming is off without it
+#   MEDIA_DOMAIN     its public domain, e.g. media.example.com
 service: spark
 
 image: <%= ENV.fetch("KAMAL_IMAGE", "spark") %>
@@ -26,7 +28,12 @@ env:
   secret:
     - SECRET_KEY_BASE
     - SPARK_DATABASE_PASSWORD
+    - MEDIA_HOOK_SECRET
   clear:
+    MEDIA_WEBRTC_URL: https://<%= ENV.fetch("MEDIA_DOMAIN", "media.example.com") %>
+    MEDIA_HLS_URL: https://<%= ENV.fetch("MEDIA_DOMAIN", "media.example.com") %>
+    MEDIA_API_URL: https://<%= ENV.fetch("MEDIA_DOMAIN", "media.example.com") %>
+    MEDIA_RTMP_URL: rtmp://<%= ENV.fetch("MEDIA_DOMAIN", "media.example.com") %>:1935
     # Run the Solid Queue supervisor inside Puma; split into a job role once traffic grows.
     SOLID_QUEUE_IN_PUMA: true
     DB_HOST: spark-db
@@ -62,3 +69,37 @@ accessories:
       - config/db/init.sql:/docker-entrypoint-initdb.d/setup.sql
     directories:
       - data:/var/lib/postgresql/data
+
+<% if ENV["MEDIA_HOST"].present? %>
+  # Live streaming. Run on their own VPS: Caddy needs ports 80/443, which kamal-proxy holds on the web host.
+  # First time: bin/kamal accessory boot mediamtx && bin/kamal accessory boot caddy
+  mediamtx:
+    image: bluenviron/mediamtx:1.21.2-ffmpeg # the -ffmpeg variant ships wget for the Rails hooks
+    host: <%= ENV["MEDIA_HOST"] %>
+    cmd: /mediamtx.yml
+    files:
+      - config/media/mediamtx.yml:/mediamtx.yml
+    options:
+      network: host # WebRTC needs the host's UDP port 8189 and public IP
+    env:
+      clear:
+        MEDIA_HOOKS_URL: https://<%= ENV.fetch("APP_HOST", "spark.example.com") %>/media/hooks
+        MTX_WEBRTCALLOWORIGINS: https://<%= ENV.fetch("APP_HOST", "spark.example.com") %>
+        MTX_HLSALLOWORIGINS: https://<%= ENV.fetch("APP_HOST", "spark.example.com") %>
+      secret:
+        - MEDIA_HOOK_SECRET
+        - MTX_AUTHHTTPADDRESS
+
+  caddy:
+    image: caddy:2.10
+    host: <%= ENV["MEDIA_HOST"] %>
+    files:
+      - config/media/Caddyfile:/etc/caddy/Caddyfile
+    directories:
+      - data:/data
+    options:
+      network: host
+    env:
+      clear:
+        MEDIA_DOMAIN: <%= ENV.fetch("MEDIA_DOMAIN", "media.example.com") %>
+<% end %>

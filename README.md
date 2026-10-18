@@ -7,8 +7,22 @@ Dating + live-streaming social network on Rails 8. See [`docs/ROADMAP.md`](docs/
 ```sh
 bin/setup      # installs gems, prepares the database, starts the server
 bin/dev        # Rails + Tailwind watcher
+bin/media      # MediaMTX for live streaming (binary on PATH or Docker), talks to bin/dev
+bin/rails db:seed   # demo profiles; sign in as demo@example.com / password123
 bin/rspec      # test suite
+script/media_smoke  # end-to-end streaming check with real MediaMTX + ffmpeg
 ```
+
+### Live streaming
+
+Rails is the control plane; [MediaMTX](https://github.com/bluenviron/mediamtx) moves the video.
+
+- **Broadcasters** go live from the browser (WebRTC/WHIP) or OBS (WHIP on OBS 30+, or RTMP).
+  MediaMTX asks Rails (`POST /media/auth`) whether the stream key is valid, and tells Rails
+  when video starts/stops (`/media/hooks/ready|not_ready`). `StreamReconcileJob` catches missed hooks.
+- **Viewers** get a short-lived signed token from Rails and play over WebRTC (WHEP, <1 s) or
+  low-latency HLS (RTMP sources, whose AAC audio WebRTC can't carry).
+- Config: `config/media/mediamtx.yml` (shared), `config/initializers/media.rb` (Rails side).
 
 ## Deployment (Kamal + GitHub Actions)
 
@@ -23,3 +37,16 @@ bin/rspec      # test suite
    After that, every merge to `main` runs `bin/kamal deploy`.
 
 Images are pushed to GitHub Container Registry using the workflow's `GITHUB_TOKEN`.
+
+### Live streaming server (optional)
+
+Streaming runs on a second VPS (Caddy needs ports 80/443, which kamal-proxy holds on the web host):
+
+1. Point a domain such as `media.example.com` at the media VPS. Open TCP 80, 443, 1935 and UDP 8189.
+2. Add **variables** `MEDIA_HOST=<media VPS IP>`, `MEDIA_DOMAIN=media.example.com` and the **secret**
+   `MEDIA_HOOK_SECRET` (`openssl rand -hex 32`).
+3. First time only: `bin/kamal accessory boot mediamtx && bin/kamal accessory boot caddy`.
+   Later deploys restart them when `config/media/` changes.
+
+Optional TURN for viewers behind strict NATs: run coturn with `use-auth-secret` and set `TURN_URLS`
+and `TURN_SECRET` for the app; Rails hands out time-limited TURN credentials.

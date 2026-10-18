@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_18_120002) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_18_130005) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -156,12 +156,53 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_120002) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
+  create_table "stream_comments", force: :cascade do |t|
+    t.bigint "stream_id", null: false
+    t.bigint "user_id", null: false
+    t.string "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["stream_id", "created_at"], name: "index_stream_comments_on_stream_id_and_created_at"
+    t.index ["user_id"], name: "index_stream_comments_on_user_id"
+  end
+
+  create_table "stream_viewers", force: :cascade do |t|
+    t.bigint "stream_id", null: false
+    t.bigint "user_id", null: false
+    t.string "connection_token", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["connection_token"], name: "index_stream_viewers_on_connection_token", unique: true
+    t.index ["stream_id"], name: "index_stream_viewers_on_stream_id"
+    t.index ["user_id"], name: "index_stream_viewers_on_user_id"
+  end
+
+  create_table "streams", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "title", null: false
+    t.integer "category", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "started_at"
+    t.datetime "ended_at"
+    t.integer "viewers_count", default: 0, null: false
+    t.integer "peak_viewers", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "ingest_protocol"
+    t.index ["status"], name: "index_streams_live", where: "(status = 1)"
+    t.index ["user_id", "created_at"], name: "index_streams_on_user_id_and_created_at"
+    t.index ["user_id"], name: "index_streams_one_open_per_user", unique: true, where: "(status = ANY (ARRAY[0, 1]))"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email_address", null: false
     t.string "password_digest", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "stream_path"
+    t.string "stream_key"
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
+    t.index ["stream_path"], name: "index_users_on_stream_path", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -182,4 +223,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_18_120002) do
   add_foreign_key "reports", "users", column: "reported_id"
   add_foreign_key "reports", "users", column: "reporter_id"
   add_foreign_key "sessions", "users"
+  add_foreign_key "stream_comments", "streams", on_delete: :cascade
+  add_foreign_key "stream_comments", "users", on_delete: :cascade
+  add_foreign_key "stream_viewers", "streams", on_delete: :cascade
+  add_foreign_key "stream_viewers", "users", on_delete: :cascade
+  add_foreign_key "streams", "users"
 end

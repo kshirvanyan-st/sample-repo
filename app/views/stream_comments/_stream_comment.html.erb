@@ -1,0 +1,7 @@
+<%# A <div>, not a <p>: the moderation button_to renders a <form>, which can't sit inside a <p>. %>
+<div id="<%= dom_id(stream_comment) %>" class="break-words">
+  <span class="font-semibold text-pink-700"><%= stream_comment.user.profile.display_name %></span>
+  <%= stream_comment.body %>
+  <%= button_to "✕", stream_comment_path(stream_comment.stream, stream_comment), method: :delete, form_class: "hidden group-data-[moderator]:inline",
+        class: "text-gray-400 hover:text-red-600 cursor-pointer", aria: { label: "Remove comment" } %>
+</div>

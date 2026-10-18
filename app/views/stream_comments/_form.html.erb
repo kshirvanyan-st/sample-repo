@@ -1,0 +1,5 @@
+<%= form_with model: StreamComment.new, url: stream_comments_path(stream), id: "stream_comment_form", class: "flex gap-2 p-3 border-t" do |form| %>
+  <%= form.text_field :body, required: true, maxlength: StreamComment::MAX_LENGTH, autocomplete: "off", placeholder: "Say something…",
+        aria: { label: "Comment" }, class: "#{input_classes} mt-0" %>
+  <%= form.submit "Send", class: primary_button_classes %>
+<% end %>

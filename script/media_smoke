@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+# End-to-end check of the Rails <-> MediaMTX integration (run in CI, works locally too):
+# a broadcaster pushes over RTMP, the stream goes live, a viewer token plays it over HLS,
+# bad keys/tokens are refused, and the stream ends when the push stops.
+#
+#   MEDIAMTX_BIN=/path/to/mediamtx script/media_smoke
+#
+# Needs: ffmpeg, curl, a prepared test database.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+
+PORT="${SMOKE_PORT:-3123}"
+export RAILS_ENV=test
+export MEDIA_HOOK_SECRET="smoke-secret"
+export MEDIA_HOOKS_URL="http://127.0.0.1:$PORT/media/hooks"
+export MTX_AUTHHTTPADDRESS="http://127.0.0.1:$PORT/media/auth?secret=$MEDIA_HOOK_SECRET"
+RTMP="rtmp://127.0.0.1:1935"
+HLS="http://127.0.0.1:8888"
+pids=()
+cleanup() { for pid in "${pids[@]}"; do kill "$pid" 2>/dev/null || true; done; }
+trap cleanup EXIT
+
+fail() { echo "FAIL: $*" >&2; echo "--- mediamtx log"; tail -20 tmp/media_smoke_mediamtx.log >&2 || true; exit 1; }
+runner() { bin/rails runner "$1" 2>/dev/null | tail -1; }
+wait_for() { # wait_for <seconds> <description> <command...>
+  local seconds=$1 what=$2; shift 2
+  for _ in $(seq 1 $((seconds * 2))); do "$@" >/dev/null 2>&1 && return 0; sleep 0.5; done
+  fail "timed out waiting for $what"
+}
+status() { runner "puts User.find_by!(email_address: '$EMAIL').streams.order(:id).last&.status"; }
+
+bin/rails server -p "$PORT" -b 127.0.0.1 > tmp/media_smoke_rails.log 2>&1 & pids+=($!)
+"${MEDIAMTX_BIN:-mediamtx}" config/media/mediamtx.yml > tmp/media_smoke_mediamtx.log 2>&1 & mediamtx=$!; pids+=($mediamtx)
+wait_for 30 "Rails" curl -sf "http://127.0.0.1:$PORT/up"
+wait_for 10 "MediaMTX" curl -sf -u "rails:$MEDIA_HOOK_SECRET" "http://127.0.0.1:9997/v3/paths/list"
+kill -0 "$mediamtx" 2>/dev/null || fail "MediaMTX exited (is another instance using its ports?)"
+
+EMAIL="smoke-$(date +%s)@example.com"
+read -r STREAM_PATH STREAM_KEY < <(runner "
+  u = User.create!(email_address: '$EMAIL', password: 'password123')
+  u.create_profile!(display_name: 'Smoke', birthdate: 30.years.ago, gender: :female, looking_for: :everyone, onboarded_at: Time.current)
+  puts [Stream.media_path_for(u), u.stream_key].join(' ')")
+
+echo "1. a wrong stream key is refused"
+if timeout 15 ffmpeg -loglevel error -re -f lavfi -i testsrc -t 2 -c:v libx264 -f flv "$RTMP/$STREAM_PATH?token=wrong" >/dev/null 2>&1; then
+  fail "publishing with a wrong key succeeded"
+fi
+
+echo "2. publishing with the stream key goes live"
+ffmpeg -loglevel error -re -f lavfi -i testsrc=size=640x360:rate=30 -f lavfi -i sine=frequency=440 -t 25 \
+  -c:v libx264 -preset ultrafast -tune zerolatency -g 30 -c:a aac -f flv "$RTMP/$STREAM_PATH?token=$STREAM_KEY" \
+  > tmp/media_smoke_ffmpeg.log 2>&1 & push=$!; pids+=($push)
+wait_for 15 "the stream to go live" bash -c "[ \"\$(RAILS_ENV=test bin/rails runner \"puts User.find_by!(email_address: '$EMAIL').streams.last&.status\" 2>/dev/null | tail -1)\" = live ]"
+
+echo "3. a viewer token plays the stream over HLS"
+TOKEN=$(runner "require 'cgi'; u = User.find_by!(email_address: '$EMAIL'); puts CGI.escape(u.live_stream.viewer_token_for(u))")
+code=$(curl -s -o /dev/null -w "%{http_code}" -L "$HLS/$STREAM_PATH/index.m3u8?token=$TOKEN")
+[ "$code" = 200 ] || fail "HLS with a valid token returned $code"
+frames=$(timeout 30 ffmpeg -loglevel error -i "$HLS/$STREAM_PATH/index.m3u8?token=$TOKEN" -t 3 -f null - -stats 2>&1 | grep -o "frame= *[0-9]*" | tail -1 | grep -o "[0-9]*$" || true)
+[ "${frames:-0}" -gt 0 ] || fail "no frames decoded over HLS"
+echo "   decoded $frames frames"
+
+echo "4. readers without a valid token are refused"
+code=$(curl -s -o /dev/null -w "%{http_code}" -L "$HLS/$STREAM_PATH/index.m3u8?token=forged")
+[ "$code" = 401 ] || fail "HLS with a forged token returned $code"
+code=$(curl -s -o /dev/null -w "%{http_code}" -X POST -H "Content-Type: application/sdp" --data "v=0" "http://127.0.0.1:8889/$STREAM_PATH/whep")
+[ "$code" = 401 ] || fail "WHEP without a token returned $code"
+
+echo "5. Rails can use the MediaMTX API; others can't"
+runner "puts MediaServer.new.ready_paths.inspect" | grep -q "$STREAM_PATH" || fail "MediaServer#ready_paths doesn't list the stream"
+code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:9997/v3/paths/list")
+[ "$code" = 401 ] || fail "the API without credentials returned $code"
+
+echo "6. stopping the push ends the stream"
+kill "$push"
+wait_for 15 "the stream to end" bash -c "[ \"\$(RAILS_ENV=test bin/rails runner \"puts User.find_by!(email_address: '$EMAIL').streams.last&.status\" 2>/dev/null | tail -1)\" = ended ]"
+
+echo "Media smoke test passed."

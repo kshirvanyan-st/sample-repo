@@ -35,3 +35,9 @@
 
 # Capybara screenshots from failed system tests
 /tmp/capybara
+
+# Certificates MediaMTX generates when run from the repo root (bin/media)
+/auto.crt
+/auto.key
+/server.crt
+/server.key

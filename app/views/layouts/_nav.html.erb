@@ -4,6 +4,7 @@
     <%= link_to "Spark", root_path, class: "text-pink-600 font-bold text-lg mr-2" %>
     <div class="hidden sm:flex items-center gap-5">
       <%= link_to "Discover", discover_path %>
+      <%= link_to "Live", streams_path %>
       <%= link_to liked_me_path do %>
         Liked me <span class="liked-me-count ml-1 rounded-full bg-pink-100 text-pink-700 px-2"><%= liked_me_count %></span>
       <% end %>
@@ -14,15 +15,19 @@
         Chats <span class="chats-count ml-1 rounded-full bg-pink-600 text-white px-2 empty:hidden"><%= unread_chats_count.nonzero? %></span>
       <% end %>
     </div>
-    <%= link_to "Profile", profile_path(Current.user.profile), class: "ml-auto hidden sm:inline" %>
+    <%= link_to "Go live", go_live_path, class: "ml-auto hidden sm:inline rounded-md px-3 py-1.5 bg-red-600 text-white" %>
+    <%= link_to "Profile", profile_path(Current.user.profile), class: "hidden sm:inline" %>
     <%= button_to "Sign out", session_path, method: :delete, form_class: "ml-auto sm:ml-0", class: "text-gray-500 cursor-pointer" %>
   </div>
 </nav>
 
 <nav class="sm:hidden fixed bottom-0 inset-x-0 bg-white border-t z-10" aria-label="Main">
-  <div class="grid grid-cols-5 h-16 text-xs font-medium text-center">
+  <div class="grid grid-cols-6 h-16 text-[11px] font-medium text-center">
     <%= link_to discover_path, class: "flex flex-col items-center justify-center gap-1" do %>
       <span class="text-lg leading-none">♥</span>Discover
+    <% end %>
+    <%= link_to streams_path, class: "flex flex-col items-center justify-center gap-1" do %>
+      <span class="text-lg leading-none text-red-600">●</span>Live
     <% end %>
     <%= link_to liked_me_path, class: "flex flex-col items-center justify-center gap-1" do %>
       <span class="liked-me-count rounded-full bg-pink-100 text-pink-700 px-2 leading-5"><%= liked_me_count %></span>Liked me

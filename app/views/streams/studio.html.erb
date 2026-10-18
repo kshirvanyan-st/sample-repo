@@ -1,0 +1,65 @@
+<% media = Rails.configuration.x.media %>
+
+<div class="grid lg:grid-cols-3 gap-6">
+  <%= turbo_stream_from @stream, class: "hidden" %>
+  <div class="lg:col-span-2 space-y-4">
+    <div class="flex items-center justify-between gap-4">
+      <h1 class="font-bold text-2xl truncate"><%= @stream.title %></h1>
+      <%= render "streams/studio_status", stream: @stream %>
+    </div>
+
+    <% unless @stream.ended? %>
+      <section class="rounded-xl border p-4" data-controller="publisher"
+               data-publisher-whip-url-value="<%= "#{media.webrtc_url}/#{@stream.media_path}/whip" %>"
+               data-publisher-stream-key-value="<%= Current.user.stream_key %>"
+               data-publisher-ice-servers-value="<%= media_ice_servers.to_json %>">
+        <h2 class="font-semibold">Go live from this browser</h2>
+        <video data-publisher-target="preview" autoplay playsinline muted class="mt-3 w-full aspect-video bg-black rounded-lg"></video>
+        <div class="flex items-center gap-3 mt-3">
+          <button type="button" data-publisher-target="start" data-action="publisher#start" class="<%= primary_button_classes %>">Start streaming</button>
+          <button type="button" data-publisher-target="stop" data-action="publisher#stop" class="<%= secondary_button_classes %>" hidden>Stop</button>
+          <span data-publisher-target="status" class="text-sm text-gray-500">Your camera turns on when you start.</span>
+        </div>
+      </section>
+
+      <details class="rounded-xl border p-4">
+        <summary class="font-semibold cursor-pointer">Or stream from OBS</summary>
+        <div class="mt-3 space-y-4 text-sm">
+          <div>
+            <p class="font-medium">OBS 30 or newer (recommended, under 1 second of delay)</p>
+            <p class="text-gray-500">Settings → Stream → Service: <strong>WHIP</strong></p>
+            <dl class="mt-2 space-y-2">
+              <div><dt class="text-gray-500">Server</dt><dd><code class="select-all break-all"><%= media.webrtc_url %>/<%= @stream.media_path %>/whip</code></dd></div>
+              <div><dt class="text-gray-500">Bearer Token (keep it secret)</dt><dd><code class="select-all break-all"><%= Current.user.stream_key %></code></dd></div>
+            </dl>
+          </div>
+          <div>
+            <p class="font-medium">Older OBS or other apps (RTMP, a few seconds of delay)</p>
+            <dl class="mt-2 space-y-2">
+              <div><dt class="text-gray-500">Server</dt><dd><code class="select-all"><%= media.rtmp_url %>/live</code></dd></div>
+              <div><dt class="text-gray-500">Stream key (keep it secret)</dt><dd><code class="select-all break-all"><%= Current.user.stream_path %>?token=<%= Current.user.stream_key %></code></dd></div>
+            </dl>
+          </div>
+        </div>
+        <%= button_to "Reset stream key", reset_stream_key_path, method: :patch, class: "mt-3 text-sm underline cursor-pointer",
+              form: { data: { turbo_confirm: "Reset your stream key? OBS will need the new one." } } %>
+      </details>
+
+      <div class="flex gap-3">
+        <%= link_to "View as a viewer", stream_path(@stream), class: secondary_button_classes, target: "_blank" %>
+        <%= button_to "End stream", finish_stream_path(@stream), method: :patch, class: "rounded-md px-3.5 py-2.5 bg-red-600 hover:bg-red-500 text-white font-medium cursor-pointer",
+              form: { data: { turbo_confirm: "End your stream for everyone?" } } %>
+      </div>
+    <% else %>
+      <div class="rounded-xl border p-6">
+        <p class="font-semibold">Stream ended</p>
+        <p class="text-gray-600 mt-1">
+          <% if @stream.started_at %>Live for <%= stream_duration(@stream) %> · peak <%= pluralize(@stream.peak_viewers, "viewer") %><% else %>You didn't go live this time.<% end %>
+        </p>
+        <%= link_to "Go live again", go_live_path, class: "#{primary_button_classes} inline-block mt-4" %>
+      </div>
+    <% end %>
+  </div>
+
+  <%= render "stream_comments/panel", stream: @stream, moderator: true %>
+</div>
