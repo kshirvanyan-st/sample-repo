@@ -1,0 +1,15 @@
+<% content_for :title, t(".title") %>
+<section class="py-6">
+  <%= render "admin/shared/tabs" %>
+  <h1 class="mt-6 text-2xl font-bold"><%= t(".title") %></h1>
+  <ul class="mt-4 divide-y rounded-xl border">
+    <% @service_zones.each do |zone| %>
+      <li class="flex items-center justify-between p-4" id="<%= dom_id(zone) %>">
+        <span><span class="font-medium"><%= zone.name %></span>
+          <span class="ml-2 text-sm <%= zone.active ? "text-green-700" : "text-gray-500" %>"><%= t(zone.active ? ".active" : ".inactive") %></span></span>
+        <%= link_to t(".edit"), edit_admin_service_zone_path(zone), class: "underline" %>
+      </li>
+    <% end %>
+  </ul>
+  <%= link_to t(".new"), new_admin_service_zone_path, class: "mt-4 inline-block rounded-lg bg-yellow-400 px-4 py-2 font-medium text-gray-900" %>
+</section>

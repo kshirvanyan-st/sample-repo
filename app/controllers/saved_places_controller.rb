@@ -12,6 +12,7 @@ class SavedPlacesController < ApplicationController
 
   def create
     @saved_place = Current.user.saved_places.new(saved_place_params)
+    locate(@saved_place)
     if @saved_place.save
       redirect_to saved_places_path, notice: t(".saved")
     else
@@ -23,7 +24,9 @@ class SavedPlacesController < ApplicationController
   end
 
   def update
-    if @saved_place.update(saved_place_params)
+    @saved_place.assign_attributes(saved_place_params)
+    locate(@saved_place) if @saved_place.address_changed?
+    if @saved_place.save
       redirect_to saved_places_path, notice: t(".saved")
     else
       render :edit, status: :unprocessable_content
@@ -38,6 +41,14 @@ class SavedPlacesController < ApplicationController
   private
     def set_saved_place
       @saved_place = Current.user.saved_places.find(params[:id])
+    end
+
+    # Finds the address on the map so the place can be picked on the "Where to?" page.
+    # A geocoding outage only means the place has no map pin for now.
+    def locate(place)
+      place.location = place.address.present? ? Geocoding.search(place.address).first&.point : nil
+    rescue HttpJson::Error => e
+      Rails.logger.warn "Couldn't geocode a saved place: #{e.message}"
     end
 
     def saved_place_params

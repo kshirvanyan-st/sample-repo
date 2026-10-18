@@ -1,0 +1,42 @@
+<% content_for :title, t(".title") %>
+<% content_for :head, stylesheet_link_tag("/vendor/maplibre-gl-6.12.0/maplibre-gl.css") %>
+<section class="mx-auto max-w-2xl py-6"
+         data-controller="trip-planner"
+         data-trip-planner-style-url-value="<%= Rails.configuration.x.maps.style_url %>"
+         data-trip-planner-search-url-value="<%= search_places_path %>"
+         data-trip-planner-reverse-url-value="<%= reverse_place_path %>"
+         data-trip-planner-labels-value="<%= t(".labels").to_json %>">
+  <h1 class="text-2xl font-bold"><%= t(".title") %></h1>
+  <p class="mt-1 text-gray-600"><%= t(".intro") %></p>
+
+  <%= form_with url: fare_quotes_path, class: "mt-4 space-y-3" do |form| %>
+    <% if @fare_quote.errors.any? %>
+      <p class="rounded-lg bg-red-50 px-4 py-2 text-red-800" role="alert"><%= @fare_quote.errors.map(&:message).to_sentence %></p>
+    <% end %>
+
+    <%= render "place_field", field: "pickup", form: form %>
+    <button type="button" class="text-sm text-green-700 underline" data-action="trip-planner#locate"><%= t(".my_location") %></button>
+    <%= render "place_field", field: "dropoff", form: form %>
+
+    <% if @saved_places.any? %>
+      <div class="flex flex-wrap gap-2" aria-label="<%= t(".saved_places") %>">
+        <% @saved_places.each do |place| %>
+          <button type="button" class="rounded-full border px-3 py-1 text-sm" data-action="trip-planner#choose"
+                  data-trip-planner-lat-param="<%= place.location.y %>" data-trip-planner-lon-param="<%= place.location.x %>"
+                  data-trip-planner-name-param="<%= place.title %>" data-trip-planner-address-param="<%= place.address %>">
+            <%= place.title %>
+          </button>
+        <% end %>
+      </div>
+    <% end %>
+
+    <p class="text-sm text-gray-600" role="status" aria-live="polite" data-trip-planner-target="status"></p>
+    <ul class="divide-y rounded-lg border empty:hidden" data-trip-planner-target="results"></ul>
+
+    <div class="h-80 w-full overflow-hidden rounded-xl border sm:h-96" data-trip-planner-target="map" role="application" aria-label="<%= t(".map") %>"></div>
+    <p class="text-xs text-gray-500"><%= t(".map_hint") %></p>
+
+    <%= form.submit t(".submit"), disabled: true, data: { trip_planner_target: "submit" },
+          class: "w-full rounded-lg bg-yellow-400 px-4 py-3 text-lg font-semibold text-gray-900 disabled:opacity-50" %>
+  <% end %>
+</section>

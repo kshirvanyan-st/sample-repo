@@ -40,6 +40,10 @@ Rails.application.configure do
   # Keep SMS in SmsSender::TestAdapter.deliveries.
   config.x.sms.adapter = :test
 
+  # No map servers in tests (the CI "routing" job runs the OSRM specs against a real one).
+  config.x.routing.adapter = ENV.fetch("ROUTING_ADAPTER", "straight_line").to_sym
+  config.x.geocoding.adapter = :test
+
   # Set host to be used by links generated in mailer templates.
   config.action_mailer.default_url_options = { host: "example.com" }
 

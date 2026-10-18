@@ -8,6 +8,7 @@ gem "propshaft"
 gem "pg", "~> 1.1"
 # PostGIS: nearest drivers, service zones, pickup areas [https://github.com/rgeo/activerecord-postgis-adapter]
 gem "activerecord-postgis-adapter", "~> 11.1"
+gem "rgeo-geojson", "~> 2.2"
 
 # Locale data (dates, numbers, pluralization) for hy and ru [https://github.com/svenfuchs/rails-i18n]
 gem "rails-i18n", "~> 8.0"

@@ -34,6 +34,8 @@ env:
   clear:
     SOLID_QUEUE_IN_PUMA: true
     DB_HOST: taxi-am-db
+    OSRM_URL: http://taxi-am-osrm:5000
+    NOMINATIM_URL: http://taxi-am-nominatim:8080
     APP_HOST: <%= ENV.fetch("APP_HOST", "taxi.example.am") %>
 
 aliases:
@@ -65,3 +67,26 @@ accessories:
       - config/db/init.sql:/docker-entrypoint-initdb.d/setup.sql
     directories:
       - data:/var/lib/postgresql/data
+
+  # Driving routes, distance and time. Build the data on the host first:
+  #   bin/osrm-prepare /var/lib/taxi-am/osrm    (needs Docker; about 1 GB RAM and a minute for Armenia)
+  osrm:
+    image: ghcr.io/project-osrm/osrm-backend:v5.27.1
+    host: <%= ENV.fetch("KAMAL_WEB_HOST", "192.168.0.1") %>
+    cmd: osrm-routed --algorithm mld /data/armenia-latest.osrm
+    volumes:
+      - /var/lib/taxi-am/osrm:/data
+
+  # Address search. Imports the Armenia extract on first start (about 30 minutes, 4 GB RAM).
+  nominatim:
+    image: mediagis/nominatim:4.5
+    host: <%= ENV.fetch("KAMAL_WEB_HOST", "192.168.0.1") %>
+    env:
+      clear:
+        PBF_URL: https://download.geofabrik.de/asia/armenia-latest.osm.pbf
+        REPLICATION_URL: https://download.geofabrik.de/asia/armenia-updates/
+        IMPORT_WIKIPEDIA: "false"
+    options:
+      shm-size: 1g
+    directories:
+      - nominatim:/var/lib/postgresql/16/main

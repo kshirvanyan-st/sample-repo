@@ -40,6 +40,14 @@ and on pushes to `taxi-main`.
 - Uploaded documents: list them in the model's `DOCUMENTS` and include `DocumentAttachments` (type is
   sniffed from the bytes, max size). Serve them only through `DocumentsController` (owner or admin),
   never with public Active Storage URLs.
+- Maps: `Routing.route` (OSRM; falls back to a straight-line estimate marked `approximate`) and
+  `Geocoding.search/reverse` (Nominatim, Armenia only, cached). Never call the public OSM servers per
+  keystroke. Points via `Geo.point(lat:, lon:)`. `ServiceZone.serves?` gates every trip.
+- Prices: `Tariff#fare_for` (whole drams, rounded up to 10 ֏). A `FareQuote` stores the prices and a tariff
+  snapshot, so a quote never changes after it is shown. Defaults live in `lib/map_defaults.rb` (seeds).
+- MapLibre is served from `public/vendor/maplibre-gl-<version>/` (three ES modules that import each other
+  by relative path). To upgrade: download the new `dist/*.mjs` and css there and update `config/importmap.rb`.
+- Specs tagged `:osrm` run only in the CI `routing` job against a real OSRM (`bin/osrm-prepare`).
 - Locale files: `config/locales/{hy,ru,en}.yml` plus feature files like `drivers.hy.yml`.
 - Rate limits: sign-in per IP and per number; signed-in actions per user (`by: -> { Current.user.id }`).
 - Geo: store points as PostGIS `geography(Point, 4326)` (longitude first); never compare raw lat/lng floats.

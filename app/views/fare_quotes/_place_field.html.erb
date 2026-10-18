@@ -1,0 +1,18 @@
+<%# locals: (field:, form:) %>
+<% values = params[field].respond_to?(:permit) ? params[field].permit(:lat, :lon, :address, :query) : {} %>
+<div>
+  <label for="<%= field %>_query" class="block text-sm font-medium"><%= t("fare_quotes.new.#{field}") %></label>
+  <div class="mt-1 flex gap-2">
+    <input type="text" id="<%= field %>_query" name="<%= field %>[query]" value="<%= values[:query] %>"
+           placeholder="<%= t("fare_quotes.new.#{field}_placeholder") %>" autocomplete="off" enterkeyhint="search"
+           class="min-w-0 flex-1 rounded-lg border px-3 py-2"
+           data-trip-planner-target="<%= field %>Query" data-trip-planner-field-param="<%= field %>"
+           data-action="focus->trip-planner#focus keydown.enter->trip-planner#search">
+    <button type="button" class="rounded-lg border px-3 py-2" data-trip-planner-field-param="<%= field %>" data-action="trip-planner#search">
+      <%= t("fare_quotes.new.search") %>
+    </button>
+  </div>
+  <% %w[ lat lon address ].each do |part| %>
+    <input type="hidden" name="<%= field %>[<%= part %>]" value="<%= values[part.to_sym] %>" data-trip-planner-target="<%= field %><%= part.capitalize %>">
+  <% end %>
+</div>

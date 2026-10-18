@@ -1,0 +1,93 @@
+en:
+  home:
+    index:
+      where_to: "Where to?"
+  places:
+    unavailable: "Address search isn't available right now. Tap the map instead."
+  fare_quotes:
+    new:
+      title: "Where to?"
+      intro: "Search for an address or tap the map. We'll show the price before you book."
+      pickup: "Pickup"
+      dropoff: "Destination"
+      pickup_placeholder: "Street, place or landmark"
+      dropoff_placeholder: "Where are you going?"
+      search: "Search"
+      my_location: "Use my location"
+      saved_places: "Saved places"
+      map: "Map: tap to place the selected point"
+      map_hint: "Tap the map to set the selected point: pickup first, then destination."
+      submit: "See prices"
+      labels:
+        searching: "Searching…"
+        noResults: "Nothing found. Try another spelling, or tap the map."
+        failed: "Address search isn't available right now. Tap the map instead."
+        locating: "Finding you…"
+        noLocation: "We couldn't get your location. Search or tap the map."
+    show:
+      title: "Your trip"
+      pin: "Pin on the map"
+      map: "Map of the route"
+      trip: "%{km} km · about %{minutes} min"
+      approximate: "approximate: the route service is unavailable"
+      class_hint:
+        economy: "Everyday cars, the best price"
+        comfort: "Newer, roomier cars"
+      valid_until: "Prices are held until %{time}."
+      expired: "These prices have expired. Check them again."
+      book_soon: "Booking opens soon"
+      change: "Change the route"
+  saved_places:
+    index:
+      not_on_map: "Not found on the map: check the address"
+  admin:
+    shared:
+      tabs:
+        tariffs: "Tariffs"
+        zones: "Zones"
+    tariffs:
+      index:
+        title: "Tariffs"
+        intro: "Prices in drams: base fare plus per km and per minute, never below the minimum. Fares are rounded up to 10 ֏. Quotes already shown keep their price."
+        example: "A 5 km, 15 minute trip costs %{price}"
+        updated: "changed by %{name}, %{time}"
+        save: "Save"
+      update:
+        saved: "%{name} tariff saved."
+    service_zones:
+      saved: "Zone %{name} saved."
+      index:
+        title: "Service zones"
+        active: "active"
+        inactive: "off"
+        edit: "Edit"
+        new: "New zone"
+      new:
+        title: "New zone"
+      edit:
+        title: "Edit zone"
+      form:
+        hint: "GeoJSON Polygon or MultiPolygon, longitude first (draw one at geojson.io and paste it here). Pickup and destination must both be inside an active zone."
+        save: "Save zone"
+  activerecord:
+    models:
+      tariff: "Tariff"
+      service_zone: "Service zone"
+    attributes:
+      fare_quote:
+        base: "Trip"
+      tariff:
+        base_fare: "Base fare, ֏"
+        per_km: "Per km, ֏"
+        per_minute: "Per minute, ֏"
+        minimum_fare: "Minimum fare, ֏"
+      service_zone:
+        name: "Name"
+        active: "Active"
+        area: "Area"
+        area_geojson: "Area (GeoJSON)"
+    errors:
+      messages:
+        outside_service_area: "We don't serve that area yet. Pickup and destination must both be in Yerevan."
+        same_place: "Pickup and destination are the same place."
+        choose_both: "Choose both a pickup and a destination."

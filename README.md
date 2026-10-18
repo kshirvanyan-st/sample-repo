@@ -29,3 +29,11 @@ then change `taxi-main` to `main` in `.github/workflows/*.yml` and `CLAUDE.md`.
 Same as Kamal's usual flow, gated by the repository variable `DEPLOY_ENABLED=true`:
 variables `KAMAL_WEB_HOST`, `APP_HOST`; secrets `SSH_PRIVATE_KEY`, `SECRET_KEY_BASE`, `POSTGRES_PASSWORD`.
 First time: `bin/kamal setup`.
+
+## Maps in production
+Routing (OSRM) and address search (Nominatim) run as Kamal accessories on your own server; the public
+OSM demo servers used in development are not for production traffic.
+
+1. On the server: `bin/osrm-prepare /var/lib/taxi-am/osrm` (needs Docker), then `bin/kamal accessory boot osrm`.
+2. `bin/kamal accessory boot nominatim` (imports Armenia on first start: about 30 minutes and 4 GB RAM).
+3. Map tiles come from OpenFreeMap by default; set `MAP_STYLE_URL` to use MapTiler or your own tiles.

@@ -38,6 +38,14 @@ module TaxiAm
 
     # SMS delivery (see app/services/sms_sender.rb). Development logs messages.
     config.x.sms.adapter = :log
+
+    # Maps (see app/services/routing.rb and geocoding.rb). Development uses the public OSM demo servers,
+    # which allow light use only; production uses the OSRM and Nominatim accessories in config/deploy.yml.
+    config.x.routing.adapter = ENV.fetch("ROUTING_ADAPTER", "osrm").to_sym
+    config.x.routing.osrm_url = ENV.fetch("OSRM_URL", "https://router.project-osrm.org")
+    config.x.geocoding.adapter = ENV.fetch("GEOCODING_ADAPTER", "nominatim").to_sym
+    config.x.geocoding.nominatim_url = ENV.fetch("NOMINATIM_URL", "https://nominatim.openstreetmap.org")
+    config.x.maps.style_url = ENV.fetch("MAP_STYLE_URL", "https://tiles.openfreemap.org/styles/liberty")
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Don't generate system test files.
