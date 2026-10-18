@@ -1,0 +1,6 @@
+<nav aria-label="<%= t("shared.locale_switcher.label") %>" class="flex gap-3 text-sm">
+  <% { hy: "Հայերեն", ru: "Русский", en: "English" }.each do |locale, name| %>
+    <%= link_to name, url_for(locale: locale), lang: locale, class: I18n.locale == locale ? "font-bold underline" : "text-gray-600",
+          aria: { current: (I18n.locale == locale ? "true" : nil) } %>
+  <% end %>
+</nav>

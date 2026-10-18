@@ -1,0 +1,13 @@
+<section class="py-16 text-center">
+  <h1 class="text-5xl font-bold text-yellow-500"><%= t(".title") %></h1>
+  <p class="mt-4 text-lg text-gray-600"><%= t(".tagline") %></p>
+  <ul class="mt-10 grid gap-4 sm:grid-cols-3 text-left">
+    <% %w[ fast fair local ].each do |point| %>
+      <li class="rounded-xl border p-4">
+        <p class="font-semibold"><%= t(".points.#{point}.title") %></p>
+        <p class="text-sm text-gray-600 mt-1"><%= t(".points.#{point}.body") %></p>
+      </li>
+    <% end %>
+  </ul>
+  <p class="mt-10 text-sm text-gray-500"><%= t(".coming_soon") %></p>
+</section>
