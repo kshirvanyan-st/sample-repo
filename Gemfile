@@ -40,7 +40,7 @@ gem "kamal", require: false
 gem "thruster", require: false
 
 # Coin purchases through Stripe Checkout [https://github.com/stripe/stripe-ruby]
-gem "stripe", "~> 20.0"
+gem "stripe", "~> 20.1"
 
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 gem "image_processing", "~> 1.2"
