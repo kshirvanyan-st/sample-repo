@@ -17,6 +17,7 @@ segments=(
   "2-10|Water finds a way"
   "3-10|Keep the lava out"
   "4-10|Cool lava into stone"
+  "5-10|Plants grow. Fire spreads."
   "6-10|60 hand-crafted puzzles"
 )
 n=0
