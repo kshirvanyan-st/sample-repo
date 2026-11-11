@@ -33,6 +33,7 @@ extension Matter {
         case .dirt: return String(localized: "Dirt")
         case .wall: return String(localized: "Wall")
         case .gate: return String(localized: "Gate")
+        case .drain: return String(localized: "Drain")
         case .empty: return ""
         }
     }

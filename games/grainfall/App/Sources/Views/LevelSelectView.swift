@@ -87,7 +87,7 @@ struct LevelSelectView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(unlocked
-            ? Text("Level \(id), \(model.level(id)?.name ?? ""), \(stars) stars")
+            ? Text("Level \(id), \(Text(LocalizedStringKey(model.level(id)?.name ?? ""))), \(stars) stars")
             : Text("Level \(id), locked"))
     }
 }

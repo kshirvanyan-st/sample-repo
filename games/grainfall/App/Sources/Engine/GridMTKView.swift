@@ -51,8 +51,8 @@ struct GridView: UIViewRepresentable {
         view.isMultipleTouchEnabled = false
         view.isUserInteractionEnabled = interactive
         view.isAccessibilityElement = true
-        view.accessibilityLabel = "Game board"
-        view.accessibilityHint = "Drag to dig through dirt. Tap a striped gate to open it."
+        view.accessibilityLabel = String(localized: "Game board")
+        view.accessibilityHint = String(localized: "Drag to dig through dirt. Tap a striped gate to open it.")
         let renderer = PixelRenderer(view: view)
         context.coordinator.renderer = renderer
         configure(view, renderer: renderer)

@@ -44,7 +44,7 @@ final class StoreService: ObservableObject {
 
     func purchase() async {
         guard let product else {
-            state = .failed("The store isn't available right now. Please try again later.")
+            state = .failed(String(localized: "The store isn't available right now. Please try again later."))
             return
         }
         state = .purchasing

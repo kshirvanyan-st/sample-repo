@@ -35,7 +35,11 @@ struct PaywallView: View {
                     if store.state == .purchasing {
                         ProgressView().tint(Theme.background)
                     } else {
-                        Text(store.product.map { "Unlock for \($0.displayPrice)" } ?? "Unlock Full Game")
+                        if let product = store.product {
+                            Text("Unlock for \(product.displayPrice)")
+                        } else {
+                            Text("Unlock Full Game")
+                        }
                     }
                 }
                 .buttonStyle(PixelButtonStyle())

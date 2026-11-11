@@ -45,7 +45,7 @@ struct TitleView: View {
                     .foregroundStyle(Theme.text)
                 Spacer()
                 VStack(spacing: 12) {
-                    Button(model.progress.bestStars.isEmpty ? "Play" : "Continue") {
+                    Button(model.progress.bestStars.isEmpty ? LocalizedStringKey("Play") : LocalizedStringKey("Continue")) {
                         if let id = model.continueLevel { model.play(id) }
                     }
                     .buttonStyle(PixelButtonStyle())
