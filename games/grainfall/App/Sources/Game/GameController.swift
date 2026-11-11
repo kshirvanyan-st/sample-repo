@@ -6,7 +6,7 @@ import SwiftUI
 struct HUDState: Equatable {
     struct Cup: Equatable, Identifiable {
         let id: Int
-        let material: Material
+        let material: Matter
         let collected: Int
         let required: Int
         var fraction: Double { min(1, Double(collected) / Double(required)) }

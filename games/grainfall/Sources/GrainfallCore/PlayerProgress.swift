@@ -7,7 +7,17 @@ public struct PlayerProgress: Codable, Equatable, Sendable {
 
     public struct Settings: Codable, Equatable, Sendable {
         public var haptics = true
+        public var sound = true
+        public var music = true
         public init() {}
+
+        // Every field is optional on decode so saves from older versions keep loading.
+        public init(from decoder: Decoder) throws {
+            let c = try decoder.container(keyedBy: CodingKeys.self)
+            haptics = try c.decodeIfPresent(Bool.self, forKey: .haptics) ?? true
+            sound = try c.decodeIfPresent(Bool.self, forKey: .sound) ?? true
+            music = try c.decodeIfPresent(Bool.self, forKey: .music) ?? true
+        }
     }
 
     public var schemaVersion = PlayerProgress.currentSchema
@@ -15,8 +25,29 @@ public struct PlayerProgress: Codable, Equatable, Sendable {
     public var settings = Settings()
     /// Level hints already shown once.
     public var seenHints: Set<String> = []
+    /// Levels completed in total (including replays) — drives the review prompt and stats.
+    public var wins = 0
+    /// Whether the store review prompt has been requested (we ask once, at a happy moment).
+    public var askedForReview = false
 
     public init() {}
+
+    enum CodingKeys: String, CodingKey { case schemaVersion, bestStars, settings, seenHints, wins, askedForReview }
+
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        schemaVersion = try c.decodeIfPresent(Int.self, forKey: .schemaVersion) ?? PlayerProgress.currentSchema
+        bestStars = try c.decodeIfPresent([String: Int].self, forKey: .bestStars) ?? [:]
+        settings = try c.decodeIfPresent(Settings.self, forKey: .settings) ?? Settings()
+        seenHints = try c.decodeIfPresent(Set<String>.self, forKey: .seenHints) ?? []
+        wins = try c.decodeIfPresent(Int.self, forKey: .wins) ?? 0
+        askedForReview = try c.decodeIfPresent(Bool.self, forKey: .askedForReview) ?? false
+    }
+
+    /// True when every level of the chapter has 3 stars.
+    public func isPerfect(_ chapter: Chapter) -> Bool { chapter.levels.allSatisfy { stars($0) == 3 } }
+
+    public func isComplete(_ chapter: Chapter) -> Bool { chapter.levels.allSatisfy(isCompleted) }
 
     public func stars(_ levelID: String) -> Int { bestStars[levelID] ?? 0 }
 

@@ -10,11 +10,11 @@ public enum PlayerAction: Equatable, Sendable {
 
 /// One painting operation in a level file (spec §3).
 public enum Shape: Equatable, Sendable {
-    case rect(Material, x: Int, y: Int, w: Int, h: Int)
-    case circle(Material, cx: Int, cy: Int, r: Int)
-    case line(Material, x0: Int, y0: Int, x1: Int, y1: Int, t: Int)
+    case rect(Matter, x: Int, y: Int, w: Int, h: Int)
+    case circle(Matter, cx: Int, cy: Int, r: Int)
+    case line(Matter, x0: Int, y0: Int, x1: Int, y1: Int, t: Int)
     /// U-shaped container: left, right and bottom walls of thickness `t`.
-    case cup(Material, x: Int, y: Int, w: Int, h: Int, t: Int)
+    case cup(Matter, x: Int, y: Int, w: Int, h: Int, t: Int)
     case gate(id: Int, x: Int, y: Int, w: Int, h: Int)
 }
 
@@ -25,7 +25,7 @@ extension Shape: Decodable {
         let c = try decoder.container(keyedBy: K.self)
         let op = try c.decode(String.self, forKey: .op)
         func i(_ k: K) throws -> Int { try c.decode(Int.self, forKey: k) }
-        func m() throws -> Material { try c.decode(Material.self, forKey: .m) }
+        func m() throws -> Matter { try c.decode(Matter.self, forKey: .m) }
         switch op {
         case "rect": self = .rect(try m(), x: try i(.x), y: try i(.y), w: try i(.w), h: try i(.h))
         case "circle": self = .circle(try m(), cx: try i(.cx), cy: try i(.cy), r: try i(.r))
@@ -33,7 +33,7 @@ extension Shape: Decodable {
             self = .line(try m(), x0: try i(.x0), y0: try i(.y0), x1: try i(.x1), y1: try i(.y1),
                          t: try c.decodeIfPresent(Int.self, forKey: .t) ?? 1)
         case "cup":
-            self = .cup(try c.decodeIfPresent(Material.self, forKey: .m) ?? .wall,
+            self = .cup(try c.decodeIfPresent(Matter.self, forKey: .m) ?? .wall,
                         x: try i(.x), y: try i(.y), w: try i(.w), h: try i(.h),
                         t: try c.decodeIfPresent(Int.self, forKey: .t) ?? 2)
         case "gate": self = .gate(id: try i(.id), x: try i(.x), y: try i(.y), w: try i(.w), h: try i(.h))
@@ -46,7 +46,7 @@ extension Shape: Decodable {
 public struct SpoutDef: Decodable, Equatable, Sendable {
     public var x: Int
     public var y: Int
-    public var m: Material
+    public var m: Matter
     public var rate: Int
     public var total: Int
     public var width: Int
@@ -54,7 +54,7 @@ public struct SpoutDef: Decodable, Equatable, Sendable {
 
     enum CodingKeys: String, CodingKey { case x, y, m, rate, total, width, delay }
 
-    public init(x: Int, y: Int, m: Material, rate: Int, total: Int, width: Int = 6, delay: Int = 60) {
+    public init(x: Int, y: Int, m: Matter, rate: Int, total: Int, width: Int = 6, delay: Int = 60) {
         self.x = x; self.y = y; self.m = m; self.rate = rate; self.total = total; self.width = width; self.delay = delay
     }
 
@@ -62,7 +62,7 @@ public struct SpoutDef: Decodable, Equatable, Sendable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(x: try c.decode(Int.self, forKey: .x),
                   y: try c.decode(Int.self, forKey: .y),
-                  m: try c.decode(Material.self, forKey: .m),
+                  m: try c.decode(Matter.self, forKey: .m),
                   rate: try c.decode(Int.self, forKey: .rate),
                   total: try c.decode(Int.self, forKey: .total),
                   width: try c.decodeIfPresent(Int.self, forKey: .width) ?? 6,
@@ -75,13 +75,13 @@ public struct CupDef: Decodable, Equatable, Sendable {
     public var y: Int
     public var w: Int
     public var h: Int
-    public var accepts: Material
+    public var accepts: Matter
     public var required: Int
-    public var forbids: [Material]
+    public var forbids: [Matter]
 
     enum CodingKeys: String, CodingKey { case x, y, w, h, accepts, required, forbids }
 
-    public init(x: Int, y: Int, w: Int, h: Int, accepts: Material, required: Int, forbids: [Material] = []) {
+    public init(x: Int, y: Int, w: Int, h: Int, accepts: Matter, required: Int, forbids: [Matter] = []) {
         self.x = x; self.y = y; self.w = w; self.h = h
         self.accepts = accepts; self.required = required; self.forbids = forbids
     }
@@ -90,9 +90,9 @@ public struct CupDef: Decodable, Equatable, Sendable {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         self.init(x: try c.decode(Int.self, forKey: .x), y: try c.decode(Int.self, forKey: .y),
                   w: try c.decode(Int.self, forKey: .w), h: try c.decode(Int.self, forKey: .h),
-                  accepts: try c.decode(Material.self, forKey: .accepts),
+                  accepts: try c.decode(Matter.self, forKey: .accepts),
                   required: try c.decode(Int.self, forKey: .required),
-                  forbids: try c.decodeIfPresent([Material].self, forKey: .forbids) ?? [])
+                  forbids: try c.decodeIfPresent([Matter].self, forKey: .forbids) ?? [])
     }
 
     public func contains(_ x: Int, _ y: Int) -> Bool {
@@ -208,10 +208,10 @@ public enum LevelLoader {
         if l.blasts < 0 || l.blasts > 9 { try fail("blasts must be 0...9") }
         if l.cups.isEmpty { try fail("needs at least one cup") }
 
-        // Material available to a cup: spout output plus cells painted into the level
+        // Matter available to a cup: spout output plus cells painted into the level
         // (stone is made from lava, so lava counts toward it).
         lazy var painted = World(level: l).grid
-        func available(_ m: Material) -> Int {
+        func available(_ m: Matter) -> Int {
             let spouted = l.spouts.filter { $0.m == m || (m == .stone && $0.m == .lava) }.reduce(0) { $0 + $1.total }
             return spouted + painted.count(m) + (m == .stone ? painted.count(.lava) : 0)
         }

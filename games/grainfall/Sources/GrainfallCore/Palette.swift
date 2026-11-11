@@ -21,7 +21,7 @@ public struct RGBA: Equatable, Sendable {
 public enum Palette {
     public static let background = RGBA(hex: 0x14_1626)
 
-    public static func shades(_ m: Material) -> [RGBA] {
+    public static func shades(_ m: Matter) -> [RGBA] {
         switch m {
         case .empty: return Array(repeating: background, count: 4)
         case .wall: return [0x4A4E69, 0x454962, 0x50556F, 0x42465C].map(RGBA.init(hex:))
@@ -39,16 +39,18 @@ public enum Palette {
     }
 
     /// Precomputed table: `table[material.rawValue * 4 + shade]`.
-    public static let table: [UInt32] = Material.allCases.flatMap { shades($0).map(\.packed) }
+    public static let table: [UInt32] = Matter.allCases.flatMap { shades($0).map(\.packed) }
 
     /// Tint for the empty space inside a cup that accepts `m`.
-    public static func cupTint(_ m: Material) -> UInt32 { background.mix(shades(m)[0], 0.18).packed }
+    public static func cupTint(_ m: Matter) -> UInt32 { background.mix(shades(m)[0], 0.18).packed }
     public static let spoutColor = RGBA(hex: 0xE0E1DD).packed
 }
 
 extension World {
     /// Writes the current frame as RGBA8 into `pixels` (count = width × height).
-    public func render(into pixels: inout [UInt32]) {
+    /// With `emissive`, the alpha channel carries glow strength (lava, fire, drains' rim) for the
+    /// Metal bloom pass; otherwise alpha is opaque (PNG export).
+    public func render(into pixels: inout [UInt32], emissive: Bool = false) {
         let w = grid.width, h = grid.height
         if pixels.count != w * h { pixels = Array(repeating: 0, count: w * h) }
         let table = Palette.table
@@ -66,13 +68,24 @@ extension World {
                         case .drain: s = ((i % w + i / w + tick / 5) / 2) & 3
                         default: break
                         }
-                        out[i] = table[Int(m.rawValue) * 4 + s]
+                        var px = table[Int(m.rawValue) * 4 + s]
+                        if emissive {
+                            let glow: UInt32
+                            switch m {
+                            case .lava: glow = 200
+                            case .fire: glow = 255
+                            case .steam: glow = 40
+                            default: glow = 0
+                            }
+                            px = (px & 0x00FF_FFFF) | (glow << 24)
+                        }
+                        out[i] = px
                     }
                 }
             }
         }
         for cup in cups {
-            let tint = Palette.cupTint(cup.def.accepts)
+            let tint = emissive ? Palette.cupTint(cup.def.accepts) & 0x00FF_FFFF : Palette.cupTint(cup.def.accepts)
             for y in cup.def.y..<(cup.def.y + cup.def.h) {
                 for x in cup.def.x..<(cup.def.x + cup.def.w) where grid.mat[y * w + x] == .empty {
                     pixels[y * w + x] = tint
@@ -82,7 +95,9 @@ extension World {
         for s in spouts where !s.exhausted {
             let y = max(0, s.def.y - 1)
             for x in (s.def.x - s.def.width / 2)..<(s.def.x - s.def.width / 2 + s.def.width) where grid.inBounds(x, y) {
-                if grid.mat[y * w + x] == .empty { pixels[y * w + x] = Palette.spoutColor }
+                if grid.mat[y * w + x] == .empty {
+                    pixels[y * w + x] = emissive ? (Palette.spoutColor & 0x00FF_FFFF) | (60 << 24) : Palette.spoutColor
+                }
             }
         }
     }

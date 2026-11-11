@@ -144,3 +144,26 @@ final class ProgressTests: XCTestCase {
         XCTAssertTrue(FileManager.default.fileExists(atPath: store.url.appendingPathExtension("corrupt").path))
     }
 }
+
+final class SaveCompatibilityTests: XCTestCase {
+    func testDecodesVersionOneSaveWithoutNewFields() throws {
+        let old = #"{"schemaVersion":1,"bestStars":{"1-1":3},"settings":{"haptics":false},"seenHints":["1-1"]}"#
+        let p = try JSONDecoder().decode(PlayerProgress.self, from: Data(old.utf8))
+        XCTAssertEqual(p.stars("1-1"), 3)
+        XCTAssertFalse(p.settings.haptics)
+        XCTAssertTrue(p.settings.sound)
+        XCTAssertTrue(p.settings.music)
+        XCTAssertEqual(p.wins, 0)
+    }
+
+    func testEmissiveRenderMarksLavaOnly() {
+        let w = World(level: LevelDefinition(id: "e", name: "e", shapes: [.rect(.lava, x: 0, y: 239, w: 1, h: 1),
+                                                                           .rect(.sand, x: 5, y: 239, w: 1, h: 1)],
+                                             spouts: [], cups: [CupDef(x: 60, y: 0, w: 4, h: 4, accepts: .sand, required: 1)]))
+        var px: [UInt32] = []
+        w.render(into: &px, emissive: true)
+        XCTAssertGreaterThan(px[239 * Grid.width] >> 24, 100)
+        XCTAssertEqual(px[239 * Grid.width + 5] >> 24, 0)
+        XCTAssertEqual(px[60] >> 24, 0, "cup tint doesn't glow")
+    }
+}

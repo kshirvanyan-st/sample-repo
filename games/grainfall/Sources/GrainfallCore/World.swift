@@ -1,6 +1,6 @@
 public enum FailReason: Equatable, Sendable {
     /// A forbidden material reached a cup (spec §2.7).
-    case contaminated(cup: Int, by: Material)
+    case contaminated(cup: Int, by: Matter)
 }
 
 public enum GameStatus: Equatable, Sendable {
@@ -119,7 +119,7 @@ public struct World: Sendable {
         }
     }
 
-    private mutating func fill(_ m: Material, where test: (Int, Int) -> Bool) {
+    private mutating func fill(_ m: Matter, where test: (Int, Int) -> Bool) {
         for y in 0..<grid.height {
             for x in 0..<grid.width where test(x, y) {
                 grid.set(x, y, m, shade: newShade(m))
@@ -128,7 +128,7 @@ public struct World: Sendable {
     }
 
     /// Paints a `t`×`t` block centred on p (used for line thickness).
-    private mutating func fillSquare(center p: Point, size t: Int, m: Material) {
+    private mutating func fillSquare(center p: Point, size t: Int, m: Matter) {
         let lo = -(t - 1) / 2
         for dy in lo..<(lo + t) {
             for dx in lo..<(lo + t) {
@@ -137,7 +137,7 @@ public struct World: Sendable {
         }
     }
 
-    mutating func newShade(_ m: Material) -> UInt8 {
+    mutating func newShade(_ m: Matter) -> UInt8 {
         m == .empty ? 0 : UInt8(rng.int(4))
     }
 

@@ -11,7 +11,7 @@ public struct Grid: Sendable {
 
     public let width: Int
     public let height: Int
-    public var mat: [Material]
+    public var mat: [Matter]
     public var shade: [UInt8]
     public var life: [UInt8]
     public var stamp: [UInt8]
@@ -34,12 +34,12 @@ public struct Grid: Sendable {
 
     @inline(__always) public func index(_ x: Int, _ y: Int) -> Int { y * width + x }
 
-    /// Material at (x, y); out of bounds reads as wall.
-    @inline(__always) public func at(_ x: Int, _ y: Int) -> Material {
+    /// Matter at (x, y); out of bounds reads as wall.
+    @inline(__always) public func at(_ x: Int, _ y: Int) -> Matter {
         inBounds(x, y) ? mat[y * width + x] : .wall
     }
 
-    public mutating func set(_ x: Int, _ y: Int, _ m: Material, shade s: UInt8 = 0, life l: UInt8 = 0, gate g: UInt8 = 0) {
+    public mutating func set(_ x: Int, _ y: Int, _ m: Matter, shade s: UInt8 = 0, life l: UInt8 = 0, gate g: UInt8 = 0) {
         guard inBounds(x, y) else { return }
         let i = y * width + x
         mat[i] = m
@@ -55,7 +55,7 @@ public struct Grid: Sendable {
         gate.swapAt(a, b)
     }
 
-    public func count(_ m: Material) -> Int { mat.reduce(0) { $0 + ($1 == m ? 1 : 0) } }
+    public func count(_ m: Matter) -> Int { mat.reduce(0) { $0 + ($1 == m ? 1 : 0) } }
 
     /// FNV-1a hash over materials, used to assert determinism.
     public var hashValueForTesting: UInt64 {

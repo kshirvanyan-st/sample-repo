@@ -1,5 +1,5 @@
 /// Every cell of the grid holds exactly one material (spec §2.4).
-public enum Material: UInt8, CaseIterable, Codable, Sendable {
+public enum Matter: UInt8, CaseIterable, Codable, Sendable {
     case empty = 0
     case wall
     case dirt
@@ -68,13 +68,13 @@ public enum Material: UInt8, CaseIterable, Codable, Sendable {
     }
 
     public init?(name: String) {
-        guard let m = Material.allCases.first(where: { $0.name == name }) else { return nil }
+        guard let m = Matter.allCases.first(where: { $0.name == name }) else { return nil }
         self = m
     }
 
     public init(from decoder: Decoder) throws {
         let raw = try decoder.singleValueContainer().decode(String.self)
-        guard let m = Material(name: raw) else {
+        guard let m = Matter(name: raw) else {
             throw DecodingError.dataCorrupted(.init(codingPath: decoder.codingPath,
                                                     debugDescription: "Unknown material '\(raw)'"))
         }

@@ -2,7 +2,7 @@
 extension World {
     static let neighbours4 = [(0, -1), (1, 0), (0, 1), (-1, 0)]
 
-    mutating func initialLife(_ m: Material) -> UInt8 {
+    mutating func initialLife(_ m: Matter) -> UInt8 {
         switch m {
         case .steam: return UInt8(60 + rng.int(61))
         case .fire: return UInt8(20 + rng.int(21))
@@ -36,7 +36,7 @@ extension World {
 
     // MARK: Movement
 
-    @inline(__always) func canEnter(_ x: Int, _ y: Int, mover: Material) -> Bool {
+    @inline(__always) func canEnter(_ x: Int, _ y: Int, mover: Matter) -> Bool {
         guard grid.inBounds(x, y) else { return false }
         let t = grid.mat[y * grid.width + x]
         return t == .empty || t == .drain || (t.isFluid && t.density < mover.density)
@@ -62,7 +62,7 @@ extension World {
     }
 
     /// Tries ↓ then the two diagonals in random order (dy = +1 falls, -1 rises).
-    mutating func fall(_ x: Int, _ y: Int, _ i: Int, _ m: Material, _ now: UInt32, dy: Int) -> Int? {
+    mutating func fall(_ x: Int, _ y: Int, _ i: Int, _ m: Matter, _ now: UInt32, dy: Int) -> Int? {
         if canEnter(x, y + dy, mover: m) { return move(i, to: x, y + dy, now) }
         let first = rng.bool() ? -1 : 1
         for dx in [first, -first] where canEnter(x + dx, y + dy, mover: m) {
@@ -71,11 +71,11 @@ extension World {
         return nil
     }
 
-    mutating func movePowder(_ x: Int, _ y: Int, _ i: Int, _ m: Material, _ now: UInt32) -> Int? {
+    mutating func movePowder(_ x: Int, _ y: Int, _ i: Int, _ m: Matter, _ now: UInt32) -> Int? {
         fall(x, y, i, m, now, dy: 1)
     }
 
-    mutating func moveLiquid(_ x: Int, _ y: Int, _ i: Int, _ m: Material, _ now: UInt32) -> Int? {
+    mutating func moveLiquid(_ x: Int, _ y: Int, _ i: Int, _ m: Matter, _ now: UInt32) -> Int? {
         if let j = fall(x, y, i, m, now, dy: 1) { return j }
         let first = rng.bool() ? -1 : 1
         for dir in [first, -first] {

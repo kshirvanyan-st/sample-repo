@@ -18,7 +18,7 @@ extension Color {
     }
 }
 
-extension Material {
+extension Matter {
     var color: Color { Color(rgba: Palette.shades(self)[0]) }
 
     var displayName: String {

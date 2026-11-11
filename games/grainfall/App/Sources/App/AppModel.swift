@@ -23,11 +23,11 @@ final class AppModel: ObservableObject {
     private var cancellables: Set<AnyCancellable> = []
 
     init(catalog: LevelCatalog? = nil, progressStore: ProgressStore? = try? .applicationSupport(),
-         store: StoreService = StoreService()) {
+         store: StoreService? = nil) {
         // The catalog ships inside the app; failing to load it is a build error caught by CI.
         self.catalog = catalog ?? (try! LevelCatalog.bundled())
         self.progressStore = progressStore
-        self.store = store
+        self.store = store ?? StoreService()
         self.progress = progressStore?.load() ?? PlayerProgress()
         haptics.isEnabled = progress.settings.haptics
         // Purchases change what's unlocked: re-render anything observing the model.

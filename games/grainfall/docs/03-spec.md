@@ -16,7 +16,7 @@ Implements `02-prd.md`. Requirement IDs (`R-x`) are referenced from tests and co
 │ Services: ProgressStore (JSON file) · StoreService (StoreKit 2) · Haptics │
 └──────────────────────────────────────────────────────────────────────────┘
 ┌──────── GrainfallCore (Swift package, no Apple-only APIs) ────────┐
-│ Material · Grid · RNG · Simulation · Level/LevelLoader · World    │
+│ Matter · Grid · RNG · Simulation · Level/LevelLoader · World    │
 │ Scoring · Progress · LevelCatalog · Replay   (+ levels/*.json)     │
 └────────────────────────────────────────────────────────────────────┘
 grainfall-sim (CLI): validates levels, runs solutions, renders PNG snapshots
@@ -50,7 +50,7 @@ Core doesn't change.
 ### 2.1 Grid
 - Fixed size **128 × 240** cells (`Grid.width/height`), with y = 0 at the top.
 - Structure of arrays, indexed `i = y * width + x`:
-  - `mat: [Material]` (UInt8 raw value)
+  - `mat: [Matter]` (UInt8 raw value)
   - `shade: [UInt8]` — a 0…3 colour variant rolled when the cell is created, for the grainy look
   - `life: [UInt8]` — remaining lifetime for steam and fire
   - `stamp: [UInt8]` — tick stamp of the cell's last move, which stops a cell from being processed twice in one tick
