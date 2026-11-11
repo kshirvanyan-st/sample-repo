@@ -8,8 +8,10 @@ simulated. Dig through dirt and pull gates to pour the right material into each 
 | Doc | |
 |---|---|
 | [`docs/01-ideation.md`](docs/01-ideation.md) | Top 5 concepts, weighted scoring, why Grainfall |
-| [`docs/02-prd.md`](docs/02-prd.md) | Product requirements: audience, loop, content, monetization, App Store compliance |
-| [`docs/03-spec.md`](docs/03-spec.md) | Technical spec: simulation rules, level format, rendering, persistence, CI |
+| [`docs/02-prd.md`](docs/02-prd.md) | Product requirements: audience, loop, content, App Store compliance |
+| [`docs/03-spec.md`](docs/03-spec.md) | Technical spec: simulation rules, level format, rendering, audio, persistence, CI |
+| [`docs/04-monetization.md`](docs/04-monetization.md) | Monetization plan: pricing, paywall, funnel model, growth, roadmap |
+| [`docs/05-launch.md`](docs/05-launch.md) | App Store Connect, Game Center, QA and release checklist |
 
 ## Layout
 
@@ -18,14 +20,16 @@ Package.swift                 Swift package: GrainfallCore + grainfall-sim (buil
 Sources/GrainfallCore/        Engine-agnostic game logic: materials, simulation, levels, scoring, save data
   Resources/levels/           chapters.json + one JSON per level (with reference solution and traps)
 Sources/grainfall-sim/        CLI: validate levels, trace, render PNG frames and level sheets
-Tests/GrainfallCoreTests/     33 XCTest cases: materials, determinism, actions, cups, levels, progress
+Tests/GrainfallCoreTests/     39 XCTest cases: materials, mechanics, determinism, cups, all 60 levels, saves
 App/                          iOS app (XcodeGen): SwiftUI shell, Metal renderer, StoreKit 2, haptics
   project.yml                 → `xcodegen` generates Grainfall.xcodeproj
   Sources/Engine/             PixelSurface seam + Metal PixelRenderer, touch view, shaders
   Sources/Game/               GameController: fixed 60 Hz step, input → actions, HUD
   Sources/Views/              Title (live demo), level select, game HUD, results, paywall, settings
   Grainfall.storekit          Local StoreKit config for the Full Game IAP
-tools/make_icon.py            Regenerates the pixel-art app icon
+AppStore/                     fastlane-style metadata + generated 6.9" screenshots
+tools/                        set_pars.py, l10n.py (string catalog), screenshots/ (Playwright),
+                              trailer.sh (1080×1920 social video), make_icon.py, levelgen/
 ```
 
 ## Build & test
@@ -72,13 +76,26 @@ frame. To move onto the studio engine, implement that seam with its sprite/textu
 - [ ] Final icon art, 6.9" and 6.5" screenshots (`grainfall-sim render` gives pixel-exact frames), App Preview video.
 - [ ] Device pass: 60 fps on iPhone 11, haptics, purchase and restore in the sandbox, TestFlight beta.
 
-## Status: vertical slice (PRD milestone M1)
+## Status
 
-Done: simulation with 10 materials and reactions; 12 levels in 3 chapters, all CI-verified;
-Metal renderer; touch digging and gates; HUD; stars and progress; paywall and restore; settings;
-haptics; title-screen live demo; privacy manifest; icon placeholder.
+**Content-complete v1.0 candidate.**
+- **Gameplay:** 60 levels in 6 chapters, each CI-verified (needs input, solvable at 3★,
+  traps hold). Ten materials plus drains and blast charges.
+- **Presentation:**
+  - Metal renderer with bloom.
+  - Procedural sound and music.
+  - Haptics, hints, the tutorial hand, the share card and the review prompt.
+- **Platform:**
+  - Game Center.
+  - The Full Game purchase with its paywall flow.
+  - Settings with sound, music, haptics, restore and reset.
+  - Localization into 7 languages plus English.
+  - Privacy manifest.
+- **Store:** App Store metadata, screenshots and a social trailer.
+- **CI:** builds the iOS app and smoke-tests it in the Simulator.
 
-Not done yet (M2+): audio, localization, the remaining 48 levels, final art, XCUITests,
-Game Center. The iOS target hasn't been compiled yet: it was written on Linux, where only the core
-package and CLI could be built. The `ios` CI job is the first compile, so expect to fix a few
-small Xcode issues on the first run.
+**Still needed before submission** (see docs/05-launch.md):
+- studio bundle ID, team and IAP setup in App Store Connect
+- Game Center IDs
+- final icon art (the current one is generated)
+- device QA on real hardware and a TestFlight beta

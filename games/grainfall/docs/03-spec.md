@@ -76,7 +76,7 @@ Each tick:
 ### 2.4 Movement classes
 | Class | Materials | Rule (stop at first success) |
 |---|---|---|
-| static | wall, dirt, stone, plant, gate | doesn't move |
+| static | wall, dirt, stone, plant, gate, drain | doesn't move. A **drain** deletes any powder, liquid or gas that moves into it (including sideways liquid spread) |
 | powder | sand | ↓; then ↙/↘ (random order) |
 | liquid | water (spread 5), lava (spread 1, moves on 50% of ticks) | ↓; ↙/↘; then slide sideways up to *spread* cells in a random direction, through empty space only |
 | gas | steam | ↑; ↖/↗; sideways 1. `life` counts down → empty |
@@ -129,7 +129,13 @@ Once the status is terminal, the world stops ticking.
   budget reaches 0. Total cells dug is tracked as `dug`.
 - `openGate(at: Point)`: finds the nearest gate cell within radius 6 and removes every cell
   with that gate's id.
-- The app chooses between the two on touch-down: if `world.gateID(near:)` returns a gate, the
+- `blast(at: Point)`: uses one of the level's `blasts` charges and clears dirt, stone and plant
+  within radius 7. Walls, gates and drains survive. Blasted cells don't count toward `dug`.
+- Effects: actions and cups push `WorldEvent`s (`gateOpened`, `blast`, `cupFilled`), and each
+  tick fills an `Activity` record (moves per material, reactions, burning, drained). The app
+  reads both for sound, haptics and screen shake. The simulation never reads them back, so
+  they can't affect determinism.
+- The app chooses between the actions on touch-down: an armed blast wins, then if `world.gateID(near:)` returns a gate, the
   touch is a gate tap; otherwise it's a dig stroke.
 
 ### 2.10 Scoring (R-SCORE-1)
@@ -185,8 +191,11 @@ Par convention: par3 = 1.5× and par2 = 2.5× the reference solution's dig cost,
   - One `MTLTexture` of 128×240 `.rgba8Unorm`, updated each frame with `replace(region:)`
     (123 KB, well within budget).
   - The pipeline draws a 4-vertex triangle strip. The viewport is set to the letterbox rect
-    (aspect fit, integer-ish scale not required). The fragment shader samples with `nearest` and
-    adds a subtle vignette.
+    (aspect fit, integer-ish scale not required). The fragment shader samples with `nearest`,
+    adds a **bloom** from the alpha channel, and finishes with a subtle vignette.
+    `render(into:emissive:)` writes glow strength into alpha: lava 200, fire 255, steam 40,
+    spout nozzles 60. The bloom is 12 bilinear taps at 1.8 and 4 cells. The CLI's `--glow` is a
+    CPU port of the same shader, so store art matches the device.
   - The clear colour matches the palette background, so letterbox bars blend in.
 - **Budget (R-PERF-1):** simulation ≤ 2 ms per tick and frame CPU ≤ 6 ms on iPhone 11.
   The grid is 30,720 cells, so one tick is roughly 30k branchy operations.
@@ -207,6 +216,11 @@ Par convention: par3 = 1.5× and par2 = 2.5× the reference solution's dig cost,
 | `ProgressStore` (Core) | Persistence (§6) |
 | `Services/StoreService` | StoreKit 2: product load, purchase, restore, `Transaction.updates` listener, entitlement check on launch |
 | `Services/Haptics` | Throttled `UIImpactFeedbackGenerator` / `UINotificationFeedbackGenerator` |
+| `Services/AudioEngine` | Procedural audio via `AVAudioSourceNode`. Pour beds follow `Activity`; one-shots: dig, gate, blast, cup full, win, fail, tap. Generative pentatonic soundtrack. `.ambient` session, so the silent switch is respected. The real-time thread only `tryLock`s. |
+| `Services/GameCenter` | Optional sign-in, total-stars leaderboard, per-chapter complete/perfect achievements, access point on the title screen |
+| Hints & onboarding | Hint button unlocks after a retry or 15 s and overlays the reference solution. A tutorial hand traces the first stroke of 1-1 until the first touch. |
+| Retention hooks | Share card (pixel snapshot + "I solved level X"), one-time review prompt (3★ win after ≥ 8 wins), chapter-complete banner |
+| Launch arguments | `-GFStartLevel <id> -GFAutoplay -GFUnlockAll` for CI smoke tests and real in-app screenshots |
 
 ## 6. Persistence
 `PlayerProgress` (Codable, in Core): `[levelID: bestStars]`, `settings.haptics`, `schemaVersion = 1`.

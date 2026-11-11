@@ -31,6 +31,12 @@
     "sub": "Build bridges. Blast them apart."
   },
   {
+    "level": "5-10",
+    "at": 0.32,
+    "title": "Plants grow.<br><em>Fire spreads.</em>",
+    "sub": "Burn a path — or water a garden"
+  },
+  {
     "level": "6-10",
     "at": 0.96,
     "title": "60 puzzles.<br><em>No ads. Ever.</em>",
