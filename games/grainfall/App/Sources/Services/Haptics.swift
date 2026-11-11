@@ -7,6 +7,7 @@ final class Haptics {
 
     private let light = UIImpactFeedbackGenerator(style: .light)
     private let rigid = UIImpactFeedbackGenerator(style: .rigid)
+    private let heavy = UIImpactFeedbackGenerator(style: .heavy)
     private let notify = UINotificationFeedbackGenerator()
     private var lastDig = 0.0
 
@@ -19,6 +20,7 @@ final class Haptics {
     }
 
     func gate() { if isEnabled { rigid.impactOccurred() } }
+    func blast() { if isEnabled { heavy.impactOccurred(intensity: 1) } }
     func success() { if isEnabled { notify.notificationOccurred(.success) } }
     func failure() { if isEnabled { notify.notificationOccurred(.error) } }
 }

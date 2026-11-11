@@ -4,7 +4,7 @@ import SwiftUI
 struct LevelSelectView: View {
     @EnvironmentObject private var model: AppModel
 
-    private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 4)
+    private let columns = Array(repeating: GridItem(.flexible(), spacing: 10), count: 5)
 
     var body: some View {
         VStack(spacing: 0) {
@@ -42,11 +42,15 @@ struct LevelSelectView: View {
     private func chapterSection(_ chapter: Chapter) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .firstTextBaseline) {
-                Text("\(chapter.id). \(chapter.name)")
+                Text("\(chapter.id). \(Text(LocalizedStringKey(chapter.name)))")
                     .font(Theme.title(20))
                     .foregroundStyle(Theme.text)
                     .accessibilityAddTraits(.isHeader)
                 Spacer()
+                let earned = chapter.levels.reduce(0) { $0 + model.progress.stars($1) }
+                Label("\(earned)/\(chapter.levels.count * 3)", systemImage: "star.fill")
+                    .font(.caption.weight(.bold))
+                    .foregroundStyle(model.progress.isPerfect(chapter) ? Theme.sand : Theme.dim)
                 if model.needsPurchase(chapter) {
                     Button("Unlock") { model.showPaywall = true }
                         .font(Theme.body)

@@ -9,7 +9,10 @@ struct GrainfallApp: App {
             RootView()
                 .environmentObject(model)
                 .environmentObject(model.store)
-                .task { await model.store.load() }
+                .task {
+                    model.start()
+                    await model.store.load()
+                }
                 .preferredColorScheme(.dark)
                 .statusBarHidden()
         }

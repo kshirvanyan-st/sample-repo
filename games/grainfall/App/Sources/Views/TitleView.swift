@@ -14,11 +14,19 @@ struct TitleView: View {
     @MainActor private static func makeDemo() -> GameController {
         let fallback = LevelDefinition(id: "demo", name: "", shapes: [], spouts: [],
                                        cups: [CupDef(x: 0, y: 0, w: 1, h: 1, accepts: .sand, required: 1)])
-        let level = (try? LevelCatalog.bundled())?.levels["1-4"] ?? fallback
+        // A showcase level with lava glow, fire and water — the title screen is the first impression.
+        let catalog = try? LevelCatalog.bundled()
+        let level = ["4-1", "3-2", "1-4"].lazy.compactMap { catalog?.levels[$0] }.first ?? fallback
         return GameController(level: level, demo: true)
     }
 
     var body: some View {
+        content
+            .onAppear { model.gameCenter.showAccessPoint(true) }
+            .onDisappear { model.gameCenter.showAccessPoint(false) }
+    }
+
+    private var content: some View {
         ZStack {
             GridView(controller: demo, interactive: false)
                 .ignoresSafeArea()
@@ -32,7 +40,7 @@ struct TitleView: View {
                     .foregroundStyle(Theme.sand)
                     .shadow(color: .black.opacity(0.6), radius: 0, x: 3, y: 3)
                     .accessibilityAddTraits(.isHeader)
-                Text("A pixel physics puzzle")
+                Text("Dig. Pour. Solve.")
                     .font(Theme.body)
                     .foregroundStyle(Theme.text)
                 Spacer()
@@ -45,6 +53,10 @@ struct TitleView: View {
                         .buttonStyle(PixelButtonStyle(prominent: false))
                 }
                 .padding(.horizontal, 48)
+                if !model.hasFullGame {
+                    Text("\(model.catalog.chapters.filter(\.free).count) chapters free")
+                        .font(.footnote).foregroundStyle(Theme.dim)
+                }
                 Button {
                     model.showSettings = true
                 } label: {
