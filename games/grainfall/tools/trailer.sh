@@ -30,7 +30,7 @@ for seg in "${segments[@]}"; do
   echo "segment $n: $id ($ticks ticks, stride $stride)"
   "$SIM" video "$id" --dir "$LEVELS" --scale $SCALE --stride $stride --hold 60 |
     ffmpeg -loglevel error -y -f rawvideo -pix_fmt rgba -s ${W}x${H} -r 30 -i - \
-      -vf "scale=-2:1920:flags=neighbor,pad=1080:1920:(ow-iw)/2:0:color=${BG},drawbox=y=150:w=iw:h=170:color=black@0.45:t=fill,drawtext=fontfile=${FONT}:text='${caption}':fontcolor=0xF2C46D:fontsize=72:x=(w-text_w)/2:y=200" \
+      -vf "scale=-2:1920:flags=neighbor,pad=1080:1920:(ow-iw)/2:0:color=${BG},drawbox=y=150:w=iw:h=170:color=black@0.45:t=fill,drawtext=fontfile=${FONT}:text='${caption}':fontcolor=0xF2C46D:fontsize=60:x=(w-text_w)/2:y=200" \
       -c:v libx264 -pix_fmt yuv420p -r 30 -preset medium -crf 20 "$TMP/seg$n.mp4"
   echo "file 'seg$n.mp4'" >> "$TMP/list.txt"
 done
