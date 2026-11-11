@@ -116,7 +116,7 @@ struct GameScreen: View {
                 iconButton("pause.fill", label: "Pause") { game.isPaused = true }
             }
             HStack(spacing: 8) {
-                ForEach(game.hud.cups) { cup in CupChip(cup: cup) }
+                ForEach(game.hud.cups) { cup in CupChip(cup: cup, compact: game.hud.cups.count >= 3) }
             }
         }
         .padding(.horizontal)
@@ -341,25 +341,44 @@ struct GhostOverlay: View {
 
 struct CupChip: View {
     let cup: HUDState.Cup
+    /// Three or more cups don't fit at full width on a phone: drop the bar, keep the numbers.
+    var compact = false
+
+    private var barWidth: CGFloat { compact ? 0 : 64 }
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: compact ? 4 : 6) {
             Image(systemName: cup.fraction >= 1 ? "checkmark.circle.fill" : cup.material.symbol)
                 .foregroundStyle(cup.material.color)
-            ZStack(alignment: .leading) {
-                Capsule().fill(Theme.panel)
-                Capsule().fill(cup.material.color)
-                    .frame(width: 64 * cup.fraction)
+            if !compact {
+                ZStack(alignment: .leading) {
+                    Capsule().fill(Theme.panel)
+                    Capsule().fill(cup.material.color)
+                        .frame(width: barWidth * cup.fraction)
+                }
+                .frame(width: barWidth, height: 8)
             }
-            .frame(width: 64, height: 8)
             Text("\(cup.collected)/\(cup.required)")
-                .font(.system(size: 12, weight: .bold, design: .monospaced))
+                .font(.system(size: compact ? 11 : 12, weight: .bold, design: .monospaced))
+                .lineLimit(1)
+                .fixedSize()
                 .foregroundStyle(Theme.text)
                 .monospacedDigit()
         }
-        .padding(.horizontal, 10)
+        .padding(.horizontal, compact ? 8 : 10)
         .padding(.vertical, 6)
         .background(Theme.panel.opacity(0.85), in: Capsule())
+        .overlay(alignment: .bottom) {
+            if compact { // thin progress line instead of the bar
+                GeometryReader { g in
+                    Capsule().fill(cup.material.color)
+                        .frame(width: g.size.width * cup.fraction, height: 2)
+                        .frame(maxHeight: .infinity, alignment: .bottom)
+                }
+                .padding(.horizontal, 10)
+                .padding(.bottom, 2)
+            }
+        }
         .animation(.easeOut(duration: 0.2), value: cup.fraction >= 1)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(cup.material.displayName) cup")
