@@ -71,15 +71,21 @@ struct GameScreen: View {
     private func setUp() {
         game.haptics = model.haptics
         game.audio = model.audio
+        // Capture plain values and bindings only: capturing `self` would retain the controller
+        // from its own callback and leak one GameController per level played.
+        let levelID = game.level.id
+        let model = self.model
+        let review = requestReview
+        let result = $result, newBest = $newBest, showGhost = $showGhost
         game.onFinished = { status, stars in
-            newBest = status == .won && model.record(levelID: game.level.id, stars: stars)
-            showGhost = false
-            withAnimation(.spring(duration: 0.35)) { result = status }
+            newBest.wrappedValue = status == .won && model.record(levelID: levelID, stars: stars)
+            showGhost.wrappedValue = false
+            withAnimation(.spring(duration: 0.35)) { result.wrappedValue = status }
             if model.wantsReview {
                 model.wantsReview = false
-                Task {
+                Task { @MainActor in
                     try? await Task.sleep(for: .seconds(1.2))
-                    requestReview()
+                    review()
                 }
             }
         }

@@ -1,0 +1,902 @@
+{
+ "First Grains": {
+  "es": "Primeros granos",
+  "fr": "Premiers grains",
+  "de": "Erste Körner",
+  "pt-BR": "Primeiros grãos",
+  "ja": "はじめの粒",
+  "ko": "첫 알갱이",
+  "zh-Hans": "初识沙粒"
+ },
+ "First Dig": {
+  "es": "Primera excavación",
+  "fr": "Premier trou",
+  "de": "Erster Spatenstich",
+  "pt-BR": "Primeira escavação",
+  "ja": "はじめての穴掘り",
+  "ko": "첫 땅파기",
+  "zh-Hans": "第一铲"
+ },
+ "Drag to dig a path for the sand": {
+  "es": "Arrastra para cavar un camino para la arena",
+  "fr": "Glisse pour creuser un chemin au sable",
+  "de": "Ziehe, um dem Sand einen Weg zu graben",
+  "pt-BR": "Arraste para cavar um caminho para a areia",
+  "ja": "ドラッグして砂の通り道を掘ろう",
+  "ko": "드래그해서 모래가 지나갈 길을 파세요",
+  "zh-Hans": "拖动手指，为沙子挖出通道"
+ },
+ "Sidestep": {
+  "es": "Paso al costado",
+  "fr": "Pas de côté",
+  "de": "Ausweichen",
+  "pt-BR": "Desvio",
+  "ja": "サイドステップ",
+  "ko": "옆걸음",
+  "zh-Hans": "侧移"
+ },
+ "Pull the Pin": {
+  "es": "Tira del pasador",
+  "fr": "Tire la goupille",
+  "de": "Zieh den Stift",
+  "pt-BR": "Puxe o pino",
+  "ja": "ピンを抜け",
+  "ko": "핀을 뽑아라",
+  "zh-Hans": "拔掉插销"
+ },
+ "Tap a gate to open it": {
+  "es": "Toca una compuerta para abrirla",
+  "fr": "Touche une vanne pour l'ouvrir",
+  "de": "Tippe auf eine Klappe, um sie zu öffnen",
+  "pt-BR": "Toque numa comporta para abri-la",
+  "ja": "ゲートをタップして開けよう",
+  "ko": "게이트를 탭해서 여세요",
+  "zh-Hans": "点击闸门即可打开"
+ },
+ "Fork in the Road": {
+  "es": "Bifurcación",
+  "fr": "La bifurcation",
+  "de": "Weggabelung",
+  "pt-BR": "Bifurcação",
+  "ja": "分かれ道",
+  "ko": "갈림길",
+  "zh-Hans": "岔路口"
+ },
+ "Zigzag": {
+  "es": "Zigzag",
+  "fr": "Zigzag",
+  "de": "Zickzack",
+  "pt-BR": "Zigue-zague",
+  "ja": "ジグザグ",
+  "ko": "지그재그",
+  "zh-Hans": "之字路"
+ },
+ "Bucket Brigade": {
+  "es": "Cadena de baldes",
+  "fr": "Chaîne de seaux",
+  "de": "Eimerkette",
+  "pt-BR": "Corrente de baldes",
+  "ja": "バケツリレー",
+  "ko": "양동이 릴레이",
+  "zh-Hans": "接力传沙"
+ },
+ "One hopper isn't enough": {
+  "es": "Con una tolva no basta",
+  "fr": "Une trémie ne suffit pas",
+  "de": "Ein Trichter reicht nicht",
+  "pt-BR": "Um funil não basta",
+  "ja": "ホッパー1つでは足りない",
+  "ko": "투입구 하나로는 부족해요",
+  "zh-Hans": "一个漏斗不够用"
+ },
+ "Three Cups": {
+  "es": "Tres vasos",
+  "fr": "Trois gobelets",
+  "de": "Drei Becher",
+  "pt-BR": "Três copos",
+  "ja": "3つのカップ",
+  "ko": "컵 세 개",
+  "zh-Hans": "三个杯子"
+ },
+ "Caves": {
+  "es": "Cuevas",
+  "fr": "Grottes",
+  "de": "Höhlen",
+  "pt-BR": "Cavernas",
+  "ja": "洞窟",
+  "ko": "동굴",
+  "zh-Hans": "洞穴"
+ },
+ "Dig is limited. Use the caves.": {
+  "es": "Puedes cavar poco. Usa las cuevas.",
+  "fr": "Creusage limité. Utilise les grottes.",
+  "de": "Graben ist begrenzt. Nutze die Höhlen.",
+  "pt-BR": "A escavação é limitada. Use as cavernas.",
+  "ja": "掘れる量は限られている。洞窟を使おう。",
+  "ko": "팔 수 있는 양이 제한돼요. 동굴을 이용하세요.",
+  "zh-Hans": "挖掘量有限，利用洞穴吧。"
+ },
+ "Shutters": {
+  "es": "Persianas",
+  "fr": "Volets",
+  "de": "Rollläden",
+  "pt-BR": "Persianas",
+  "ja": "シャッター",
+  "ko": "셔터",
+  "zh-Hans": "卷帘门"
+ },
+ "Grand Pour": {
+  "es": "Gran vertido",
+  "fr": "Grand déversement",
+  "de": "Großer Guss",
+  "pt-BR": "Grande despejo",
+  "ja": "大放流",
+  "ko": "대방류",
+  "zh-Hans": "倾泻而下"
+ },
+ "Flow": {
+  "es": "Flujo",
+  "fr": "Courant",
+  "de": "Strömung",
+  "pt-BR": "Fluxo",
+  "ja": "流れ",
+  "ko": "흐름",
+  "zh-Hans": "流动"
+ },
+ "Thirsty Sprout": {
+  "es": "Brote sediento",
+  "fr": "Pousse assoiffée",
+  "de": "Durstiger Spross",
+  "pt-BR": "Broto sedento",
+  "ja": "乾いた新芽",
+  "ko": "목마른 새싹",
+  "zh-Hans": "口渴的嫩芽"
+ },
+ "Water flows sideways. Sand doesn't.": {
+  "es": "El agua fluye de lado. La arena no.",
+  "fr": "L'eau coule sur les côtés. Pas le sable.",
+  "de": "Wasser fließt seitwärts. Sand nicht.",
+  "pt-BR": "A água escorre para os lados. A areia, não.",
+  "ja": "水は横に流れる。砂は流れない。",
+  "ko": "물은 옆으로 흘러요. 모래는 아니에요.",
+  "zh-Hans": "水会横向流动，沙子不会。"
+ },
+ "Wrong Pin": {
+  "es": "Pasador equivocado",
+  "fr": "Mauvaise goupille",
+  "de": "Falscher Stift",
+  "pt-BR": "Pino errado",
+  "ja": "ちがうピン",
+  "ko": "잘못된 핀",
+  "zh-Hans": "拔错了"
+ },
+ "Sand would spoil the water": {
+  "es": "La arena arruinaría el agua",
+  "fr": "Le sable gâcherait l'eau",
+  "de": "Sand würde das Wasser verderben",
+  "pt-BR": "A areia estragaria a água",
+  "ja": "砂が入ると水がだめになる",
+  "ko": "모래가 섞이면 물을 망쳐요",
+  "zh-Hans": "沙子会弄脏水"
+ },
+ "Keep Them Apart": {
+  "es": "Mantenlos separados",
+  "fr": "Chacun chez soi",
+  "de": "Getrennt halten",
+  "pt-BR": "Separe-os",
+  "ja": "まぜないで",
+  "ko": "섞지 마세요",
+  "zh-Hans": "各走各路"
+ },
+ "Switchback": {
+  "es": "Curva de horquilla",
+  "fr": "Lacets",
+  "de": "Serpentine",
+  "pt-BR": "Curva fechada",
+  "ja": "つづら折り",
+  "ko": "굽잇길",
+  "zh-Hans": "回头弯"
+ },
+ "Waterslide": {
+  "es": "Tobogán acuático",
+  "fr": "Toboggan aquatique",
+  "de": "Wasserrutsche",
+  "pt-BR": "Toboágua",
+  "ja": "ウォータースライダー",
+  "ko": "워터 슬라이드",
+  "zh-Hans": "滑水道"
+ },
+ "Twin Pots": {
+  "es": "Vasos gemelos",
+  "fr": "Gobelets jumeaux",
+  "de": "Zwillingsbecher",
+  "pt-BR": "Copos gêmeos",
+  "ja": "ふたごのカップ",
+  "ko": "쌍둥이 컵",
+  "zh-Hans": "双子杯"
+ },
+ "Down the Drain": {
+  "es": "Por el desagüe",
+  "fr": "Par le siphon",
+  "de": "Ab in den Abfluss",
+  "pt-BR": "Ralo abaixo",
+  "ja": "排水口へ",
+  "ko": "배수구 속으로",
+  "zh-Hans": "流进排水口"
+ },
+ "Drains swallow anything. Get rid of the sand first.": {
+  "es": "Los desagües se tragan todo. Primero deshazte de la arena.",
+  "fr": "Les siphons avalent tout. Débarrasse-toi d'abord du sable.",
+  "de": "Abflüsse schlucken alles. Werde zuerst den Sand los.",
+  "pt-BR": "Os ralos engolem tudo. Livre-se da areia primeiro.",
+  "ja": "排水口は何でも吸いこむ。まず砂を捨てよう。",
+  "ko": "배수구는 뭐든 삼켜요. 먼저 모래를 없애세요.",
+  "zh-Hans": "排水口什么都能吞掉。先把沙子处理掉。"
+ },
+ "Lock Chain": {
+  "es": "Cadena de esclusas",
+  "fr": "Chaîne d'écluses",
+  "de": "Schleusentreppe",
+  "pt-BR": "Eclusas em série",
+  "ja": "水門リレー",
+  "ko": "연쇄 수문",
+  "zh-Hans": "连环水闸"
+ },
+ "Muddy Waters": {
+  "es": "Aguas turbias",
+  "fr": "Eaux troubles",
+  "de": "Trübes Wasser",
+  "pt-BR": "Águas turvas",
+  "ja": "にごった水",
+  "ko": "흙탕물",
+  "zh-Hans": "浑水"
+ },
+ "Waterworks": {
+  "es": "Obras hidráulicas",
+  "fr": "Grandes eaux",
+  "de": "Wasserwerk",
+  "pt-BR": "Obras hidráulicas",
+  "ja": "水のからくり",
+  "ko": "수로 대공사",
+  "zh-Hans": "水利工程"
+ },
+ "Hot Stuff": {
+  "es": "Al rojo vivo",
+  "fr": "Chaud devant",
+  "de": "Heiße Sache",
+  "pt-BR": "Pegando fogo",
+  "ja": "アツアツ",
+  "ko": "앗 뜨거",
+  "zh-Hans": "滚烫来袭"
+ },
+ "Hot Pocket": {
+  "es": "Bolsillo ardiente",
+  "fr": "Poche brûlante",
+  "de": "Heiße Tasche",
+  "pt-BR": "Bolsão quente",
+  "ja": "マグマだまり",
+  "ko": "뜨거운 주머니",
+  "zh-Hans": "熔岩包"
+ },
+ "Lava ruins the pot. Dig around it.": {
+  "es": "La lava arruina el vaso. Cava alrededor.",
+  "fr": "La lave gâche le gobelet. Creuse autour.",
+  "de": "Lava ruiniert den Becher. Grabe drumherum.",
+  "pt-BR": "A lava estraga o copo. Cave em volta.",
+  "ja": "溶岩はカップをだめにする。よけて掘ろう。",
+  "ko": "용암은 컵을 망쳐요. 피해서 파세요.",
+  "zh-Hans": "岩浆会毁掉杯子，绕开它挖。"
+ },
+ "Burn the Floor": {
+  "es": "Quema el piso",
+  "fr": "Brûle le sol",
+  "de": "Brenn den Boden",
+  "pt-BR": "Queime o chão",
+  "ja": "床を燃やせ",
+  "ko": "바닥을 태워라",
+  "zh-Hans": "烧穿地板"
+ },
+ "Lava sets plants on fire": {
+  "es": "La lava prende fuego a las plantas",
+  "fr": "La lave enflamme les plantes",
+  "de": "Lava setzt Pflanzen in Brand",
+  "pt-BR": "A lava põe fogo nas plantas",
+  "ja": "溶岩は植物を燃やす",
+  "ko": "용암은 식물에 불을 붙여요",
+  "zh-Hans": "岩浆会点燃植物"
+ },
+ "Quench": {
+  "es": "Enfriamiento",
+  "fr": "Trempe",
+  "de": "Abschrecken",
+  "pt-BR": "Têmpera",
+  "ja": "急冷",
+  "ko": "담금질",
+  "zh-Hans": "淬火"
+ },
+ "Water + lava = stone. Fill the cup with stone.": {
+  "es": "Agua + lava = piedra. Llena el vaso de piedra.",
+  "fr": "Eau + lave = pierre. Remplis le gobelet de pierre.",
+  "de": "Wasser + Lava = Stein. Fülle den Becher mit Stein.",
+  "pt-BR": "Água + lava = pedra. Encha o copo de pedra.",
+  "ja": "水 + 溶岩 = 石。カップを石で満たそう。",
+  "ko": "물 + 용암 = 돌. 컵을 돌로 채우세요.",
+  "zh-Hans": "水 + 岩浆 = 石头。用石头填满杯子。"
+ },
+ "Two Pockets": {
+  "es": "Dos bolsillos",
+  "fr": "Deux poches",
+  "de": "Zwei Taschen",
+  "pt-BR": "Dois bolsões",
+  "ja": "二つの溜まり",
+  "ko": "주머니 두 개",
+  "zh-Hans": "两个熔岩包"
+ },
+ "Side Channel": {
+  "es": "Canal lateral",
+  "fr": "Canal latéral",
+  "de": "Seitenkanal",
+  "pt-BR": "Canal lateral",
+  "ja": "わき水路",
+  "ko": "옆 수로",
+  "zh-Hans": "侧渠"
+ },
+ "Drains swallow anything. Feed them the lava.": {
+  "es": "Los desagües se tragan todo. Dales la lava.",
+  "fr": "Les siphons avalent tout. Donne-leur la lave.",
+  "de": "Abflüsse schlucken alles. Füttere sie mit Lava.",
+  "pt-BR": "Os ralos engolem tudo. Alimente-os com a lava.",
+  "ja": "排水口は何でも吸いこむ。溶岩を流しこもう。",
+  "ko": "배수구는 뭐든 삼켜요. 용암을 먹이세요.",
+  "zh-Hans": "排水口什么都能吞掉。把岩浆喂给它。"
+ },
+ "Long Way Round": {
+  "es": "El camino largo",
+  "fr": "Le grand détour",
+  "de": "Großer Umweg",
+  "pt-BR": "O caminho longo",
+  "ja": "遠回り",
+  "ko": "먼 길로 돌아서",
+  "zh-Hans": "绕远路"
+ },
+ "Molten Moat": {
+  "es": "Foso de lava",
+  "fr": "Douves de lave",
+  "de": "Lavagraben",
+  "pt-BR": "Fosso de lava",
+  "ja": "溶岩の堀",
+  "ko": "용암 해자",
+  "zh-Hans": "熔岩护城河"
+ },
+ "Empty the lava into the drain before you dig to the cup.": {
+  "es": "Vacía la lava en el desagüe antes de cavar hasta el vaso.",
+  "fr": "Vide la lave dans le siphon avant de creuser jusqu'au gobelet.",
+  "de": "Leite die Lava in den Abfluss, bevor du zum Becher gräbst.",
+  "pt-BR": "Despeje a lava no ralo antes de cavar até o copo.",
+  "ja": "カップまで掘る前に、溶岩を排水口に流そう。",
+  "ko": "컵까지 파기 전에 용암을 배수구로 빼세요.",
+  "zh-Hans": "挖到杯子之前，先把岩浆排进排水口。"
+ },
+ "Three Ways": {
+  "es": "Tres caminos",
+  "fr": "Trois chemins",
+  "de": "Drei Wege",
+  "pt-BR": "Três caminhos",
+  "ja": "三つの道",
+  "ko": "세 갈래 길",
+  "zh-Hans": "三条路"
+ },
+ "First Things First": {
+  "es": "Primero lo primero",
+  "fr": "Dans l'ordre",
+  "de": "Der Reihe nach",
+  "pt-BR": "Tudo em ordem",
+  "ja": "まずはこれから",
+  "ko": "차근차근",
+  "zh-Hans": "先来后到"
+ },
+ "Order matters.": {
+  "es": "El orden importa.",
+  "fr": "L'ordre compte.",
+  "de": "Die Reihenfolge zählt.",
+  "pt-BR": "A ordem importa.",
+  "ja": "順番が大事。",
+  "ko": "순서가 중요해요.",
+  "zh-Hans": "顺序很重要。"
+ },
+ "Inferno": {
+  "es": "Llamarada",
+  "fr": "Fournaise",
+  "de": "Flammenmeer",
+  "pt-BR": "Fornalha",
+  "ja": "灼熱",
+  "ko": "불바다",
+  "zh-Hans": "烈焰"
+ },
+ "Cool Down": {
+  "es": "A enfriar",
+  "fr": "Refroidir",
+  "de": "Abkühlen",
+  "pt-BR": "Esfriando",
+  "ja": "クールダウン",
+  "ko": "식히기",
+  "zh-Hans": "冷却"
+ },
+ "Stone Soup": {
+  "es": "Sopa de piedra",
+  "fr": "Soupe aux cailloux",
+  "de": "Steinsuppe",
+  "pt-BR": "Sopa de pedra",
+  "ja": "石のスープ",
+  "ko": "돌멩이 수프",
+  "zh-Hans": "石头汤"
+ },
+ "Lava + water = stone. Make stone in the cup.": {
+  "es": "Lava + agua = piedra. Haz piedra en el vaso.",
+  "fr": "Lave + eau = pierre. Fais de la pierre dans le gobelet.",
+  "de": "Lava + Wasser = Stein. Mach Stein im Becher.",
+  "pt-BR": "Lava + água = pedra. Faça pedra no copo.",
+  "ja": "溶岩 + 水 = 石。カップの中で石を作ろう。",
+  "ko": "용암 + 물 = 돌. 컵 안에서 돌을 만드세요.",
+  "zh-Hans": "岩浆 + 水 = 石头。在杯子里造出石头。"
+ },
+ "Simmer": {
+  "es": "A fuego lento",
+  "fr": "À feu doux",
+  "de": "Köcheln",
+  "pt-BR": "Fogo baixo",
+  "ja": "とろ火",
+  "ko": "보글보글",
+  "zh-Hans": "文火慢炖"
+ },
+ "Water cools lava into a stone crust.": {
+  "es": "El agua enfría la lava y forma una costra de piedra.",
+  "fr": "L'eau refroidit la lave en croûte de pierre.",
+  "de": "Wasser kühlt Lava zu einer Steinkruste ab.",
+  "pt-BR": "A água esfria a lava e forma uma crosta de pedra.",
+  "ja": "水で冷えた溶岩は石の殻になる。",
+  "ko": "물이 용암을 식혀 돌 껍질을 만들어요.",
+  "zh-Hans": "水会把岩浆冷却成一层石壳。"
+ },
+ "Blast Off": {
+  "es": "¡A volar!",
+  "fr": "Mise à feu",
+  "de": "Es knallt!",
+  "pt-BR": "Pelos ares",
+  "ja": "ドカン！",
+  "ko": "펑!",
+  "zh-Hans": "一炸冲天"
+ },
+ "Stone can't be dug. Tap the bomb, then tap the stone.": {
+  "es": "La piedra no se puede cavar. Toca la bomba y luego la piedra.",
+  "fr": "On ne peut pas creuser la pierre. Touche la bombe, puis la pierre.",
+  "de": "Stein kann man nicht graben. Tippe auf die Bombe, dann auf den Stein.",
+  "pt-BR": "Não dá para cavar pedra. Toque na bomba e depois na pedra.",
+  "ja": "石は掘れない。爆弾をタップしてから石をタップ。",
+  "ko": "돌은 팔 수 없어요. 폭탄을 탭한 다음 돌을 탭하세요.",
+  "zh-Hans": "石头挖不动。先点炸弹，再点石头。"
+ },
+ "Mixing Bowl": {
+  "es": "Bol de mezcla",
+  "fr": "Bol mélangeur",
+  "de": "Rührschüssel",
+  "pt-BR": "Tigela de mistura",
+  "ja": "まぜまぜボウル",
+  "ko": "믹싱 볼",
+  "zh-Hans": "搅拌碗"
+ },
+ "Hard Hat": {
+  "es": "Casco de obra",
+  "fr": "Casque de chantier",
+  "de": "Schutzhelm",
+  "pt-BR": "Capacete de obra",
+  "ja": "ヘルメット",
+  "ko": "안전모",
+  "zh-Hans": "安全帽"
+ },
+ "Each bomb counts. Spend them on stone.": {
+  "es": "Cada bomba cuenta. Úsalas en la piedra.",
+  "fr": "Chaque bombe compte. Garde-les pour la pierre.",
+  "de": "Jede Bombe zählt. Nutze sie für Stein.",
+  "pt-BR": "Cada bomba conta. Use-as na pedra.",
+  "ja": "爆弾は貴重。石に使おう。",
+  "ko": "폭탄 하나하나가 소중해요. 돌에 쓰세요.",
+  "zh-Hans": "每颗炸弹都很宝贵，留着炸石头。"
+ },
+ "Dam It": {
+  "es": "¡A represar!",
+  "fr": "Barrage !",
+  "de": "Damm bauen",
+  "pt-BR": "Represa já",
+  "ja": "せき止めろ",
+  "ko": "막아라!",
+  "zh-Hans": "拦住它"
+ },
+ "Cool the lava before it reaches the cup.": {
+  "es": "Enfría la lava antes de que llegue al vaso.",
+  "fr": "Refroidis la lave avant qu'elle atteigne le gobelet.",
+  "de": "Kühle die Lava ab, bevor sie den Becher erreicht.",
+  "pt-BR": "Esfrie a lava antes que ela chegue ao copo.",
+  "ja": "溶岩がカップに届く前に冷やそう。",
+  "ko": "용암이 컵에 닿기 전에 식히세요.",
+  "zh-Hans": "在岩浆流到杯子前把它冷却。"
+ },
+ "Short on Shovels": {
+  "es": "Pocas palas",
+  "fr": "Pelles comptées",
+  "de": "Wenig Schaufeln",
+  "pt-BR": "Poucas pás",
+  "ja": "スコップ不足",
+  "ko": "삽이 모자라",
+  "zh-Hans": "铲子不够"
+ },
+ "Twin Crusts": {
+  "es": "Costras gemelas",
+  "fr": "Croûtes jumelles",
+  "de": "Zwillingskrusten",
+  "pt-BR": "Crostas gêmeas",
+  "ja": "ふたつの石の殻",
+  "ko": "쌍둥이 껍질",
+  "zh-Hans": "双生石壳"
+ },
+ "Forge": {
+  "es": "Forja",
+  "fr": "Forge",
+  "de": "Schmiede",
+  "pt-BR": "Forja",
+  "ja": "鍛冶場",
+  "ko": "대장간",
+  "zh-Hans": "锻炉"
+ },
+ "Caldera": {
+  "es": "Caldera",
+  "fr": "Caldeira",
+  "de": "Caldera",
+  "pt-BR": "Caldeira",
+  "ja": "カルデラ",
+  "ko": "칼데라",
+  "zh-Hans": "火山口"
+ },
+ "Overgrowth": {
+  "es": "Maleza",
+  "fr": "Broussailles",
+  "de": "Wildwuchs",
+  "pt-BR": "Mato crescido",
+  "ja": "草ぼうぼう",
+  "ko": "무성한 초록",
+  "zh-Hans": "草木疯长"
+ },
+ "Slow Burn": {
+  "es": "Combustión lenta",
+  "fr": "Combustion lente",
+  "de": "Schwelbrand",
+  "pt-BR": "Queima lenta",
+  "ja": "じわじわ燃える",
+  "ko": "천천히 타오르는",
+  "zh-Hans": "缓缓燃烧"
+ },
+ "Lava sets plants on fire. Tap the gate.": {
+  "es": "La lava prende fuego a las plantas. Toca la compuerta.",
+  "fr": "La lave enflamme les plantes. Touche la vanne.",
+  "de": "Lava setzt Pflanzen in Brand. Tippe auf die Klappe.",
+  "pt-BR": "A lava põe fogo nas plantas. Toque na comporta.",
+  "ja": "溶岩は植物を燃やす。ゲートをタップしよう。",
+  "ko": "용암은 식물에 불을 붙여요. 게이트를 탭하세요.",
+  "zh-Hans": "岩浆会点燃植物。点击闸门。"
+ },
+ "Green Thumb": {
+  "es": "Mano verde",
+  "fr": "Main verte",
+  "de": "Grüner Daumen",
+  "pt-BR": "Dedo verde",
+  "ja": "みどりの指",
+  "ko": "식물 박사",
+  "zh-Hans": "园艺高手"
+ },
+ "Plants drink water and grow. Fill the pot with green.": {
+  "es": "Las plantas beben agua y crecen. Llena el vaso de verde.",
+  "fr": "Les plantes boivent l'eau et poussent. Remplis le gobelet de vert.",
+  "de": "Pflanzen trinken Wasser und wachsen. Fülle den Becher mit Grün.",
+  "pt-BR": "As plantas bebem água e crescem. Encha o copo de verde.",
+  "ja": "植物は水を吸って育つ。カップを緑でいっぱいにしよう。",
+  "ko": "식물은 물을 마시고 자라요. 컵을 초록으로 채우세요.",
+  "zh-Hans": "植物喝水就会生长。让杯子里长满绿色。"
+ },
+ "Fire Line": {
+  "es": "Línea de fuego",
+  "fr": "Ligne de feu",
+  "de": "Feuerlinie",
+  "pt-BR": "Linha de fogo",
+  "ja": "炎の道",
+  "ko": "불길",
+  "zh-Hans": "火线"
+ },
+ "Fire spreads along plants. Blast a gap so it can't reach the water.": {
+  "es": "El fuego se propaga por las plantas. Abre un hueco con una bomba para que no llegue al agua.",
+  "fr": "Le feu se propage par les plantes. Ouvre une brèche à la bombe pour qu'il n'atteigne pas l'eau.",
+  "de": "Feuer breitet sich über Pflanzen aus. Spreng mit einer Bombe eine Lücke, damit es nicht ans Wasser kommt.",
+  "pt-BR": "O fogo se espalha pelas plantas. Abra um buraco com uma bomba para ele não chegar à água.",
+  "ja": "火は植物を伝って広がる。爆弾ですき間を作り、水に届かないようにしよう。",
+  "ko": "불은 식물을 타고 번져요. 폭탄으로 틈을 내서 물에 닿지 못하게 하세요.",
+  "zh-Hans": "火会沿着植物蔓延。用炸弹炸出缺口，别让它烧到水边。"
+ },
+ "Controlled Burn": {
+  "es": "Quema controlada",
+  "fr": "Brûlage dirigé",
+  "de": "Kontrolliertes Feuer",
+  "pt-BR": "Queima controlada",
+  "ja": "計画的な火入れ",
+  "ko": "조절된 불길",
+  "zh-Hans": "控制燃烧"
+ },
+ "Two Gardens": {
+  "es": "Dos jardines",
+  "fr": "Deux jardins",
+  "de": "Zwei Gärten",
+  "pt-BR": "Dois jardins",
+  "ja": "ふたつの庭",
+  "ko": "두 개의 정원",
+  "zh-Hans": "两座花园"
+ },
+ "Sinkholes swallow whatever falls in.": {
+  "es": "Los desagües se tragan todo lo que cae.",
+  "fr": "Les siphons avalent tout ce qui y tombe.",
+  "de": "Abflüsse schlucken alles, was hineinfällt.",
+  "pt-BR": "Os ralos engolem tudo o que cai neles.",
+  "ja": "排水口は落ちたものを何でも吸いこむ。",
+  "ko": "배수구는 떨어지는 건 뭐든 삼켜요.",
+  "zh-Hans": "掉进排水口的东西都会被吞掉。"
+ },
+ "Thicket": {
+  "es": "Matorral",
+  "fr": "Fourré",
+  "de": "Dickicht",
+  "pt-BR": "Matagal",
+  "ja": "やぶ",
+  "ko": "덤불숲",
+  "zh-Hans": "灌木丛"
+ },
+ "Wet Blanket": {
+  "es": "Aguafiestas",
+  "fr": "Rabat-joie",
+  "de": "Spielverderber",
+  "pt-BR": "Estraga-prazeres",
+  "ja": "水を差す",
+  "ko": "찬물 끼얹기",
+  "zh-Hans": "泼冷水"
+ },
+ "Fire can't cross wet plants. Make a puddle first.": {
+  "es": "El fuego no cruza plantas mojadas. Primero haz un charco.",
+  "fr": "Le feu ne traverse pas les plantes mouillées. Fais d'abord une flaque.",
+  "de": "Feuer kommt nicht über nasse Pflanzen. Mach zuerst eine Pfütze.",
+  "pt-BR": "O fogo não atravessa plantas molhadas. Faça uma poça primeiro.",
+  "ja": "火はぬれた植物を越えられない。まず水たまりを作ろう。",
+  "ko": "불은 젖은 식물을 넘지 못해요. 먼저 물웅덩이를 만드세요.",
+  "zh-Hans": "火烧不过湿植物。先弄出一个水坑。"
+ },
+ "Seed Vault": {
+  "es": "Bóveda de semillas",
+  "fr": "Coffre à graines",
+  "de": "Samentresor",
+  "pt-BR": "Cofre de sementes",
+  "ja": "種の金庫",
+  "ko": "씨앗 금고",
+  "zh-Hans": "种子库"
+ },
+ "Keep fire out of the garden pot.": {
+  "es": "No dejes que el fuego llegue al vaso del jardín.",
+  "fr": "Garde le feu loin du gobelet du jardin.",
+  "de": "Halte das Feuer vom Gartenbecher fern.",
+  "pt-BR": "Mantenha o fogo longe do copo do jardim.",
+  "ja": "庭のカップに火を近づけないで。",
+  "ko": "정원 컵에 불이 닿지 않게 하세요.",
+  "zh-Hans": "别让火烧到花园杯。"
+ },
+ "Hedge Maze": {
+  "es": "Laberinto de setos",
+  "fr": "Labyrinthe de haies",
+  "de": "Heckenlabyrinth",
+  "pt-BR": "Labirinto verde",
+  "ja": "生け垣の迷路",
+  "ko": "울타리 미로",
+  "zh-Hans": "树篱迷宫"
+ },
+ "Last Bloom": {
+  "es": "Última flor",
+  "fr": "Dernière floraison",
+  "de": "Letzte Blüte",
+  "pt-BR": "Última flor",
+  "ja": "最後の花",
+  "ko": "마지막 꽃",
+  "zh-Hans": "最后一朵花"
+ },
+ "Alchemy": {
+  "es": "Alquimia",
+  "fr": "Alchimie",
+  "de": "Alchemie",
+  "pt-BR": "Alquimia",
+  "ja": "錬金術",
+  "ko": "연금술",
+  "zh-Hans": "炼金术"
+ },
+ "Drain First": {
+  "es": "Desagüe primero",
+  "fr": "Siphon d'abord",
+  "de": "Abfluss zuerst",
+  "pt-BR": "Ralo primeiro",
+  "ja": "まずは排水",
+  "ko": "배수 먼저",
+  "zh-Hans": "先排水"
+ },
+ "Get rid of the lava before the sand goes through": {
+  "es": "Deshazte de la lava antes de que pase la arena",
+  "fr": "Débarrasse-toi de la lave avant que le sable passe",
+  "de": "Werde die Lava los, bevor der Sand durchläuft",
+  "pt-BR": "Livre-se da lava antes que a areia passe",
+  "ja": "砂が通る前に溶岩を片づけよう",
+  "ko": "모래가 지나가기 전에 용암을 없애세요",
+  "zh-Hans": "在沙子通过前先处理掉岩浆"
+ },
+ "Kindling": {
+  "es": "Yesca",
+  "fr": "Petit bois",
+  "de": "Anzündholz",
+  "pt-BR": "Gravetos",
+  "ja": "たきつけ",
+  "ko": "불쏘시개",
+  "zh-Hans": "引火柴"
+ },
+ "Blasts break stone. Lava burns plants.": {
+  "es": "Las bombas rompen la piedra. La lava quema las plantas.",
+  "fr": "Les bombes brisent la pierre. La lave brûle les plantes.",
+  "de": "Bomben sprengen Stein. Lava verbrennt Pflanzen.",
+  "pt-BR": "Bombas quebram pedra. Lava queima plantas.",
+  "ja": "爆弾は石をこわす。溶岩は植物を燃やす。",
+  "ko": "폭탄은 돌을 부숴요. 용암은 식물을 태워요.",
+  "zh-Hans": "炸弹能炸碎石头，岩浆能烧掉植物。"
+ },
+ "Hot Swap": {
+  "es": "Cambio en caliente",
+  "fr": "Échange à chaud",
+  "de": "Heißer Tausch",
+  "pt-BR": "Troca quente",
+  "ja": "あつあつ交換",
+  "ko": "뜨거운 교환",
+  "zh-Hans": "热交换"
+ },
+ "One cup wants stone, the other wants water": {
+  "es": "Un vaso pide piedra; el otro, agua",
+  "fr": "Un gobelet veut de la pierre, l'autre de l'eau",
+  "de": "Ein Becher will Stein, der andere Wasser",
+  "pt-BR": "Um copo quer pedra, o outro quer água",
+  "ja": "片方のカップは石、もう片方は水がほしい",
+  "ko": "한 컵은 돌을, 다른 컵은 물을 원해요",
+  "zh-Hans": "一个杯子要石头，另一个要水"
+ },
+ "Lava Lamp": {
+  "es": "Lámpara de lava",
+  "fr": "Lampe à lave",
+  "de": "Lavalampe",
+  "pt-BR": "Luminária de lava",
+  "ja": "ラバランプ",
+  "ko": "용암 램프",
+  "zh-Hans": "熔岩灯"
+ },
+ "This cup wants lava. Keep the water out.": {
+  "es": "Este vaso pide lava. Mantén el agua afuera.",
+  "fr": "Ce gobelet veut de la lave. Garde l'eau à l'écart.",
+  "de": "Dieser Becher will Lava. Halte das Wasser fern.",
+  "pt-BR": "Este copo quer lava. Mantenha a água longe.",
+  "ja": "このカップには溶岩を。水は入れないで。",
+  "ko": "이 컵은 용암을 원해요. 물이 들어가지 않게 하세요.",
+  "zh-Hans": "这个杯子要岩浆，别让水进去。"
+ },
+ "Firebreak": {
+  "es": "Cortafuegos",
+  "fr": "Coupe-feu",
+  "de": "Brandschneise",
+  "pt-BR": "Corta-fogo",
+  "ja": "防火帯",
+  "ko": "방화선",
+  "zh-Hans": "防火带"
+ },
+ "Fire spreads through every plant it touches": {
+  "es": "El fuego se propaga a cada planta que toca",
+  "fr": "Le feu se propage à chaque plante qu'il touche",
+  "de": "Feuer springt auf jede Pflanze über, die es berührt",
+  "pt-BR": "O fogo se espalha por toda planta que toca",
+  "ja": "火はふれた植物すべてに燃え広がる",
+  "ko": "불은 닿는 식물마다 번져요",
+  "zh-Hans": "火会蔓延到碰到的每一株植物"
+ },
+ "Secret Garden": {
+  "es": "Jardín secreto",
+  "fr": "Jardin secret",
+  "de": "Geheimer Garten",
+  "pt-BR": "Jardim secreto",
+  "ja": "ひみつの庭",
+  "ko": "비밀의 정원",
+  "zh-Hans": "秘密花园"
+ },
+ "Water the seeds and the garden grows": {
+  "es": "Riega las semillas y el jardín crecerá",
+  "fr": "Arrose les graines et le jardin poussera",
+  "de": "Gieß die Samen, dann wächst der Garten",
+  "pt-BR": "Regue as sementes e o jardim cresce",
+  "ja": "種に水をやれば庭が育つ",
+  "ko": "씨앗에 물을 주면 정원이 자라요",
+  "zh-Hans": "给种子浇水，花园就会长起来"
+ },
+ "Sluice": {
+  "es": "Compuerta",
+  "fr": "Vanne",
+  "de": "Stauwehr",
+  "pt-BR": "Comporta",
+  "ja": "放水路",
+  "ko": "물길",
+  "zh-Hans": "泄水道"
+ },
+ "Deal with the water before the sand comes down": {
+  "es": "Encárgate del agua antes de que baje la arena",
+  "fr": "Occupe-toi de l'eau avant que le sable descende",
+  "de": "Kümmere dich ums Wasser, bevor der Sand herunterkommt",
+  "pt-BR": "Cuide da água antes que a areia desça",
+  "ja": "砂が落ちてくる前に水をなんとかしよう",
+  "ko": "모래가 내려오기 전에 물을 처리하세요",
+  "zh-Hans": "沙子落下前先把水处理好"
+ },
+ "Quarry": {
+  "es": "Cantera",
+  "fr": "Carrière",
+  "de": "Steinbruch",
+  "pt-BR": "Pedreira",
+  "ja": "石切り場",
+  "ko": "채석장",
+  "zh-Hans": "采石场"
+ },
+ "One blast. Choose the spot carefully.": {
+  "es": "Una sola bomba. Elige bien el lugar.",
+  "fr": "Une seule bombe. Choisis bien l'endroit.",
+  "de": "Nur eine Bombe. Wähle die Stelle gut.",
+  "pt-BR": "Só uma bomba. Escolha bem o lugar.",
+  "ja": "爆弾は1つだけ。場所をよく選ぼう。",
+  "ko": "폭탄은 하나뿐. 위치를 잘 고르세요.",
+  "zh-Hans": "只有一颗炸弹，仔细选好位置。"
+ },
+ "Trinity": {
+  "es": "Trío",
+  "fr": "Trio",
+  "de": "Dreiklang",
+  "pt-BR": "Trio",
+  "ja": "トリプル",
+  "ko": "삼총사",
+  "zh-Hans": "三重奏"
+ },
+ "Three cups, three treasures": {
+  "es": "Tres vasos, tres tesoros",
+  "fr": "Trois gobelets, trois trésors",
+  "de": "Drei Becher, drei Schätze",
+  "pt-BR": "Três copos, três tesouros",
+  "ja": "3つのカップに3つのお宝",
+  "ko": "컵 세 개, 보물 세 개",
+  "zh-Hans": "三个杯子，三样宝贝"
+ },
+ "The Alchemist": {
+  "es": "El alquimista",
+  "fr": "L'Alchimiste",
+  "de": "Der Alchemist",
+  "pt-BR": "O Alquimista",
+  "ja": "錬金術師",
+  "ko": "연금술사",
+  "zh-Hans": "炼金术师"
+ },
+ "Fire frees the sand. Water and lava make stone.": {
+  "es": "El fuego libera la arena. El agua y la lava hacen piedra.",
+  "fr": "Le feu libère le sable. L'eau et la lave font de la pierre.",
+  "de": "Feuer befreit den Sand. Wasser und Lava ergeben Stein.",
+  "pt-BR": "O fogo liberta a areia. Água e lava viram pedra.",
+  "ja": "火が砂を解き放つ。水と溶岩で石ができる。",
+  "ko": "불이 모래를 풀어 줘요. 물과 용암이 만나면 돌이 돼요.",
+  "zh-Hans": "火能放出沙子，水和岩浆会变成石头。"
+ }
+}
