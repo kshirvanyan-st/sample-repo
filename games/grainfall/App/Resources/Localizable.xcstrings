@@ -12,7 +12,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pot : %@"
+            "value": "Gobelet : %@"
           }
         },
         "de": {
@@ -24,7 +24,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "Pote de %@"
+            "value": "Copo de %@"
           }
         },
         "ja": {
@@ -58,7 +58,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Du %@ est tombé dans le pot."
+            "value": "Du %@ est tombé dans le gobelet."
           }
         },
         "de": {
@@ -70,7 +70,7 @@
         "pt-BR": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@ caiu no pote."
+            "value": "%@ caiu no copo."
           }
         },
         "ja": {
@@ -1668,13 +1668,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Glissez pour creuser la terre. Touchez une trappe rayée pour l'ouvrir."
+            "value": "Glissez pour creuser la terre. Touchez une vanne rayée pour l'ouvrir."
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Ziehe, um durch Erde zu graben. Tippe auf ein gestreiftes Tor, um es zu öffnen."
+            "value": "Ziehe, um durch Erde zu graben. Tippe auf eine gestreifte Klappe, um sie zu öffnen."
           }
         },
         "pt-BR": {
@@ -1692,7 +1692,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "드래그해서 흙을 파세요. 줄무늬 문을 탭하면 열립니다."
+            "value": "드래그해서 흙을 파세요. 줄무늬 게이트를 탭하면 열립니다."
           }
         },
         "zh-Hans": {
@@ -1714,7 +1714,7 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bonde"
+            "value": "Siphon"
           }
         },
         "de": {
@@ -2726,13 +2726,13 @@
         "fr": {
           "stringUnit": {
             "state": "translated",
-            "value": "Trappe"
+            "value": "Vanne"
           }
         },
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Tor"
+            "value": "Klappe"
           }
         },
         "pt-BR": {
@@ -2750,7 +2750,7 @@
         "ko": {
           "stringUnit": {
             "state": "translated",
-            "value": "문"
+            "value": "게이트"
           }
         },
         "zh-Hans": {

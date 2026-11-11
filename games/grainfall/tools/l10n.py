@@ -92,10 +92,10 @@ UI = {
                                                    "Grainfall 레벨 %1$@을(를) ★%2$lld개로 풀었어요",
                                                    "我在 Grainfall 中以 %2$lld ★ 通过了第 %1$@ 关"],
     "Ruined!": ["¡Arruinado!", "Gâché !", "Ruiniert!", "Estragou!", "台無し！", "망쳤어요!", "毁了！"],
-    "%@ got into the cup.": ["%@ ha caído en el vaso.", "Du %@ est tombé dans le pot.", "%@ ist in den Becher geraten.",
-                             "%@ caiu no pote.", "%@がカップに入ってしまった。", "%@이(가) 컵에 들어갔어요.", "%@ 掉进了杯子里。"],
+    "%@ got into the cup.": ["%@ ha caído en el vaso.", "Du %@ est tombé dans le gobelet.", "%@ ist in den Becher geraten.",
+                             "%@ caiu no copo.", "%@がカップに入ってしまった。", "%@이(가) 컵에 들어갔어요.", "%@ 掉进了杯子里。"],
     "Try again": ["Reintentar", "Réessayer", "Nochmal versuchen", "Tentar de novo", "再挑戦", "다시 시도", "再试一次"],
-    "%@ cup": ["Vaso de %@", "Pot : %@", "Becher: %@", "Pote de %@", "%@のカップ", "%@ 컵", "%@杯"],
+    "%@ cup": ["Vaso de %@", "Gobelet : %@", "Becher: %@", "Copo de %@", "%@のカップ", "%@ 컵", "%@杯"],
     "%lld of %lld": ["%1$lld de %2$lld", "%1$lld sur %2$lld", "%1$lld von %2$lld", "%1$lld de %2$lld",
                      "%2$lld中%1$lld", "%2$lld 중 %1$lld", "%1$lld/%2$lld"],
     "Grainfall Full Game": ["Grainfall: juego completo", "Grainfall : jeu complet", "Grainfall Vollversion",
@@ -180,11 +180,11 @@ UI = {
     "Game board": ["Tablero de juego", "Plateau de jeu", "Spielfeld", "Tabuleiro", "ゲーム盤", "게임 보드", "游戏棋盘"],
     "Drag to dig through dirt. Tap a striped gate to open it.": [
         "Arrastra para cavar en la tierra. Toca una compuerta a rayas para abrirla.",
-        "Glissez pour creuser la terre. Touchez une trappe rayée pour l'ouvrir.",
-        "Ziehe, um durch Erde zu graben. Tippe auf ein gestreiftes Tor, um es zu öffnen.",
+        "Glissez pour creuser la terre. Touchez une vanne rayée pour l'ouvrir.",
+        "Ziehe, um durch Erde zu graben. Tippe auf eine gestreifte Klappe, um sie zu öffnen.",
         "Arraste para cavar a terra. Toque numa comporta listrada para abri-la.",
         "ドラッグで土を掘る。しま模様のゲートをタップで開く。",
-        "드래그해서 흙을 파세요. 줄무늬 문을 탭하면 열립니다.",
+        "드래그해서 흙을 파세요. 줄무늬 게이트를 탭하면 열립니다.",
         "拖动挖开泥土。点按条纹闸门将其打开。"],
     # Materials (String(localized:) in Theme.swift)
     "Sand": ["Arena", "Sable", "Sand", "Areia", "砂", "모래", "沙子"],
@@ -196,8 +196,8 @@ UI = {
     "Fire": ["Fuego", "Feu", "Feuer", "Fogo", "炎", "불", "火"],
     "Dirt": ["Tierra", "Terre", "Erde", "Terra", "土", "흙", "泥土"],
     "Wall": ["Muro", "Mur", "Wand", "Parede", "壁", "벽", "墙"],
-    "Gate": ["Compuerta", "Trappe", "Tor", "Comporta", "ゲート", "문", "闸门"],
-    "Drain": ["Desagüe", "Bonde", "Abfluss", "Ralo", "排水口", "배수구", "排水口"],
+    "Gate": ["Compuerta", "Vanne", "Klappe", "Comporta", "ゲート", "게이트", "闸门"],
+    "Drain": ["Desagüe", "Siphon", "Abfluss", "Ralo", "排水口", "배수구", "排水口"],
 }
 
 
