@@ -19,14 +19,14 @@ struct GameScreen: View {
     private let hudHeight: CGFloat = 100
     private let meterHeight: CGFloat = 44
 
-    @MainActor init(level: LevelDefinition) {
-        _game = StateObject(wrappedValue: GameController(level: level))
+    @MainActor init(level: LevelDefinition, autoplay: Bool = false) {
+        _game = StateObject(wrappedValue: GameController(level: level, demo: autoplay))
     }
 
     /// Hints unlock after a restart or 15 s of play, so players get a fair try first.
     private var hintAvailable: Bool { !game.ghost.isEmpty && (game.attempts > 1 || game.hud.seconds > 15) }
     private var showTutorial: Bool {
-        game.level.id == model.catalog.orderedLevelIDs.first && !game.hasTouched
+        !game.isDemo && game.level.id == model.catalog.orderedLevelIDs.first && !game.hasTouched
             && !model.progress.seenHints.contains("tutorial")
     }
 
@@ -83,7 +83,7 @@ struct GameScreen: View {
                 }
             }
         }
-        if game.level.hint != nil, !model.progress.seenHints.contains(game.level.id), !showTutorial {
+        if !game.isDemo, game.level.hint != nil, !model.progress.seenHints.contains(game.level.id), !showTutorial {
             showHint = true
         }
         Task {

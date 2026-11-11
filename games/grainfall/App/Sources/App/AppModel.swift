@@ -35,6 +35,10 @@ final class AppModel: ObservableObject {
         self.progressStore = progressStore
         self.store = store ?? StoreService()
         self.progress = progressStore?.load() ?? PlayerProgress()
+        let args = ProcessInfo.processInfo.arguments
+        if let i = args.firstIndex(of: "-GFStartLevel"), i + 1 < args.count { launchLevel = args[i + 1] } else { launchLevel = nil }
+        autoplay = args.contains("-GFAutoplay")
+        unlockAll = args.contains("-GFUnlockAll")
         haptics.isEnabled = progress.settings.haptics
         audio.soundEnabled = progress.settings.sound
         audio.musicEnabled = progress.settings.music
@@ -44,11 +48,20 @@ final class AppModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    var hasFullGame: Bool { store.hasFullGame }
+    /// Launch arguments for automated screenshots and CI smoke tests (never set in normal use):
+    /// `-GFStartLevel <id>` opens a level, `-GFAutoplay` replays its solution, `-GFUnlockAll`
+    /// ignores locks.
+    let launchLevel: String?
+    let autoplay: Bool
+    private let unlockAll: Bool
+
+    var hasFullGame: Bool { store.hasFullGame || unlockAll }
 
     func level(_ id: String) -> LevelDefinition? { catalog.levels[id] }
 
-    func isUnlocked(_ id: String) -> Bool { progress.isUnlocked(id, in: catalog, fullGame: hasFullGame) }
+    func isUnlocked(_ id: String) -> Bool {
+        unlockAll || progress.isUnlocked(id, in: catalog, fullGame: hasFullGame)
+    }
 
     func isChapterUnlocked(_ c: Chapter) -> Bool { progress.isChapterUnlocked(c, in: catalog, fullGame: hasFullGame) }
 
@@ -81,7 +94,11 @@ final class AppModel: ObservableObject {
     /// Call once on launch.
     func start() {
         audio.start()
-        gameCenter.authenticate()
+        if let launchLevel, catalog.levels[launchLevel] != nil {
+            screen = .game(launchLevel)
+        } else {
+            gameCenter.authenticate()
+        }
     }
 
     /// Records a win. Returns true if it was a new best.

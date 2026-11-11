@@ -14,7 +14,8 @@ struct RootView: View {
                 LevelSelectView().transition(.opacity)
             case let .game(id):
                 if let level = model.level(id) {
-                    GameScreen(level: level).id(id).transition(.opacity)
+                    GameScreen(level: level, autoplay: model.autoplay && id == model.launchLevel)
+                        .id(id).transition(.opacity)
                 }
             }
         }

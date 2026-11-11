@@ -48,6 +48,37 @@ jobs:
           xcodebuild -project Grainfall.xcodeproj -scheme Grainfall \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO build 2>&1 | tee build.log | xcbeautify
+      - name: Smoke test in the Simulator (launch, stay alive, screenshots)
+        working-directory: games/grainfall/App
+        run: |
+          set -euo pipefail
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import json,sys; d=json.load(sys.stdin)['devices']; print(next(x['udid'] for k in sorted(d, reverse=True) if 'iOS' in k for x in d[k] if x['name'].startswith('iPhone 16 Pro') or x['name'].startswith('iPhone 1')))")
+          echo "Simulator: $UDID"
+          xcodebuild -project Grainfall.xcodeproj -scheme Grainfall -destination "id=$UDID" \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO build -quiet
+          xcrun simctl boot "$UDID" || true
+          xcrun simctl bootstatus "$UDID" -b
+          xcrun simctl install "$UDID" build/Build/Products/Debug-iphonesimulator/Grainfall.app
+          mkdir -p shots
+          shoot() { # name, extra launch args...
+            local name=$1; shift
+            xcrun simctl terminate "$UDID" com.yourstudio.grainfall 2>/dev/null || true
+            PID=$(xcrun simctl launch "$UDID" com.yourstudio.grainfall "$@" | awk '{print $NF}')
+            sleep 9
+            kill -0 "$PID" || { echo "::error::app exited during '$name'"; exit 1; }
+            xcrun simctl io "$UDID" screenshot "shots/$name.png"
+          }
+          shoot title
+          shoot level-1-10 -GFStartLevel 1-10 -GFAutoplay -GFUnlockAll
+          shoot level-3-10 -GFStartLevel 3-10 -GFAutoplay -GFUnlockAll
+          shoot level-6-10 -GFStartLevel 6-10 -GFAutoplay -GFUnlockAll
+          xcrun simctl spawn "$UDID" log show --last 2m --predicate 'process == "Grainfall"' --style compact | grep -iE "fault|crash|fatal" | head -20 || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: simulator-screenshots
+          path: games/grainfall/App/shots/
+          if-no-files-found: ignore
       - name: Show compiler errors
         if: failure()
         working-directory: games/grainfall/App
