@@ -1,0 +1,18 @@
+{
+  "id": "3-2", "name": "Burn the Floor", "seed": 32,
+  "digBudget": 1400, "par": [680, 1130],
+  "hint": "Lava sets plants on fire",
+  "shapes": [
+    {"op": "rect", "m": "wall", "x": 7, "y": 40, "w": 3, "h": 40},
+    {"op": "rect", "m": "wall", "x": 50, "y": 14, "w": 3, "h": 66},
+    {"op": "rect", "m": "wall", "x": 122, "y": 14, "w": 3, "h": 66},
+    {"op": "rect", "m": "lava", "x": 10, "y": 50, "w": 40, "h": 20},
+    {"op": "gate", "id": 1, "x": 10, "y": 70, "w": 40, "h": 6},
+    {"op": "rect", "m": "plant", "x": 10, "y": 76, "w": 112, "h": 4},
+    {"op": "rect", "m": "sand", "x": 53, "y": 24, "w": 69, "h": 52},
+    {"op": "rect", "m": "dirt", "x": 0, "y": 120, "w": 128, "h": 50},
+    {"op": "cup", "x": 70, "y": 196, "w": 52, "h": 40, "t": 3}
+  ],
+  "cups": [{"x": 73, "y": 196, "w": 46, "h": 37, "accepts": "sand", "required": 800, "forbids": ["lava"]}],
+  "solution": [{"t": 0, "gate": [30, 72]}, {"t": 0, "dig": [96, 116, 96, 176]}]
+}

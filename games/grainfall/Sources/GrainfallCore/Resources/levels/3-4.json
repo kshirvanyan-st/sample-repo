@@ -1,0 +1,21 @@
+{
+  "id": "3-4", "name": "Two Pockets", "seed": 34,
+  "digBudget": 9000, "par": [4480, 7460],
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 40, "w": 128, "h": 160},
+    {"op": "circle", "m": "lava", "cx": 40, "cy": 110, "r": 10},
+    {"op": "circle", "m": "lava", "cx": 88, "cy": 150, "r": 10},
+    {"op": "cup", "x": 6, "y": 204, "w": 44, "h": 34, "t": 3},
+    {"op": "cup", "x": 78, "y": 204, "w": 44, "h": 34, "t": 3}
+  ],
+  "spouts": [
+    {"x": 40, "y": 6, "m": "sand", "rate": 3, "total": 800, "width": 6},
+    {"x": 88, "y": 6, "m": "water", "rate": 3, "total": 800, "width": 6, "delay": 90}
+  ],
+  "cups": [
+    {"x": 9, "y": 204, "w": 38, "h": 31, "accepts": "sand", "required": 350, "forbids": ["lava", "water"]},
+    {"x": 81, "y": 204, "w": 38, "h": 31, "accepts": "water", "required": 350, "forbids": ["lava", "sand"]}
+  ],
+  "solution": [{"t": 0, "dig": [40, 36, 40, 80, 20, 110, 20, 190, 26, 206]}, {"t": 0, "dig": [88, 36, 88, 126, 108, 136, 108, 170, 100, 206]}],
+  "traps": [[{"t": 0, "dig": [40, 36, 40, 206]}, {"t": 0, "dig": [88, 36, 88, 206]}]]
+}

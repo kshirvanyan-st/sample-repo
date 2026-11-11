@@ -1,0 +1,19 @@
+{
+  "id": "2-3", "name": "Keep Them Apart", "seed": 23,
+  "digBudget": 6000, "par": [2970, 4950],
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 70, "w": 128, "h": 110},
+    {"op": "cup", "x": 6, "y": 196, "w": 44, "h": 40, "t": 3},
+    {"op": "cup", "x": 78, "y": 196, "w": 44, "h": 40, "t": 3}
+  ],
+  "spouts": [
+    {"x": 20, "y": 6, "m": "sand", "rate": 3, "total": 700, "width": 6},
+    {"x": 64, "y": 6, "m": "water", "rate": 3, "total": 700, "width": 6, "delay": 120}
+  ],
+  "cups": [
+    {"x": 9, "y": 196, "w": 38, "h": 37, "accepts": "sand", "required": 350, "forbids": ["water"]},
+    {"x": 81, "y": 196, "w": 38, "h": 37, "accepts": "water", "required": 350, "forbids": ["sand"]}
+  ],
+  "solution": [{"t": 0, "dig": [64, 66, 100, 184]}, {"t": 0, "dig": [24, 66, 26, 184]}],
+  "traps": [[{"t": 0, "dig": [24, 66, 26, 184]}, {"t": 200, "dig": [64, 66, 100, 184]}]]
+}

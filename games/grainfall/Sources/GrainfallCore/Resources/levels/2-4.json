@@ -1,0 +1,13 @@
+{
+  "id": "2-4", "name": "Switchback", "seed": 24,
+  "digBudget": 7400, "par": [3660, 6090],
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 40, "w": 128, "h": 160},
+    {"op": "rect", "m": "wall", "x": 0, "y": 100, "w": 72, "h": 8},
+    {"op": "rect", "m": "wall", "x": 40, "y": 150, "w": 88, "h": 4},
+    {"op": "cup", "x": 6, "y": 204, "w": 44, "h": 34, "t": 3}
+  ],
+  "spouts": [{"x": 20, "y": 6, "m": "water", "rate": 4, "total": 1100, "width": 6}],
+  "cups": [{"x": 9, "y": 204, "w": 38, "h": 31, "accepts": "water", "required": 500}],
+  "solution": [{"t": 0, "dig": [20, 36, 20, 95, 82, 95, 82, 145, 30, 145, 30, 206]}]
+}

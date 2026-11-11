@@ -49,3 +49,6 @@
 # Ignore Docker-related files
 /.dockerignore
 /Dockerfile*
+
+# Native game projects (built by their own workflows, not part of the Rails image).
+/games/

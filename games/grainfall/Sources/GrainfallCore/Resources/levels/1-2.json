@@ -1,0 +1,12 @@
+{
+  "id": "1-2", "name": "Sidestep", "seed": 12,
+  "digBudget": 2900, "par": [1430, 2390],
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 80, "w": 128, "h": 96},
+    {"op": "cup", "x": 78, "y": 196, "w": 44, "h": 40, "t": 3}
+  ],
+  "spouts": [{"x": 24, "y": 6, "m": "sand", "rate": 3, "total": 900, "width": 8}],
+  "cups": [{"x": 81, "y": 196, "w": 38, "h": 37, "accepts": "sand", "required": 400}],
+  "solution": [{"t": 0, "dig": [24, 76, 100, 180]}],
+  "traps": [[{"t": 0, "dig": [24, 76, 24, 180]}]]
+}

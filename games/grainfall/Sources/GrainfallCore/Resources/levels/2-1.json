@@ -1,0 +1,15 @@
+{
+  "id": "2-1", "name": "Thirsty Sprout", "seed": 21,
+  "digBudget": 4300, "par": [2150, 3580],
+  "hint": "Water flows sideways. Sand doesn't.",
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 60, "w": 128, "h": 29},
+    {"op": "line", "m": "wall", "x0": 0, "y0": 90, "x1": 100, "y1": 90, "t": 3},
+    {"op": "rect", "m": "dirt", "x": 0, "y": 130, "w": 128, "h": 50},
+    {"op": "cup", "x": 88, "y": 200, "w": 36, "h": 36, "t": 3}
+  ],
+  "spouts": [{"x": 16, "y": 6, "m": "water", "rate": 4, "total": 1000, "width": 6}],
+  "cups": [{"x": 91, "y": 200, "w": 30, "h": 33, "accepts": "water", "required": 450}],
+  "solution": [{"t": 0, "dig": [16, 56, 16, 85, 108, 85]}, {"t": 0, "dig": [106, 126, 106, 184]}],
+  "traps": [[{"t": 0, "dig": [16, 56, 16, 85]}, {"t": 0, "dig": [106, 126, 106, 184]}]]
+}

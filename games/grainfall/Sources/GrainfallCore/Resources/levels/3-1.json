@@ -1,0 +1,14 @@
+{
+  "id": "3-1", "name": "Hot Pocket", "seed": 31,
+  "digBudget": 5100, "par": [2540, 4230],
+  "hint": "Lava ruins the pot. Dig around it.",
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 40, "w": 128, "h": 160},
+    {"op": "circle", "m": "lava", "cx": 64, "cy": 120, "r": 12},
+    {"op": "cup", "x": 40, "y": 204, "w": 48, "h": 34, "t": 3}
+  ],
+  "spouts": [{"x": 64, "y": 6, "m": "water", "rate": 4, "total": 1100, "width": 6}],
+  "cups": [{"x": 43, "y": 204, "w": 42, "h": 31, "accepts": "water", "required": 500, "forbids": ["lava"]}],
+  "solution": [{"t": 0, "dig": [64, 36, 64, 92, 34, 108, 34, 150, 64, 166, 64, 206]}],
+  "traps": [[{"t": 0, "dig": [64, 36, 64, 206]}]]
+}

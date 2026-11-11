@@ -1,0 +1,12 @@
+{
+  "id": "1-1", "name": "First Dig", "seed": 11,
+  "digBudget": 1100, "par": [540, 900],
+  "hint": "Drag to dig a path for the sand",
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 100, "w": 128, "h": 40},
+    {"op": "cup", "x": 40, "y": 190, "w": 48, "h": 40, "t": 3}
+  ],
+  "spouts": [{"x": 64, "y": 6, "m": "sand", "rate": 3, "total": 900, "width": 8}],
+  "cups": [{"x": 43, "y": 190, "w": 42, "h": 37, "accepts": "sand", "required": 450}],
+  "solution": [{"t": 0, "dig": [64, 96, 64, 144]}]
+}

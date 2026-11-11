@@ -1,0 +1,56 @@
+name: Grainfall
+
+on:
+  push:
+    paths: ["games/grainfall/**", ".github/workflows/grainfall.yml"]
+  pull_request:
+    paths: ["games/grainfall/**", ".github/workflows/grainfall.yml"]
+  workflow_dispatch:
+
+defaults:
+  run:
+    working-directory: games/grainfall
+
+jobs:
+  core:
+    name: Core tests + level checks
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: swift-actions/setup-swift@v2
+        with:
+          swift-version: "6.0"
+      - name: Test (release — the simulation is too slow unoptimised)
+        run: swift test -c release -Xswiftc -enable-testing
+      - name: Validate every level (needs input, solvable at 3★, traps hold)
+        run: swift run -c release grainfall-sim validate
+      - name: Render level sheet
+        run: |
+          mkdir -p out
+          swift run -c release grainfall-sim sheet out/levels.png --scale 2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: level-sheet
+          path: games/grainfall/out/levels.png
+
+  ios:
+    name: iOS app build
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        working-directory: games/grainfall/App
+        run: xcodegen generate
+      - name: Build for iOS Simulator
+        working-directory: games/grainfall/App
+        run: |
+          set -o pipefail
+          xcodebuild -project Grainfall.xcodeproj -scheme Grainfall \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO build 2>&1 | tee build.log | xcbeautify
+      - name: Show compiler errors
+        if: failure()
+        working-directory: games/grainfall/App
+        run: grep -E "error:|warning: .*isolated" build.log | sort -u | head -100 || true

@@ -1,0 +1,30 @@
+{
+  "identifier" : "6C1F2A9E",
+  "nonRenewingSubscriptions" : [ ],
+  "products" : [
+    {
+      "displayPrice" : "3.99",
+      "familyShareable" : true,
+      "internalID" : "6740000001",
+      "localizations" : [
+        {
+          "description" : "Unlock every chapter, including all future chapters.",
+          "displayName" : "Full Game",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.yourstudio.grainfall.fullgame",
+      "referenceName" : "Full Game",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_enableAskToBuyInterruptionForTesting" : false,
+    "_storeKitErrors" : [ ]
+  },
+  "subscriptionGroups" : [ ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}
