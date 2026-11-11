@@ -11,6 +11,26 @@ public enum GameStatus: Equatable, Sendable {
     public var isTerminal: Bool { self != .playing }
 }
 
+/// Things that happened since the app last asked — drives sound and visual effects. Not part of
+/// the deterministic state (never read by the simulation).
+public enum WorldEvent: Equatable, Sendable {
+    case gateOpened(Point)
+    case blast(Point, cleared: Int)
+    case cupFilled(Int)
+}
+
+/// Per-tick movement/reaction counts (for audio intensity). Reset every tick.
+public struct Activity: Equatable, Sendable {
+    public var sand = 0
+    public var water = 0
+    public var lava = 0
+    public var steam = 0
+    public var reactions = 0
+    public var burning = 0
+    public var drained = 0
+    public init() {}
+}
+
 public struct SpoutState: Sendable {
     public let def: SpoutDef
     public internal(set) var emitted: Int = 0
@@ -33,6 +53,7 @@ public struct World: Sendable {
     public static let stuckAfterTicks = 600
     public static let digRadius = 4
     public static let gateTapRadius = 6
+    public static let blastRadius = 7
 
     public let level: LevelDefinition
     public internal(set) var grid: Grid
@@ -44,6 +65,9 @@ public struct World: Sendable {
     public internal(set) var digBudget: Int
     public internal(set) var idleTicks: Int = 0
     public internal(set) var openedGates: Set<Int> = []
+    public internal(set) var blastsLeft: Int
+    public internal(set) var activity = Activity()
+    public internal(set) var events: [WorldEvent] = []
     var rng: RNG
     /// Per-cell tick of the last move; avoids processing a cell twice in one tick.
     var stamp: [UInt32]
@@ -54,6 +78,7 @@ public struct World: Sendable {
         spouts = level.spouts.map { SpoutState(def: $0) }
         cups = level.cups.map { CupState(def: $0) }
         digBudget = level.digBudget
+        blastsLeft = level.blasts
         rng = RNG(seed: level.seed)
         stamp = Array(repeating: 0, count: grid.width * grid.height)
         paint(level.shapes)
@@ -163,11 +188,37 @@ public struct World: Sendable {
             }
             openedGates.insert(id)
             idleTicks = 0
+            events.append(.gateOpened(at))
             return removed
+        case let .blast(at):
+            guard blastsLeft > 0 else { return 0 }
+            blastsLeft -= 1
+            var cleared = 0
+            let r = World.blastRadius
+            for dy in -r...r {
+                for dx in -r...r where dx * dx + dy * dy <= r * r {
+                    let x = at.x + dx, y = at.y + dy
+                    switch grid.at(x, y) {
+                    case .dirt, .stone, .plant:
+                        grid.set(x, y, .empty)
+                        cleared += 1
+                    default: break
+                    }
+                }
+            }
+            idleTicks = 0
+            events.append(.blast(at, cleared: cleared))
+            return cleared
         }
     }
 
     /// The id of the gate nearest to `p` within `gateTapRadius`, if any.
+    /// Returns and clears the pending effect events.
+    public mutating func takeEvents() -> [WorldEvent] {
+        defer { events.removeAll(keepingCapacity: true) }
+        return events
+    }
+
     public func gateID(near p: Point) -> Int? {
         let r = World.gateTapRadius
         var best: (d: Int, id: Int)?
@@ -190,6 +241,7 @@ public struct World: Sendable {
         guard status == .playing else { return }
         tick += 1
         idleTicks += 1
+        activity = Activity()
         emitSpouts()
         updateCells()
         updateCups()
@@ -230,6 +282,7 @@ public struct World: Sendable {
                     }
                 }
             }
+            if count >= d.required, cups[c].collected < d.required { events.append(.cupFilled(c)) }
             cups[c].collected = count
             if count > cups[c].best {
                 cups[c].best = count

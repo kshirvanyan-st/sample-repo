@@ -11,13 +11,15 @@ public enum Material: UInt8, CaseIterable, Codable, Sendable {
     case plant
     case fire
     case gate
+    /// Swallows anything that flows into it (spec §2.4).
+    case drain
 
     public enum Kind: Sendable { case none, solid, powder, liquid, gas, fire }
 
     public var kind: Kind {
         switch self {
         case .empty: return .none
-        case .wall, .dirt, .stone, .plant, .gate: return .solid
+        case .wall, .dirt, .stone, .plant, .gate, .drain: return .solid
         case .sand: return .powder
         case .water, .lava: return .liquid
         case .steam: return .gas
@@ -61,6 +63,7 @@ public enum Material: UInt8, CaseIterable, Codable, Sendable {
         case .plant: return "plant"
         case .fire: return "fire"
         case .gate: return "gate"
+        case .drain: return "drain"
         }
     }
 

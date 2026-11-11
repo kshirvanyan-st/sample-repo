@@ -4,6 +4,8 @@ import Foundation
 public enum PlayerAction: Equatable, Sendable {
     case dig(from: Point, to: Point)
     case openGate(at: Point)
+    /// Uses one blast charge: breaks dirt, stone and plant in a radius (spec §2.9).
+    case blast(at: Point)
 }
 
 /// One painting operation in a level file (spec §3).
@@ -109,7 +111,7 @@ public struct TimedAction: Equatable, Sendable {
 struct SolutionStep: Decodable {
     let actions: [TimedAction]
 
-    enum CodingKeys: String, CodingKey { case t, dig, gate }
+    enum CodingKeys: String, CodingKey { case t, dig, gate, blast }
 
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
@@ -126,8 +128,10 @@ struct SolutionStep: Decodable {
             actions = out
         } else if let p = try c.decodeIfPresent([Int].self, forKey: .gate), p.count == 2 {
             actions = [TimedAction(tick: t, action: .openGate(at: Point(p[0], p[1])))]
+        } else if let p = try c.decodeIfPresent([Int].self, forKey: .blast), p.count == 2 {
+            actions = [TimedAction(tick: t, action: .blast(at: Point(p[0], p[1])))]
         } else {
-            throw DecodingError.dataCorruptedError(forKey: .t, in: c, debugDescription: "step needs dig or gate")
+            throw DecodingError.dataCorruptedError(forKey: .t, in: c, debugDescription: "step needs dig, gate or blast")
         }
     }
 }
@@ -137,6 +141,8 @@ public struct LevelDefinition: Decodable, Sendable {
     public var name: String
     public var seed: UInt64
     public var digBudget: Int
+    /// Blast charges available (0 = no blast tool in this level).
+    public var blasts: Int
     public var par: [Int]
     public var hint: String?
     public var shapes: [Shape]
@@ -146,12 +152,12 @@ public struct LevelDefinition: Decodable, Sendable {
     /// Plausible wrong approaches that must *not* win (design-intent checks, R-LVL-4).
     public var traps: [[TimedAction]]
 
-    enum CodingKeys: String, CodingKey { case id, name, seed, digBudget, par, hint, shapes, spouts, cups, solution, traps }
+    enum CodingKeys: String, CodingKey { case id, name, seed, digBudget, blasts, par, hint, shapes, spouts, cups, solution, traps }
 
-    public init(id: String, name: String, seed: UInt64 = 1, digBudget: Int = 2000, par: [Int] = [500, 1000],
+    public init(id: String, name: String, seed: UInt64 = 1, digBudget: Int = 2000, blasts: Int = 0, par: [Int] = [500, 1000],
                 hint: String? = nil, shapes: [Shape], spouts: [SpoutDef], cups: [CupDef], solution: [TimedAction] = [],
                 traps: [[TimedAction]] = []) {
-        self.id = id; self.name = name; self.seed = seed; self.digBudget = digBudget; self.par = par
+        self.id = id; self.name = name; self.seed = seed; self.digBudget = digBudget; self.blasts = blasts; self.par = par
         self.hint = hint; self.shapes = shapes; self.spouts = spouts; self.cups = cups; self.solution = solution
         self.traps = traps
     }
@@ -162,6 +168,7 @@ public struct LevelDefinition: Decodable, Sendable {
         name = try c.decode(String.self, forKey: .name)
         seed = try c.decode(UInt64.self, forKey: .seed)
         digBudget = try c.decode(Int.self, forKey: .digBudget)
+        blasts = try c.decodeIfPresent(Int.self, forKey: .blasts) ?? 0
         par = try c.decode([Int].self, forKey: .par)
         hint = try c.decodeIfPresent(String.self, forKey: .hint)
         shapes = try c.decode([Shape].self, forKey: .shapes)
@@ -198,6 +205,7 @@ public enum LevelLoader {
         if l.par.count != 2 { try fail("par must be [par3, par2]") }
         if l.par3 > l.par2 { try fail("par3 must be ≤ par2") }
         if l.digBudget < 0 { try fail("digBudget must be ≥ 0") }
+        if l.blasts < 0 || l.blasts > 9 { try fail("blasts must be 0...9") }
         if l.cups.isEmpty { try fail("needs at least one cup") }
 
         // Material available to a cup: spout output plus cells painted into the level

@@ -191,3 +191,47 @@ final class RenderTests: XCTestCase {
         withUnsafeBytes(of: c.littleEndian) { XCTAssertEqual(Array($0), [1, 2, 3, 4]) }
     }
 }
+
+final class MechanicTests: XCTestCase {
+    func testDrainSwallowsWhatFlowsIn() {
+        var w = World(level: sandbox(shapes: [.rect(.drain, x: 0, y: 239, w: 128, h: 1),
+                                              .rect(.sand, x: 10, y: 100, w: 5, h: 5),
+                                              .rect(.water, x: 60, y: 100, w: 5, h: 5),
+                                              .rect(.lava, x: 100, y: 100, w: 3, h: 3)]))
+        w.step(600)
+        XCTAssertEqual(w.grid.count(.sand) + w.grid.count(.water) + w.grid.count(.lava), 0)
+        XCTAssertEqual(w.grid.count(.drain), 128, "drains are permanent")
+    }
+
+    func testWaterFlowsSidewaysIntoAWallDrain() {
+        var w = World(level: sandbox(shapes: [.rect(.wall, x: 0, y: 200, w: 128, h: 1),
+                                              .rect(.drain, x: 100, y: 196, w: 1, h: 4),
+                                              .rect(.wall, x: 88, y: 190, w: 1, h: 10),
+                                              .rect(.water, x: 89, y: 199, w: 10, h: 1)]))
+        w.step(300)
+        XCTAssertEqual(w.grid.count(.water), 0)
+    }
+
+    func testBlastBreaksStoneDirtPlantButNotWalls() {
+        var w = World(level: LevelDefinition(
+            id: "b", name: "b", blasts: 1, shapes: [
+                .rect(.stone, x: 50, y: 100, w: 30, h: 3), .rect(.dirt, x: 50, y: 103, w: 30, h: 3),
+                .rect(.wall, x: 64, y: 95, w: 1, h: 20), .rect(.plant, x: 50, y: 106, w: 30, h: 1),
+            ], spouts: [], cups: [CupDef(x: 0, y: 0, w: 2, h: 2, accepts: .sand, required: 1)]))
+        XCTAssertGreaterThan(w.apply(.blast(at: Point(60, 103))), 50)
+        XCTAssertEqual(w.grid.at(60, 101), .empty)
+        XCTAssertEqual(w.grid.at(64, 101), .wall)
+        XCTAssertEqual(w.blastsLeft, 0)
+        XCTAssertEqual(w.dug, 0, "blasts don't count against stars")
+        XCTAssertEqual(w.apply(.blast(at: Point(70, 103))), 0, "no charges left")
+        XCTAssertEqual(w.takeEvents().count, 1)
+        XCTAssertTrue(w.takeEvents().isEmpty)
+    }
+
+    func testActivityCountsMoves() {
+        var w = World(level: sandbox(shapes: [.rect(.sand, x: 10, y: 10, w: 4, h: 4)]))
+        w.step()
+        XCTAssertGreaterThan(w.activity.sand, 0)
+        XCTAssertEqual(w.activity.water, 0)
+    }
+}

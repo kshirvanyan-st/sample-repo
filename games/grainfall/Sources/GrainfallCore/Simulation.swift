@@ -39,11 +39,23 @@ extension World {
     @inline(__always) func canEnter(_ x: Int, _ y: Int, mover: Material) -> Bool {
         guard grid.inBounds(x, y) else { return false }
         let t = grid.mat[y * grid.width + x]
-        return t == .empty || (t.isFluid && t.density < mover.density)
+        return t == .empty || t == .drain || (t.isFluid && t.density < mover.density)
     }
 
     @inline(__always) mutating func move(_ i: Int, to x: Int, _ y: Int, _ now: UInt32) -> Int {
         let j = y * grid.width + x
+        switch grid.mat[i] {
+        case .sand: activity.sand += 1
+        case .water: activity.water += 1
+        case .lava: activity.lava += 1
+        case .steam: activity.steam += 1
+        default: break
+        }
+        if grid.mat[j] == .drain {
+            grid.set(i % grid.width, i / grid.width, .empty)
+            activity.drained += 1
+            return i
+        }
         grid.swapCells(i, j)
         stamp[j] = now
         return j
@@ -70,7 +82,10 @@ extension World {
             var target = 0
             for s in 1...max(1, m.spread) {
                 let nx = x + dir * s
-                guard grid.inBounds(nx, y), grid.mat[y * grid.width + nx] == .empty else { break }
+                guard grid.inBounds(nx, y) else { break }
+                let t = grid.mat[y * grid.width + nx]
+                if t == .drain { target = s; break }
+                guard t == .empty else { break }
                 target = s
             }
             if target > 0 { return move(i, to: x + dir * target, y, now) }
@@ -87,6 +102,7 @@ extension World {
             let j = ny * grid.width + nx
             switch grid.mat[j] {
             case .water:
+                activity.reactions += 1
                 grid.set(x, y, .stone, shade: newShade(.stone))
                 grid.set(nx, ny, .steam, shade: newShade(.steam), life: initialLife(.steam))
                 stamp[j] = now
@@ -112,6 +128,7 @@ extension World {
     mutating func updateFire(_ x: Int, _ y: Int, _ i: Int, _ now: UInt32) {
         if grid.life[i] <= 1 { grid.set(x, y, .empty); return }
         grid.life[i] -= 1
+        activity.burning += 1
         for (dx, dy) in World.neighbours4 {
             let nx = x + dx, ny = y + dy
             guard grid.inBounds(nx, ny) else { continue }

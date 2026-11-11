@@ -34,6 +34,7 @@ public enum Palette {
         case .plant: return [0x4CAF50, 0x43A047, 0x5CBF60, 0x388E3C].map(RGBA.init(hex:))
         case .fire: return [0xFFE066, 0xFFB627, 0xFF8C1A, 0xF25C05].map(RGBA.init(hex:))
         case .gate: return [0xE9C46A, 0x2A2D3E, 0xE9C46A, 0x2A2D3E].map(RGBA.init(hex:))
+        case .drain: return [0x07070C, 0x1B1830, 0x2B2550, 0x110F1E].map(RGBA.init(hex:))
         }
     }
 
@@ -62,6 +63,7 @@ extension World {
                         case .lava: s = (s + lavaPhase + i % w / 3) & 3
                         case .fire: s = 3 - min(3, Int(grid.life[i]) / 10)
                         case .gate: s = ((i % w + i / w) / 2) & 1
+                        case .drain: s = ((i % w + i / w + tick / 5) / 2) & 3
                         default: break
                         }
                         out[i] = table[Int(m.rawValue) * 4 + s]
