@@ -53,4 +53,5 @@ jobs:
       - name: Show compiler errors
         if: failure()
         working-directory: games/grainfall/App
-        run: grep -E "error:|warning: .*isolated" build.log | sort -u | head -100 || true
+        run: |
+          grep -E "error:|warning: .*isolated" build.log | sort -u | head -100 || true
