@@ -36,6 +36,8 @@ targets:
       path: Generated/Info.plist
       properties:
         CFBundleDisplayName: Grainfall
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations: [en, es, fr, de, pt-BR, ja, ko, zh-Hans]
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         LSRequiresIPhoneOS: true

@@ -1,0 +1,17 @@
+{
+  "id": "5-4", "name": "Controlled Burn", "seed": 504,
+  "digBudget": 1000, "par": [350, 590],
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 24, "w": 30, "h": 106},
+    {"op": "circle", "m": "lava", "cx": 12, "cy": 46, "r": 8},
+    {"op": "rect", "m": "wall", "x": 30, "y": 24, "w": 2, "h": 56},
+    {"op": "rect", "m": "wall", "x": 100, "y": 24, "w": 2, "h": 56},
+    {"op": "rect", "m": "sand", "x": 32, "y": 36, "w": 68, "h": 44},
+    {"op": "rect", "m": "plant", "x": 20, "y": 80, "w": 82, "h": 6},
+    {"op": "rect", "m": "drain", "x": 0, "y": 236, "w": 30, "h": 4},
+    {"op": "cup", "x": 34, "y": 196, "w": 64, "h": 40, "t": 3}
+  ],
+  "cups": [{"x": 37, "y": 196, "w": 58, "h": 37, "accepts": "sand", "required": 700, "forbids": ["lava"]}],
+  "solution": [{"t": 0, "dig": [12, 54, 25, 76]}],
+  "traps": [[{"t": 0, "dig": [12, 54, 12, 128]}]]
+}

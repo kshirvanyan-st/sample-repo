@@ -1,0 +1,6 @@
+{"id": "1-8", "name": "Caves", "seed": 108, "digBudget": 900, "par": [900, 900], "hint": "Dig is limited. Use the caves.",
+  "shapes": [{"op": "rect", "m": "dirt", "x": 0, "y": 40, "w": 128, "h": 160}, {"op": "circle", "m": "empty", "cx": 30, "cy": 76, "r": 16}, {"op": "circle", "m": "empty", "cx": 52, "cy": 118, "r": 17}, {"op": "circle", "m": "empty", "cx": 80, "cy": 162, "r": 17}, {"op": "cup", "x": 80, "y": 204, "w": 44, "h": 34, "t": 3}],
+  "spouts": [{"x": 30, "y": 6, "m": "sand", "rate": 3, "total": 1000, "width": 6, "delay": 60}],
+  "cups": [{"x": 83, "y": 204, "w": 38, "h": 31, "accepts": "sand", "required": 400, "forbids": []}],
+  "solution": [{"t": 0, "dig": [30, 36, 30, 62]}, {"t": 0, "dig": [34, 90, 42, 104]}, {"t": 0, "dig": [58, 132, 70, 148]}, {"t": 0, "dig": [84, 176, 98, 206]}],
+  "traps": [[{"t": 0, "dig": [30, 36, 100, 206]}]], "lockBudget": true}

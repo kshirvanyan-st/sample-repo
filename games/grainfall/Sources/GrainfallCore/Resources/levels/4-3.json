@@ -1,0 +1,105 @@
+{
+ "id": "4-3",
+ "name": "Blast Off",
+ "seed": 403,
+ "digBudget": 2400,
+ "par": [1190, 1980],
+ "blasts": 1,
+ "hint": "Stone can't be dug. Tap the bomb, then tap the stone.",
+ "shapes": [
+  {
+   "op": "rect",
+   "m": "dirt",
+   "x": 0,
+   "y": 70,
+   "w": 128,
+   "h": 50
+  },
+  {
+   "op": "rect",
+   "m": "stone",
+   "x": 0,
+   "y": 120,
+   "w": 128,
+   "h": 10
+  },
+  {
+   "op": "rect",
+   "m": "dirt",
+   "x": 0,
+   "y": 130,
+   "w": 128,
+   "h": 40
+  },
+  {
+   "op": "cup",
+   "x": 40,
+   "y": 204,
+   "w": 48,
+   "h": 34,
+   "t": 3
+  }
+ ],
+ "spouts": [
+  {
+   "x": 64,
+   "y": 6,
+   "m": "sand",
+   "rate": 3,
+   "total": 900,
+   "width": 6,
+   "delay": 60
+  }
+ ],
+ "cups": [
+  {
+   "x": 43,
+   "y": 204,
+   "w": 42,
+   "h": 31,
+   "accepts": "sand",
+   "required": 400,
+   "forbids": []
+  }
+ ],
+ "solution": [
+  {
+   "t": 0,
+   "dig": [
+    64,
+    66,
+    64,
+    118
+   ]
+  },
+  {
+   "t": 0,
+   "blast": [
+    64,
+    125
+   ]
+  },
+  {
+   "t": 0,
+   "dig": [
+    64,
+    130,
+    64,
+    176
+   ]
+  }
+ ],
+ "traps": [
+  [
+   {
+    "t": 0,
+    "dig": [
+     64,
+     66,
+     64,
+     176
+    ]
+   }
+  ]
+ ]
+}

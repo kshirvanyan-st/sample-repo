@@ -1,0 +1,23 @@
+{
+  "id": "5-5", "name": "Two Gardens", "seed": 505,
+  "digBudget": 6300, "par": [3140, 5220],
+  "hint": "Sinkholes swallow whatever falls in.",
+  "shapes": [
+    {"op": "line", "m": "wall", "x0": 52, "y0": 58, "x1": 64, "y1": 46, "t": 2},
+    {"op": "line", "m": "wall", "x0": 64, "y0": 46, "x1": 76, "y1": 58, "t": 2},
+    {"op": "rect", "m": "dirt", "x": 0, "y": 66, "w": 128, "h": 116},
+    {"op": "circle", "m": "drain", "cx": 40, "cy": 130, "r": 6},
+    {"op": "circle", "m": "drain", "cx": 88, "cy": 130, "r": 6},
+    {"op": "cup", "x": 6, "y": 196, "w": 44, "h": 40, "t": 3},
+    {"op": "rect", "m": "plant", "x": 9, "y": 229, "w": 38, "h": 4},
+    {"op": "cup", "x": 78, "y": 196, "w": 44, "h": 40, "t": 3},
+    {"op": "rect", "m": "plant", "x": 81, "y": 229, "w": 38, "h": 4}
+  ],
+  "spouts": [{"x": 64, "y": 6, "m": "water", "rate": 4, "total": 1300, "width": 6}],
+  "cups": [
+    {"x": 9, "y": 200, "w": 38, "h": 29, "accepts": "plant", "required": 110},
+    {"x": 81, "y": 200, "w": 38, "h": 29, "accepts": "plant", "required": 110}
+  ],
+  "solution": [{"t": 0, "dig": [51, 64, 56, 130, 28, 186]}, {"t": 0, "dig": [77, 64, 72, 130, 100, 186]}],
+  "traps": [[{"t": 0, "dig": [51, 64, 28, 186]}, {"t": 0, "dig": [77, 64, 100, 186]}]]
+}

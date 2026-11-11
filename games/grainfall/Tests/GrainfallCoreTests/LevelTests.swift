@@ -11,12 +11,17 @@ final class LevelContentTests: XCTestCase {
     }
 
     func testCatalogShape() {
-        XCTAssertEqual(catalog.chapters.count, 3)
-        XCTAssertEqual(catalog.orderedLevelIDs.count, 12)
-        XCTAssertTrue(catalog.chapters[0].free)
-        XCTAssertFalse(catalog.chapters.last!.free, "the last chapter is behind the Full Game unlock")
-        XCTAssertEqual(catalog.level(after: "1-4"), "2-1")
-        XCTAssertNil(catalog.level(after: "3-4"))
+        // PRD §5.5: 6 chapters × 10 levels, chapters 1–2 free.
+        XCTAssertEqual(catalog.chapters.count, 6)
+        XCTAssertEqual(catalog.orderedLevelIDs.count, 60)
+        XCTAssertTrue(catalog.chapters.allSatisfy { $0.levels.count == 10 })
+        XCTAssertEqual(catalog.chapters.map(\.free), [true, true, false, false, false, false])
+        XCTAssertEqual(catalog.level(after: "1-10"), "2-1")
+        XCTAssertNil(catalog.level(after: "6-10"))
+        let names = catalog.orderedLevelIDs.compactMap { catalog.levels[$0]?.name }
+        XCTAssertEqual(Set(names).count, names.count, "level names are unique")
+        let seeds = catalog.orderedLevelIDs.compactMap { catalog.levels[$0]?.seed }
+        XCTAssertEqual(Set(seeds).count, seeds.count, "level seeds are unique")
     }
 
     func testEveryLevelNeedsThePlayer() {
@@ -104,7 +109,7 @@ final class ProgressTests: XCTestCase {
         p.record(levelID: "1-1", stars: 2)
         XCTAssertTrue(p.isUnlocked("1-2", in: catalog, fullGame: false))
         XCTAssertFalse(p.isUnlocked("2-1", in: catalog, fullGame: false), "chapter 1 not finished")
-        complete(["1-2", "1-3", "1-4"], in: &p)
+        complete(Array(catalog.chapters[0].levels.dropFirst()), in: &p)
         XCTAssertTrue(p.isUnlocked("2-1", in: catalog, fullGame: false))
         XCTAssertEqual(p.nextLevel(in: catalog, fullGame: false), "2-1")
     }

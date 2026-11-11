@@ -1,0 +1,6 @@
+{"id": "1-5", "name": "Zigzag", "seed": 105, "digBudget": 3800, "par": [1880, 3140],
+  "shapes": [{"op": "rect", "m": "dirt", "x": 0, "y": 60, "w": 128, "h": 130}, {"op": "rect", "m": "wall", "x": 0, "y": 108, "w": 60, "h": 4}, {"op": "rect", "m": "wall", "x": 46, "y": 150, "w": 82, "h": 4}, {"op": "cup", "x": 6, "y": 200, "w": 44, "h": 38, "t": 3}],
+  "spouts": [{"x": 20, "y": 6, "m": "sand", "rate": 3, "total": 900, "width": 6, "delay": 60}],
+  "cups": [{"x": 9, "y": 200, "w": 38, "h": 35, "accepts": "sand", "required": 400, "forbids": []}],
+  "solution": [{"t": 0, "dig": [20, 56, 66, 111, 66, 130, 36, 166, 30, 192]}],
+  "traps": [[{"t": 0, "dig": [20, 56, 20, 192]}]]}

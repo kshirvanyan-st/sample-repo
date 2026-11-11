@@ -32,6 +32,7 @@ func option(_ name: String) -> String? {
 }
 
 let solve = flag("--solve")
+let glow = flag("--glow")
 let scale = Int(option("--scale") ?? "3") ?? 3
 let every = Int(option("--every") ?? "120") ?? 120
 let dirOption = option("--dir")
@@ -79,9 +80,14 @@ do {
         guard let level = cat.levels[args[1]] else { throw LevelError.invalid(args[1], "not in catalog") }
         let result = Replay.run(level, actions: solve ? level.solution : [], maxTicks: tick)
         var pixels: [UInt32] = []
-        result.world.render(into: &pixels)
-        try PNG.write(pixels: pixels, width: result.world.grid.width, height: result.world.grid.height,
-                      scale: scale, to: URL(fileURLWithPath: args[3]))
+        result.world.render(into: &pixels, emissive: glow)
+        if glow {
+            let (big, w, h) = Bloom.apply(pixels, width: result.world.grid.width, height: result.world.grid.height, scale: scale)
+            try PNG.write(pixels: big, width: w, height: h, scale: 1, to: URL(fileURLWithPath: args[3]))
+        } else {
+            try PNG.write(pixels: pixels, width: result.world.grid.width, height: result.world.grid.height,
+                          scale: scale, to: URL(fileURLWithPath: args[3]))
+        }
         print("\(args[1]) @\(result.ticks): \(describe(result.status)), dug \(result.dug), cups \(result.world.cups.map { "\($0.collected)/\($0.def.required)" })")
 
     case "render-trap":
@@ -118,6 +124,32 @@ do {
         try PNG.write(pixels: sheet, width: SW, height: SH, scale: scale, to: URL(fileURLWithPath: args[1]))
         print("wrote \(args[1])")
 
+    case "video":
+        // video <levelID> [--every 2] [--scale 6] [--hold 90] — raw RGBA frames of the reference
+        // solution (with bloom) on stdout, for `ffmpeg -f rawvideo -pix_fmt rgba -s WxH -i -`.
+        guard args.count >= 2 else { usage() }
+        let cat = try catalog(dirOption)
+        guard let level = cat.levels[args[1]] else { throw LevelError.invalid(args[1], "not in catalog") }
+        let stride = max(1, Int(option("--stride") ?? "2") ?? 2)
+        var world = World(level: level)
+        let actions = level.solution.sorted { $0.tick < $1.tick }
+        var next = 0, hold = Int(option("--hold") ?? "90") ?? 90
+        var px: [UInt32] = []
+        let out = FileHandle.standardOutput
+        while world.tick < 3600, hold > 0 {
+            while next < actions.count, actions[next].tick <= world.tick {
+                world.apply(actions[next].action)
+                next += 1
+            }
+            world.step()
+            if world.status != .playing { hold -= 1 }
+            if world.tick % stride == 0 {
+                world.render(into: &px, emissive: true)
+                let (big, _, _) = Bloom.apply(px, width: world.grid.width, height: world.grid.height, scale: scale)
+                big.withUnsafeBytes { out.write(Data($0)) }
+            }
+        }
+
     case "trace":
         guard args.count >= 2 else { usage() }
         let cat = try catalog(dirOption)
@@ -145,6 +177,50 @@ do {
 } catch {
     FileHandle.standardError.write(Data("error: \(error)\n".utf8))
     exit(1)
+}
+
+/// CPU port of Shaders.metal's grid_fragment (bloom + vignette) so store art matches the device.
+enum Bloom {
+    static func apply(_ px: [UInt32], width w: Int, height h: Int, scale: Int) -> ([UInt32], Int, Int) {
+        func ch(_ p: UInt32, _ s: UInt32) -> Double { Double((p >> s) & 0xFF) / 255 }
+        // Premultiplied emissive colour per cell.
+        var em = [SIMD3<Double>](repeating: .zero, count: w * h)
+        for i in 0..<(w * h) {
+            let a = ch(px[i], 24)
+            em[i] = SIMD3(ch(px[i], 0), ch(px[i], 8), ch(px[i], 16)) * a
+        }
+        func sample(_ x: Double, _ y: Double) -> SIMD3<Double> { // bilinear, in cell units
+            let fx = min(max(x - 0.5, 0), Double(w - 1)), fy = min(max(y - 0.5, 0), Double(h - 1))
+            let x0 = Int(fx), y0 = Int(fy), x1 = min(x0 + 1, w - 1), y1 = min(y0 + 1, h - 1)
+            let tx = fx - Double(x0), ty = fy - Double(y0)
+            let a = em[y0 * w + x0] * (1 - tx) + em[y0 * w + x1] * tx
+            let b = em[y1 * w + x0] * (1 - tx) + em[y1 * w + x1] * tx
+            return a * (1 - ty) + b * ty
+        }
+        let W = w * scale, H = h * scale
+        var out = [UInt32](repeating: 0, count: W * H)
+        let dirs = (0..<12).map { k -> (Double, Double) in
+            let a = 2 * Double.pi * Double(k) / 12
+            return (cos(a), sin(a))
+        }
+        for Y in 0..<H {
+            for X in 0..<W {
+                let cx = (Double(X) + 0.5) / Double(scale), cy = (Double(Y) + 0.5) / Double(scale)
+                let p = px[(Y / scale) * w + X / scale]
+                var c = SIMD3(ch(p, 0), ch(p, 8), ch(p, 16))
+                var g = SIMD3<Double>.zero
+                for (dx, dy) in dirs {
+                    g += sample(cx + dx * 1.8, cy + dy * 1.8) * 0.6 + sample(cx + dx * 4.0, cy + dy * 4.0) * 0.4
+                }
+                c += g / 12 * 0.55
+                let u = Double(X) / Double(W) - 0.5, v = Double(Y) / Double(H) - 0.5
+                c *= 1 - (u * u + v * v) * 0.45
+                let r = UInt32(min(1, c.x) * 255), gg = UInt32(min(1, c.y) * 255), b = UInt32(min(1, c.z) * 255)
+                out[Y * W + X] = r | gg << 8 | b << 16 | 0xFF00_0000
+            }
+        }
+        return (out, W, H)
+    }
 }
 
 /// Minimal dependency-free PNG encoder (stored/uncompressed deflate), for previews and store art.

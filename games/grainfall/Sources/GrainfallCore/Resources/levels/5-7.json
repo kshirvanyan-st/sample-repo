@@ -1,0 +1,31 @@
+{
+  "id": "5-7", "name": "Wet Blanket", "seed": 507,
+  "digBudget": 1000, "par": [410, 680],
+  "hint": "Fire can't cross wet plants. Make a puddle first.",
+  "shapes": [
+    {"op": "rect", "m": "plant", "x": 0, "y": 90, "w": 128, "h": 4},
+    {"op": "rect", "m": "wall", "x": 2, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "wall", "x": 34, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "plant", "x": 2, "y": 94, "w": 34, "h": 12},
+    {"op": "rect", "m": "sand", "x": 4, "y": 50, "w": 30, "h": 40},
+    {"op": "cup", "x": 38, "y": 60, "w": 18, "h": 20, "t": 2},
+    {"op": "rect", "m": "lava", "x": 40, "y": 72, "w": 14, "h": 6},
+    {"op": "gate", "id": 1, "x": 41, "y": 78, "w": 12, "h": 2},
+    {"op": "line", "m": "wall", "x0": 37, "y0": 112, "x1": 55, "y1": 112, "t": 2},
+    {"op": "rect", "m": "empty", "x": 61, "y": 90, "w": 3, "h": 3},
+    {"op": "rect", "m": "wall", "x": 60, "y": 82, "w": 1, "h": 11},
+    {"op": "rect", "m": "wall", "x": 64, "y": 82, "w": 1, "h": 11},
+    {"op": "rect", "m": "dirt", "x": 56, "y": 30, "w": 14, "h": 30},
+    {"op": "rect", "m": "wall", "x": 56, "y": 18, "w": 1, "h": 12},
+    {"op": "rect", "m": "wall", "x": 69, "y": 18, "w": 1, "h": 12},
+    {"op": "rect", "m": "drain", "x": 56, "y": 112, "w": 12, "h": 2},
+    {"op": "rect", "m": "wall", "x": 70, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "wall", "x": 124, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "water", "x": 72, "y": 56, "w": 52, "h": 34},
+    {"op": "cup", "x": 2, "y": 196, "w": 124, "h": 40, "t": 3}
+  ],
+  "spouts": [{"x": 62, "y": 6, "m": "water", "rate": 2, "total": 80, "width": 2}],
+  "cups": [{"x": 5, "y": 196, "w": 118, "h": 37, "accepts": "sand", "required": 600, "forbids": ["water"]}],
+  "solution": [{"t": 0, "dig": [62, 26, 62, 64]}, {"t": 260, "gate": [47, 79]}],
+  "traps": [[{"t": 0, "gate": [47, 79]}], [{"t": 0, "dig": [62, 26, 62, 64]}, {"t": 0, "gate": [47, 79]}]]
+}

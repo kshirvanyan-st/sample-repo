@@ -1,0 +1,30 @@
+{
+  "id": "6-2",
+  "name": "Kindling",
+  "seed": 62,
+  "digBudget": 1100,
+  "par": [540, 900],
+  "blasts": 1,
+  "hint": "Blasts break stone. Lava burns plants.",
+  "shapes": [
+    {"op": "rect", "m": "wall", "x": 40, "y": 14, "w": 3, "h": 66},
+    {"op": "rect", "m": "wall", "x": 122, "y": 14, "w": 3, "h": 66},
+    {"op": "rect", "m": "plant", "x": 8, "y": 80, "w": 116, "h": 16},
+    {"op": "rect", "m": "sand", "x": 43, "y": 30, "w": 79, "h": 50},
+    {"op": "rect", "m": "stone", "x": 8, "y": 56, "w": 32, "h": 24},
+    {"op": "rect", "m": "lava", "x": 11, "y": 59, "w": 26, "h": 17},
+    {"op": "rect", "m": "drain", "x": 4, "y": 224, "w": 36, "h": 4},
+    {"op": "rect", "m": "dirt", "x": 44, "y": 130, "w": 84, "h": 40},
+    {"op": "cup", "x": 70, "y": 200, "w": 52, "h": 36, "t": 3}
+  ],
+  "cups": [
+    {"x": 73, "y": 200, "w": 46, "h": 33, "accepts": "sand", "required": 700, "forbids": ["lava"]}
+  ],
+  "solution": [
+    {"t": 0, "blast": [24, 80]},
+    {"t": 0, "dig": [96, 126, 96, 176]}
+  ],
+  "traps": [
+    [{"t": 0, "blast": [80, 84]}, {"t": 0, "dig": [96, 126, 96, 176]}]
+  ]
+}

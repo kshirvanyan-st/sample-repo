@@ -1,0 +1,25 @@
+{
+  "id": "5-3", "name": "Fire Line", "seed": 503,
+  "digBudget": 1000, "blasts": 1, "par": [10, 10],
+  "hint": "Fire spreads along plants. Blast a gap so it can't reach the water.",
+  "shapes": [
+    {"op": "rect", "m": "plant", "x": 0, "y": 90, "w": 128, "h": 4},
+    {"op": "rect", "m": "plant", "x": 20, "y": 94, "w": 32, "h": 12},
+    {"op": "rect", "m": "wall", "x": 20, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "wall", "x": 50, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "sand", "x": 22, "y": 50, "w": 28, "h": 40},
+    {"op": "cup", "x": 54, "y": 60, "w": 16, "h": 20, "t": 2},
+    {"op": "rect", "m": "lava", "x": 56, "y": 72, "w": 12, "h": 6},
+    {"op": "gate", "id": 1, "x": 57, "y": 78, "w": 10, "h": 2},
+    {"op": "rect", "m": "wall", "x": 88, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "wall", "x": 124, "y": 40, "w": 2, "h": 50},
+    {"op": "rect", "m": "water", "x": 90, "y": 56, "w": 34, "h": 34},
+    {"op": "line", "m": "wall", "x0": 52, "y0": 112, "x1": 72, "y1": 112, "t": 2},
+    {"op": "line", "m": "wall", "x0": 52, "y0": 108, "x1": 52, "y1": 112, "t": 2},
+    {"op": "line", "m": "wall", "x0": 72, "y0": 108, "x1": 72, "y1": 112, "t": 2},
+    {"op": "cup", "x": 16, "y": 196, "w": 96, "h": 40, "t": 3}
+  ],
+  "cups": [{"x": 19, "y": 196, "w": 90, "h": 37, "accepts": "sand", "required": 600, "forbids": ["water"]}],
+  "solution": [{"t": 0, "blast": [80, 92]}, {"t": 0, "gate": [62, 79]}],
+  "traps": [[{"t": 0, "gate": [62, 79]}], [{"t": 0, "blast": [36, 97]}], [{"t": 0, "blast": [36, 92]}]]
+}

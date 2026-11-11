@@ -1,0 +1,108 @@
+{
+ "id": "3-5",
+ "name": "Side Channel",
+ "seed": 305,
+ "digBudget": 7100,
+ "par": [3510, 5850],
+ "hint": "Drains swallow anything. Feed them the lava.",
+ "shapes": [
+  {
+   "op": "rect",
+   "m": "dirt",
+   "x": 0,
+   "y": 60,
+   "w": 128,
+   "h": 130
+  },
+  {
+   "op": "rect",
+   "m": "wall",
+   "x": 52,
+   "y": 30,
+   "w": 3,
+   "h": 30
+  },
+  {
+   "op": "cup",
+   "x": 4,
+   "y": 204,
+   "w": 44,
+   "h": 34,
+   "t": 3
+  },
+  {
+   "op": "rect",
+   "m": "drain",
+   "x": 86,
+   "y": 232,
+   "w": 38,
+   "h": 4
+  }
+ ],
+ "spouts": [
+  {
+   "x": 32,
+   "y": 6,
+   "m": "water",
+   "rate": 3,
+   "total": 1000,
+   "width": 6,
+   "delay": 250
+  },
+  {
+   "x": 46,
+   "y": 6,
+   "m": "lava",
+   "rate": 2,
+   "total": 400,
+   "width": 2,
+   "delay": 30
+  }
+ ],
+ "cups": [
+  {
+   "x": 7,
+   "y": 204,
+   "w": 38,
+   "h": 31,
+   "accepts": "water",
+   "required": 600,
+   "forbids": [
+    "lava"
+   ]
+  }
+ ],
+ "solution": [
+  {
+   "t": 0,
+   "dig": [
+    32,
+    56,
+    26,
+    206
+   ]
+  },
+  {
+   "t": 0,
+   "dig": [
+    46,
+    56,
+    104,
+    230
+   ]
+  }
+ ],
+ "traps": [
+  [
+   {
+    "t": 0,
+    "dig": [
+     32,
+     56,
+     26,
+     206
+    ]
+   }
+  ]
+ ]
+}

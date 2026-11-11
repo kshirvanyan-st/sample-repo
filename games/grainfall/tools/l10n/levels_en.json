@@ -1,0 +1,302 @@
+{
+ "First Grains": {
+  "context": "chapter name"
+ },
+ "First Dig": {
+  "context": "level 1-1 name"
+ },
+ "Drag to dig a path for the sand": {
+  "context": "level 1-1 hint shown in a small bubble"
+ },
+ "Sidestep": {
+  "context": "level 1-2 name"
+ },
+ "Pull the Pin": {
+  "context": "level 1-3 name"
+ },
+ "Tap a gate to open it": {
+  "context": "level 1-3 hint shown in a small bubble"
+ },
+ "Fork in the Road": {
+  "context": "level 1-4 name"
+ },
+ "Zigzag": {
+  "context": "level 1-5 name"
+ },
+ "Bucket Brigade": {
+  "context": "level 1-6 name"
+ },
+ "One hopper isn't enough": {
+  "context": "level 1-6 hint shown in a small bubble"
+ },
+ "Three Cups": {
+  "context": "level 1-7 name"
+ },
+ "Caves": {
+  "context": "level 1-8 name"
+ },
+ "Dig is limited. Use the caves.": {
+  "context": "level 1-8 hint shown in a small bubble"
+ },
+ "Shutters": {
+  "context": "level 1-9 name"
+ },
+ "Grand Pour": {
+  "context": "level 1-10 name"
+ },
+ "Flow": {
+  "context": "chapter name"
+ },
+ "Thirsty Sprout": {
+  "context": "level 2-1 name"
+ },
+ "Water flows sideways. Sand doesn't.": {
+  "context": "level 2-1 hint shown in a small bubble"
+ },
+ "Wrong Pin": {
+  "context": "level 2-2 name"
+ },
+ "Sand would spoil the water": {
+  "context": "level 2-2 hint shown in a small bubble"
+ },
+ "Keep Them Apart": {
+  "context": "level 2-3 name"
+ },
+ "Switchback": {
+  "context": "level 2-4 name"
+ },
+ "Waterslide": {
+  "context": "level 2-5 name"
+ },
+ "Twin Pots": {
+  "context": "level 2-6 name"
+ },
+ "Down the Drain": {
+  "context": "level 2-7 name"
+ },
+ "Drains swallow anything. Get rid of the sand first.": {
+  "context": "level 2-7 hint shown in a small bubble"
+ },
+ "Lock Chain": {
+  "context": "level 2-8 name"
+ },
+ "Muddy Waters": {
+  "context": "level 2-9 name"
+ },
+ "Waterworks": {
+  "context": "level 2-10 name"
+ },
+ "Hot Stuff": {
+  "context": "chapter name"
+ },
+ "Hot Pocket": {
+  "context": "level 3-1 name"
+ },
+ "Lava ruins the pot. Dig around it.": {
+  "context": "level 3-1 hint shown in a small bubble"
+ },
+ "Burn the Floor": {
+  "context": "level 3-2 name"
+ },
+ "Lava sets plants on fire": {
+  "context": "level 3-2 hint shown in a small bubble"
+ },
+ "Quench": {
+  "context": "level 3-3 name"
+ },
+ "Water + lava = stone. Fill the cup with stone.": {
+  "context": "level 3-3 hint shown in a small bubble"
+ },
+ "Two Pockets": {
+  "context": "level 3-4 name"
+ },
+ "Side Channel": {
+  "context": "level 3-5 name"
+ },
+ "Drains swallow anything. Feed them the lava.": {
+  "context": "level 3-5 hint shown in a small bubble"
+ },
+ "Long Way Round": {
+  "context": "level 3-6 name"
+ },
+ "Molten Moat": {
+  "context": "level 3-7 name"
+ },
+ "Empty the lava into the drain before you dig to the cup.": {
+  "context": "level 3-7 hint shown in a small bubble"
+ },
+ "Three Ways": {
+  "context": "level 3-8 name"
+ },
+ "First Things First": {
+  "context": "level 3-9 name"
+ },
+ "Order matters.": {
+  "context": "level 3-9 hint shown in a small bubble"
+ },
+ "Inferno": {
+  "context": "level 3-10 name"
+ },
+ "Cool Down": {
+  "context": "chapter name"
+ },
+ "Stone Soup": {
+  "context": "level 4-1 name"
+ },
+ "Lava + water = stone. Make stone in the cup.": {
+  "context": "level 4-1 hint shown in a small bubble"
+ },
+ "Simmer": {
+  "context": "level 4-2 name"
+ },
+ "Water cools lava into a stone crust.": {
+  "context": "level 4-2 hint shown in a small bubble"
+ },
+ "Blast Off": {
+  "context": "level 4-3 name"
+ },
+ "Stone can't be dug. Tap the bomb, then tap the stone.": {
+  "context": "level 4-3 hint shown in a small bubble"
+ },
+ "Mixing Bowl": {
+  "context": "level 4-4 name"
+ },
+ "Hard Hat": {
+  "context": "level 4-5 name"
+ },
+ "Each bomb counts. Spend them on stone.": {
+  "context": "level 4-5 hint shown in a small bubble"
+ },
+ "Dam It": {
+  "context": "level 4-6 name"
+ },
+ "Cool the lava before it reaches the cup.": {
+  "context": "level 4-6 hint shown in a small bubble"
+ },
+ "Short on Shovels": {
+  "context": "level 4-7 name"
+ },
+ "Twin Crusts": {
+  "context": "level 4-8 name"
+ },
+ "Forge": {
+  "context": "level 4-9 name"
+ },
+ "Caldera": {
+  "context": "level 4-10 name"
+ },
+ "Overgrowth": {
+  "context": "chapter name"
+ },
+ "Slow Burn": {
+  "context": "level 5-1 name"
+ },
+ "Lava sets plants on fire. Tap the gate.": {
+  "context": "level 5-1 hint shown in a small bubble"
+ },
+ "Green Thumb": {
+  "context": "level 5-2 name"
+ },
+ "Plants drink water and grow. Fill the pot with green.": {
+  "context": "level 5-2 hint shown in a small bubble"
+ },
+ "Fire Line": {
+  "context": "level 5-3 name"
+ },
+ "Fire spreads along plants. Blast a gap so it can't reach the water.": {
+  "context": "level 5-3 hint shown in a small bubble"
+ },
+ "Controlled Burn": {
+  "context": "level 5-4 name"
+ },
+ "Two Gardens": {
+  "context": "level 5-5 name"
+ },
+ "Sinkholes swallow whatever falls in.": {
+  "context": "level 5-5 hint shown in a small bubble"
+ },
+ "Thicket": {
+  "context": "level 5-6 name"
+ },
+ "Wet Blanket": {
+  "context": "level 5-7 name"
+ },
+ "Fire can't cross wet plants. Make a puddle first.": {
+  "context": "level 5-7 hint shown in a small bubble"
+ },
+ "Seed Vault": {
+  "context": "level 5-8 name"
+ },
+ "Keep fire out of the garden pot.": {
+  "context": "level 5-8 hint shown in a small bubble"
+ },
+ "Hedge Maze": {
+  "context": "level 5-9 name"
+ },
+ "Last Bloom": {
+  "context": "level 5-10 name"
+ },
+ "Alchemy": {
+  "context": "chapter name"
+ },
+ "Drain First": {
+  "context": "level 6-1 name"
+ },
+ "Get rid of the lava before the sand goes through": {
+  "context": "level 6-1 hint shown in a small bubble"
+ },
+ "Kindling": {
+  "context": "level 6-2 name"
+ },
+ "Blasts break stone. Lava burns plants.": {
+  "context": "level 6-2 hint shown in a small bubble"
+ },
+ "Hot Swap": {
+  "context": "level 6-3 name"
+ },
+ "One cup wants stone, the other wants water": {
+  "context": "level 6-3 hint shown in a small bubble"
+ },
+ "Lava Lamp": {
+  "context": "level 6-4 name"
+ },
+ "This cup wants lava. Keep the water out.": {
+  "context": "level 6-4 hint shown in a small bubble"
+ },
+ "Firebreak": {
+  "context": "level 6-5 name"
+ },
+ "Fire spreads through every plant it touches": {
+  "context": "level 6-5 hint shown in a small bubble"
+ },
+ "Secret Garden": {
+  "context": "level 6-6 name"
+ },
+ "Water the seeds and the garden grows": {
+  "context": "level 6-6 hint shown in a small bubble"
+ },
+ "Sluice": {
+  "context": "level 6-7 name"
+ },
+ "Deal with the water before the sand comes down": {
+  "context": "level 6-7 hint shown in a small bubble"
+ },
+ "Quarry": {
+  "context": "level 6-8 name"
+ },
+ "One blast. Choose the spot carefully.": {
+  "context": "level 6-8 hint shown in a small bubble"
+ },
+ "Trinity": {
+  "context": "level 6-9 name"
+ },
+ "Three cups, three treasures": {
+  "context": "level 6-9 hint shown in a small bubble"
+ },
+ "The Alchemist": {
+  "context": "level 6-10 name"
+ },
+ "Fire frees the sand. Water and lava make stone.": {
+  "context": "level 6-10 hint shown in a small bubble"
+ }
+}

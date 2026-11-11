@@ -1,0 +1,14 @@
+{
+  "id": "5-2", "name": "Green Thumb", "seed": 502,
+  "digBudget": 2700, "par": [1340, 2230],
+  "hint": "Plants drink water and grow. Fill the pot with green.",
+  "shapes": [
+    {"op": "rect", "m": "dirt", "x": 0, "y": 60, "w": 128, "h": 90},
+    {"op": "cup", "x": 64, "y": 180, "w": 50, "h": 50, "t": 3},
+    {"op": "rect", "m": "plant", "x": 67, "y": 223, "w": 44, "h": 4}
+  ],
+  "spouts": [{"x": 24, "y": 6, "m": "water", "rate": 3, "total": 1000, "width": 6}],
+  "cups": [{"x": 67, "y": 185, "w": 44, "h": 38, "accepts": "plant", "required": 150}],
+  "solution": [{"t": 0, "dig": [24, 56, 24, 70, 88, 154]}],
+  "traps": [[{"t": 0, "dig": [24, 56, 24, 154]}]]
+}
